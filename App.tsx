@@ -5,16 +5,14 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useEffect} from 'react';
 import MafooLogo from './assets/images/mafoo_logo.png';
 import {
-  Dimensions, Image,
+  BackHandler,
+  Dimensions, Image, Platform,
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   useColorScheme,
   View,
 } from 'react-native';
@@ -29,6 +27,8 @@ const windowHeight = Dimensions.get('window').height;
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const isAndroid = Platform.OS === 'android';
+  const webViewRef = React.useRef<WebView | null>(null);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -36,6 +36,26 @@ function App(): React.JSX.Element {
     alignItems: 'center',
     justifyContent: 'center',
   };
+
+  const onAndroidBackPress = () => {
+    if (webViewRef && webViewRef.current) {
+      webViewRef.current.goBack();
+      return true;
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    if (isAndroid) {
+      BackHandler.addEventListener('hardwareBackPress', onAndroidBackPress);
+      return () => {
+        BackHandler.removeEventListener(
+          'hardwareBackPress',
+          onAndroidBackPress,
+        );
+      };
+    }
+  });
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -45,6 +65,7 @@ function App(): React.JSX.Element {
       />
       <View style={styles.viewWrapper}>
         <WebView
+            ref={webViewRef}
           source={{uri: 'https://mafoo.kr/'}}
           style={styles.webView}
           startInLoadingState={true}
