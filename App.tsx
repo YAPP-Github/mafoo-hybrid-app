@@ -7,8 +7,9 @@
 
 import React from 'react';
 import type {PropsWithChildren} from 'react';
+import MafooLogo from './assets/images/mafoo_logo.png';
 import {
-  Dimensions,
+  Dimensions, Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -20,10 +21,6 @@ import {
 
 import {
   Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import { WebView } from 'react-native-webview';
 
@@ -48,14 +45,14 @@ function App(): React.JSX.Element {
       />
       <View style={styles.viewWrapper}>
         <WebView
-            source={{uri: 'https://mafoo.kr/'}}
-            style={styles.webView}
-            startInLoadingState={true}
-            renderLoading={() => (
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text>Loading...</Text>
-                </View>
-                )}
+          source={{uri: 'https://mafoo.kr/'}}
+          style={styles.webView}
+          startInLoadingState={true}
+          renderLoading={() =>{
+            return <View style={styles.loadingView}>
+              <Image style={{width: 252, height: 87}} source={MafooLogo} />
+            </View>
+          }}
         />
       </View>
 
@@ -72,6 +69,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     width: windowWidth,
     height: windowHeight,
+  },
+  loadingView: {
+    flexGrow: 1,
+    backgroundColor: '#28CB87',
+    width: windowWidth,
+    height: windowHeight,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   sectionDescription: {
     marginTop: 8,
