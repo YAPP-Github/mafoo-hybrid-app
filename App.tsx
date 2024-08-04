@@ -1,26 +1,19 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useEffect} from 'react';
 import MafooLogo from './assets/images/mafoo_logo.png';
 import {
   BackHandler,
-  Dimensions, Image, Platform,
+  Dimensions,
+  Image,
+  Platform,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   useColorScheme,
   View,
 } from 'react-native';
-
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
-import { WebView } from 'react-native-webview';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {WebView} from 'react-native-webview';
+import DeviceInfo from 'react-native-device-info';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -30,12 +23,9 @@ function App(): React.JSX.Element {
   const isAndroid = Platform.OS === 'android';
   const webViewRef = React.useRef<WebView | null>(null);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
+  const userAgent = `MafooApp/${DeviceInfo.getVersion()} (${
+    isAndroid ? 'AOS' : 'iOS'
+  }/${DeviceInfo.getSystemVersion()})`;
 
   const onAndroidBackPress = () => {
     if (webViewRef && webViewRef.current) {
@@ -58,25 +48,27 @@ function App(): React.JSX.Element {
   });
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={styles.background}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+        backgroundColor={isDarkMode ? Colors.darker : Colors.lighter}
       />
       <View style={styles.viewWrapper}>
         <WebView
-            ref={webViewRef}
-          source={{uri: 'https://mafoo.kr/'}}
+          ref={webViewRef}
+          source={{uri: 'https://dev.mafoo.kr/'}}
           style={styles.webView}
           startInLoadingState={true}
-          renderLoading={() =>{
-            return <View style={styles.loadingView}>
-              <Image style={{width: 252, height: 87}} source={MafooLogo} />
-            </View>
+          renderLoading={() => {
+            return (
+              <View style={styles.loadingView}>
+                <Image style={{width: 252, height: 87}} source={MafooLogo} />
+              </View>
+            );
           }}
+          userAgent={userAgent}
         />
       </View>
-
     </SafeAreaView>
   );
 }
@@ -85,6 +77,11 @@ const styles = StyleSheet.create({
   viewWrapper: {
     backgroundColor: 'blue',
     flex: 1,
+  },
+  background: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   webView: {
     flexGrow: 1,
