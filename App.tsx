@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {WebView} from 'react-native-webview';
+import { WebView, WebViewMessageEvent } from "react-native-webview";
 import DeviceInfo from 'react-native-device-info';
 
 const windowWidth = Dimensions.get('window').width;
@@ -33,6 +33,19 @@ function App(): React.JSX.Element {
       return true;
     }
     return false;
+  };
+
+  const onMessage = async (event: WebViewMessageEvent) => {
+    switch (event.nativeEvent.data) {
+      case 'kakaoLogin':
+        console.log('kakaoLogin');
+        break;
+      case 'appleLogin':
+        console.log('appleLogin');
+        break;
+      default:
+        break
+    }
   };
 
   useEffect(() => {
@@ -67,6 +80,7 @@ function App(): React.JSX.Element {
             );
           }}
           userAgent={userAgent}
+          onMessage={onMessage}
         />
       </View>
     </SafeAreaView>
