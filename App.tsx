@@ -24,7 +24,7 @@ function App(): React.JSX.Element {
   const webViewRef = React.useRef<WebView | null>(null);
 
   const userAgent = `MafooApp/${DeviceInfo.getVersion()} (${
-    isAndroid ? 'AOS' : 'iOS'
+    isAndroid ? 'Android' : 'iPhone'
   }/${DeviceInfo.getSystemVersion()})`;
 
   const onAndroidBackPress = () => {
@@ -56,7 +56,7 @@ function App(): React.JSX.Element {
       <View style={styles.viewWrapper}>
         <WebView
           ref={webViewRef}
-          source={{uri: 'https://dev.mafoo.kr/'}}
+          source={{uri: 'http://localhost:3000'}}
           style={styles.webView}
           startInLoadingState={true}
           renderLoading={() => {
