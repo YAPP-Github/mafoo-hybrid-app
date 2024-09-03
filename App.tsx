@@ -13,8 +13,6 @@ import {
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import { WebView, WebViewMessageEvent } from "react-native-webview";
-import { appleAuth } from '@invertase/react-native-apple-authentication';
-
 import DeviceInfo from 'react-native-device-info';
 
 const windowWidth = Dimensions.get('window').width;
@@ -37,27 +35,6 @@ function App(): React.JSX.Element {
     return false;
   };
 
-  async function onAppleButtonPress() {
-    // performs login request
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      // Note: it appears putting FULL_NAME first is important, see issue #293
-      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
-    });
-
-    // get current authentication state for user
-    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-    const credentialState = await appleAuth.getCredentialStateForUser(
-      appleAuthRequestResponse.user,
-    );
-
-    // use credentialState response to ensure the user is authenticated
-    if (credentialState === appleAuth.State.AUTHORIZED) {
-      // user is authenticated
-      webViewRef.current?.injectJavaScript('window.location = "http://localhost:3000/api/auth/callback/apple?' + +'"');
-    }
-  }
-
   const onMessage = async (event: WebViewMessageEvent) => {
     switch (event.nativeEvent.data) {
       case 'kakaoLogin':
@@ -65,7 +42,6 @@ function App(): React.JSX.Element {
         break;
       case 'appleLogin':
         console.log('appleLogin');
-        await onAppleButtonPress();
         break;
       default:
         break
