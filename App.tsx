@@ -1,17 +1,34 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, {Fragment, useEffect, useState} from 'react';
 import {
   BackHandler,
   Dimensions,
-  Image,
   Platform,
   SafeAreaView,
   StyleSheet,
-  View,
 } from 'react-native';
 
-import { WebView, WebViewMessageEvent, WebViewNavigation } from "react-native-webview";
+import {
+  WebView,
+  WebViewMessageEvent,
+  WebViewNavigation,
+} from 'react-native-webview';
 import DeviceInfo from 'react-native-device-info';
 import SplashScreen from 'react-native-splash-screen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+import AlbumPage from './src/pages/AlbumsPage';
+import AlbumDetailPage from './src/pages/AlbumDetailPage';
+import SharedFriendPage from './src/pages/SharedFriendPage';
+import AddFriendPage from './src/pages/AddFriendPage';
+import AlbumCreatePage from './src/pages/AlbumCreatePage';
+import ProfilePage from './src/pages/ProfilePage';
+import IntroductionPage from './src/pages/IntroductionPage';
+import KeywordPage from './src/pages/KeywordPage';
+import ScannerPage from './src/pages/ScannerPage';
+import ScannerSelectAlbumPage from './src/pages/ScannerSelectAlbumPage';
+import SumonePage from './src/pages/SumonePage';
+import HomePage from './src/pages/HomePage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -27,9 +44,12 @@ function App(): React.JSX.Element {
     isAndroid ? 'Android' : 'iPhone'
   }/${DeviceInfo.getSystemVersion()})`;
 
+  const Stack = createStackNavigator();
+
   useEffect(() => {
+    SplashScreen.hide();
     if (isLoaded) {
-      SplashScreen.hide();
+      //SplashScreen.hide();
     }
   }, [isLoaded]);
 
@@ -66,12 +86,68 @@ function App(): React.JSX.Element {
       };
     }
   });
+
+  // TODO: 파라미터 수정
+  const MafooRoutes = [
+    {
+      name: 'home',
+      component: HomePage,
+    },
+    {
+      name: 'album',
+      component: AlbumPage,
+    },
+    {
+      name: 'album/:id',
+      component: AlbumDetailPage,
+    },
+    {
+      name: 'album/friend',
+      component: SharedFriendPage,
+    },
+    {
+      name: 'album/friend/add',
+      component: AddFriendPage,
+    },
+    {
+      name: 'album/create',
+      component: AlbumCreatePage,
+    },
+    {
+      name: 'profile',
+      component: ProfilePage,
+    },
+    {
+      name: 'introduction',
+      component: IntroductionPage,
+    },
+    {
+      name: 'introduction/keyword',
+      component: KeywordPage,
+    },
+    {
+      name: 'scanner',
+      component: ScannerPage,
+    },
+    {
+      name: 'scanner/select-album',
+      component: ScannerSelectAlbumPage,
+    },
+    {
+      name: 'sumone',
+      component: SumonePage,
+    },
+  ];
   return (
     <Fragment>
       <SafeAreaView style={{flex: 0, backgroundColor: 'white'}} />
       <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1, backgroundColor: 'white'}}>
-          <WebView
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="album">
+            {MafooRoutes.map(routes => (
+              <Stack.Screen name={routes.name} component={routes.component} />
+            ))}
+            {/* <WebView
             ref={webViewRef}
             originWhitelist={['*']}
             source={{
@@ -91,8 +167,9 @@ function App(): React.JSX.Element {
             mediaPlaybackRequiresUserAction={false}
             mediaCapturePermissionGrantType={'grant'}
             onNavigationStateChange={setNavState}
-          />
-        </View>
+          /> */}
+          </Stack.Navigator>
+        </NavigationContainer>
       </SafeAreaView>
     </Fragment>
   );
