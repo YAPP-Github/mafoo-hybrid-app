@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "fix": "eslint --fix .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
@@ -19,8 +21,10 @@
     "react-native": "0.74.3",
     "react-native-device-info": "^11.1.0",
     "react-native-gesture-handler": "^2.21.2",
+    "react-native-reanimated": "^3.16.6",
     "react-native-safe-area-context": "^5.1.0",
     "react-native-safe-area-view": "^1.1.1",
+    "react-native-screens": "^4.4.0",
     "react-native-splash-screen": "^3.3.0",
     "react-native-webview": "^13.10.4",
     "react-navigation": "^5.0.0",
