@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native"
 import SplashScreen from "react-native-splash-screen"
 
 import MafooRouter from "./src/store/routes/MafooRouter"
-import DeprecatedWebView from "./src/store/routes/DeprecatedWebView"
+// import DeprecatedWebView from "./src/store/routes/DeprecatedWebView"
 
 function App(): React.JSX.Element {
   useEffect(() => {

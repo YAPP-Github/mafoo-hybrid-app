@@ -1,84 +1,51 @@
-import { NavigationContainer } from "@react-navigation/native"
-import HomePage from "../../pages/HomePage"
-import AlbumPage from "../../pages/AlbumsPage"
-import AlbumDetailPage from "../../pages/AlbumDetailPage"
-import SharedFriendPage from "../../pages/SharedFriendPage"
-import AddFriendPage from "../../pages/AddFriendPage"
-import AlbumCreatePage from "../../pages/AlbumCreatePage"
-import ProfilePage from "../../pages/ProfilePage"
-import IntroductionPage from "../../pages/IntroductionPage"
-import KeywordPage from "../../pages/KeywordPage"
-import ScannerPage from "../../pages/ScannerPage"
-import ScannerSelectAlbumPage from "../../pages/ScannerSelectAlbumPage"
-import SumonePage from "../../pages/SumonePage"
-import { createStackNavigator } from "@react-navigation/stack"
+import React, { NavigationContainer } from "@react-navigation/native"
 
-const MafooRoutes = [
-  {
-    name: "home",
-    component: HomePage,
-  },
-  {
-    name: "album",
-    component: AlbumPage,
-  },
-  {
-    name: "album/:id",
-    component: AlbumDetailPage,
-  },
-  {
-    name: "album/friend",
-    component: SharedFriendPage,
-  },
-  {
-    name: "album/friend/add",
-    component: AddFriendPage,
-  },
-  {
-    name: "album/create",
-    component: AlbumCreatePage,
-  },
-  {
-    name: "profile",
-    component: ProfilePage,
-  },
-  {
-    name: "introduction",
-    component: IntroductionPage,
-  },
-  {
-    name: "introduction/keyword",
-    component: KeywordPage,
-  },
-  {
-    name: "scanner",
-    component: ScannerPage,
-  },
-  {
-    name: "scanner/select-album",
-    component: ScannerSelectAlbumPage,
-  },
-  {
-    name: "sumone",
-    component: SumonePage,
-  },
-]
+import { createStackNavigator } from "@react-navigation/stack"
+import { AuthProvider } from "../auth"
+import { useAuth } from "../auth/AuthProvider"
+import { useEffect } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { ProtectedRoutes, UnprotectedRoutes } from "./constants"
 
 const MafooRouter = () => {
   const Stack = createStackNavigator()
+  const { status, signIn, signOut } = useAuth()
+
+  const isSignedIn = status === "signIn"
+
+  useEffect(() => {
+    const restoreSession = async () => {
+      let token
+
+      try {
+        token = await AsyncStorage.getItem("token")
+        if (!token) {
+          throw new Error("No token")
+        }
+        signIn(token)
+      } catch (e) {
+        // failed to restore token
+        signOut()
+      }
+    }
+
+    restoreSession()
+  }, [signIn, signOut])
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="album">
-        {MafooRoutes.map((routes) => (
-          <Stack.Screen
-            key={routes.name}
-            name={routes.name}
-            component={routes.component}
-          />
-        ))}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={isSignedIn ? "album" : "home"}>
+          {(isSignedIn ? ProtectedRoutes : UnprotectedRoutes).map((route) => (
+            <Stack.Screen
+              key={route.name}
+              name={route.name}
+              component={route.component}
+            />
+          ))}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthProvider>
   )
 }
 
