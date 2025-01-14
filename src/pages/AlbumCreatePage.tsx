@@ -1,19 +1,29 @@
 import React from "react"
-import { View, Button, Text } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import { View, Text, StyleSheet, SafeAreaView } from "react-native"
+import { AlbumEditSection } from "../album/_component/create/AlbumEditSection"
+// import Header from "./_components/Header"
 
-const AlbumCreatePage = ({ navigation }: any) => {
+const AlbumCreatePage = () => {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>AlbumCreatePage</Text>
-      <Button
-        title="Go to Home"
-        onPress={() => {
-          navigation.navigate("HomeScreens")
-        }}
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+      {/* <Header /> */}
+      <Text style={styles.title}>새로운 앨범을 만들어주세요</Text>
+      <AlbumEditSection />
+    </SafeAreaView>
   )
 }
 
 export default AlbumCreatePage
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "600",
+    padding: 24,
+    color: "#000000",
+  },
+})
