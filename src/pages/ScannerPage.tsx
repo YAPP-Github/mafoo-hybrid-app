@@ -1,19 +1,19 @@
-import React from 'react';
-import {View, Button, Text} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import React from "react"
+import { View, Button, Text } from "react-native"
+import { useNavigation } from "@react-navigation/native"
 
-const ScannerPage = ({navigation}: any) => {
+const ScannerPage = ({ navigation }: any) => {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>ScannerPage</Text>
       <Button
         title="Go to Home"
         onPress={() => {
-          navigation.navigate('HomeScreens');
+          navigation.navigate("HomeScreens")
         }}
       />
     </View>
-  );
-};
+  )
+}
 
-export default ScannerPage;
+export default ScannerPage
