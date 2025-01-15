@@ -1,3 +1,5 @@
+import React from "react"
+
 import HomePage from "../../pages/Mainpage"
 import AlbumPage from "../../pages/AlbumsPage"
 import AlbumDetailPage from "../../pages/AlbumDetailPage"
@@ -18,40 +20,38 @@ export const UnprotectedRoutes = [
     options: {
       headerShown: false,
     },
-    component: HomePage,
+    children: () => <HomePage />,
   },
   {
     name: "album",
     options: {
       headerShown: false,
     },
-    component: AlbumPage,
+    children: () => <AlbumPage />,
   },
   {
     name: "AlbumDetail",
     options: {
       headerShown: false,
-      // {/** Page 별 Custom Header */ */}
-      // headerTitle: (props: any) => <AlbumDetailHeader {...props} />,
     },
-    component: AlbumDetailPage,
+    children: () => <AlbumDetailPage />,
   },
   {
     name: "AlbumCreate",
     options: {},
-    component: AlbumCreatePage,
+    children: () => <AlbumCreatePage />,
   },
   {
     name: "AddFriend",
     options: {
       headerShown: false,
     },
-    component: AddFriendPage,
+    children: () => <AddFriendPage />,
   },
   {
     name: "SharedFriend",
     options: {},
-    component: SharedFriendPage,
+    children: () => <SharedFriendPage />,
   },
 ]
 
@@ -60,56 +60,56 @@ export const ProtectedRoutes = [
   {
     name: "album",
     options: {},
-    component: AlbumPage,
+    children: () => <AlbumPage />,
   },
   {
     name: "AlbumDetail",
     options: {},
-    component: AlbumDetailPage,
+    children: () => <AlbumDetailPage />,
   },
   {
     name: "SharedFriend",
     options: {},
-    component: SharedFriendPage,
+    children: () => <SharedFriendPage />,
   },
   {
     name: "AddFriend",
     options: {},
-    component: AddFriendPage,
+    children: () => <AddFriendPage />,
   },
   {
     name: "album/create",
     options: {},
-    component: AlbumCreatePage,
+    children: () => <AlbumCreatePage />,
   },
   {
     name: "profile",
     options: {},
-    component: ProfilePage,
+    children: () => <ProfilePage />,
   },
   {
     name: "introduction",
     options: {},
-    component: IntroductionPage,
+    children: () => <IntroductionPage />,
   },
   {
     name: "introduction/keyword",
     options: {},
-    component: KeywordPage,
+    children: () => <KeywordPage />,
   },
   {
     name: "scanner",
     options: {},
-    component: ScannerPage,
+    children: () => <ScannerPage />,
   },
   {
     name: "scanner/select-album",
     options: {},
-    component: ScannerSelectAlbumPage,
+    children: () => <ScannerSelectAlbumPage />,
   },
   {
     name: "sumone",
     options: {},
-    component: SumonePage,
+    children: () => <SumonePage />,
   },
 ]

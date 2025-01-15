@@ -40,9 +40,9 @@ const MafooRouter = () => {
             <Stack.Screen
               key={route.name}
               name={route.name}
-              component={route.component}
-              options={route?.options}
-            />
+              options={route?.options}>
+              {route.children}
+            </Stack.Screen>
           ))}
         </Stack.Navigator>
       </NavigationContainer>
