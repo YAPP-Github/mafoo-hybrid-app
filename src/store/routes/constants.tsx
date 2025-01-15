@@ -1,4 +1,4 @@
-import HomePage from "../../pages/HomePage"
+import HomePage from "../../pages/Mainpage"
 import AlbumPage from "../../pages/AlbumsPage"
 import AlbumDetailPage from "../../pages/AlbumDetailPage"
 import SharedFriendPage from "../../pages/SharedFriendPage"
@@ -55,6 +55,7 @@ export const UnprotectedRoutes = [
   },
 ]
 
+// ProtectedRoutes definition
 export const ProtectedRoutes = [
   {
     name: "album",
