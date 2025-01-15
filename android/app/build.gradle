@@ -86,6 +86,7 @@ android {
         versionCode 9
         versionName "1.1.2"
     }
+    /*
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -113,6 +114,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    */
 }
 
 dependencies {

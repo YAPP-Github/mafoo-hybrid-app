@@ -166,111 +166,79 @@ ex) Display1 + Extralight -> tp-display1-extralight
 
 */
 
-/* display 1,2 */
-.tp-display1-extralight {
-  @apply text-display-1 font-extralight tracking-[.8px];
-}
-.tp-display1-regular {
-  @apply text-display-1 font-regular tracking-[.8px];
-}
-.tp-display1-semibold {
-  @apply text-display-1 font-semibold tracking-[.8px];
-}
-.tp-display2-extralight {
-  @apply text-display-2 font-extralight tracking-[.72px];
-}
-.tp-display2-regular {
-  @apply text-display-2 font-regular tracking-[.72px];
-}
-.tp-display2-semibold {
-  @apply text-display-2 font-semibold tracking-[.72px];
-}
-
-/* header 1,2 */
-.tp-header1-extralight {
-  @apply text-header-1 font-extralight tracking-[.56px];
-}
-.tp-header1-regular {
-  @apply text-header-1 font-regular tracking-[.56px];
-}
-.tp-header1-semibold {
-  @apply text-header-1 font-semibold tracking-[.56px];
-}
-
-.tp-header2-extralight {
-  @apply text-header-2 font-extralight tracking-[.48px];
-}
-.tp-header2-regular {
-  @apply text-header-2 font-regular tracking-[.48px];
-}
-.tp-header2-semibold {
-  @apply text-header-2 font-semibold tracking-[.48px];
-}
-
-/* title 1,2 */
-.tp-title1-extralight {
-  @apply text-title-1 font-extralight tracking-[.4px];
-}
-.tp-title1-regular {
-  @apply text-title-1 font-regular tracking-[.4px];
-}
-.tp-title1-semibold {
-  @apply text-title-1 font-semibold tracking-[.4px];
-}
-
-.tp-title2-extralight {
-  @apply text-title-2 font-extralight tracking-[.36px];
-}
-.tp-title2-regular {
-  @apply text-title-2 font-regular tracking-[.36px];
-}
-.tp-title2-semibold {
-  @apply text-title-2 font-semibold tracking-[.36px];
-}
-
-/* body 1,2 */
-.tp-body1-extralight {
-  @apply text-body-1 font-extralight tracking-[.32px];
-}
-.tp-body1-regular {
-  @apply text-body-1 font-regular tracking-[.32px];
-}
-.tp-body1-semibold {
-  @apply text-body-1 font-semibold tracking-[.32px];
-}
-
-.tp-body2-extralight {
-  @apply text-body-2 font-extralight tracking-[.28px];
-}
-.tp-body2-regular {
-  @apply text-body-2 font-regular tracking-[.28px];
-}
-.tp-body2-semibold {
-  @apply text-body-2 font-semibold tracking-[.28px];
-}
-
-/* caption 1,2 */
-.tp-caption1-extralight {
-  @apply text-caption-1 font-extralight tracking-[.24px];
-}
-.tp-caption1-regular {
-  @apply text-caption-1 font-regular tracking-[.24px];
-}
-.tp-caption1-semibold {
-  @apply text-caption-1 font-semibold tracking-[.24px];
-}
-
-.tp-caption2-extralight {
-  @apply text-caption-2 font-extralight tracking-[.24px];
-}
-.tp-caption2-regular {
-  @apply text-caption-2 font-regular tracking-[.24px];
-}
-.tp-caption2-semibold {
-  @apply text-caption-2 font-semibold tracking-[.24px];
-}
-
 .text-gradient-purple {
   color: transparent;
   background: linear-gradient(114deg, #c680ff 4.37%, #ff82c6 101.46%);
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-Thin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-ExtraLight.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-SemiBold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../font/Pretendard-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Define fallback fonts */
+:root {
+  --font-pretendard: "Pretendard", system-ui, arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-pretendard);
 }

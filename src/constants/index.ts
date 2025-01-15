@@ -1,7 +1,7 @@
-import { signOut } from "next-auth/react"
+// import { signOut } from "next-auth/react"
 
-import { quit } from "@/app/api/signIn"
-import { ListItemProps } from "@/app/profile/_components/ListItem"
+import { quit } from "../api/signIn"
+// import { ListItemProps } from "../profile/_components/ListItem"
 
 export const ICON_NAME = {
   HEART: "heartAngleBold",
@@ -21,52 +21,52 @@ export const ICON_COLOR_STYLE = {
   SMILE_FACE: "pink-600",
 } as const
 
-export const LIST_ITEM_INFO: ListItemProps[] = [
-  {
-    items: [
-      {
-        label: "1:1 문의",
-        link: "https://forms.gle/kX9j7co6jLvbgWFr7",
-      },
-      {
-        label: "서비스 이용약관",
-        link: "https://chisel-promise-9ff.notion.site/7d80231fcdf040158d31e48e7cd570a2",
-      },
-      {
-        label: "마푸를 소개해요",
-        link: "/profile/introduction",
-      },
-      {
-        label: "개발팀 소개",
-        link: "https://chisel-promise-9ff.notion.site/112385a9a75b8094b784e868d6779c1c",
-      },
-    ],
-  },
-  {
-    items: [
-      {
-        label: "로그아웃",
-        action: () => {
-          signOut()
-        },
-      },
-      {
-        label: "탈퇴하기",
-        action: () => {
-          confirm("정말 탈퇴하시겠어요?") &&
-            quit().then(
-              () => {
-                signOut()
-              },
-              () => {
-                alert("회원 탈퇴에 실패했어요 😉")
-              }
-            )
-        },
-      },
-    ],
-  },
-]
+// export const LIST_ITEM_INFO: ListItemProps[] = [
+//   {
+//     items: [
+//       {
+//         label: "1:1 문의",
+//         link: "https://forms.gle/kX9j7co6jLvbgWFr7",
+//       },
+//       {
+//         label: "서비스 이용약관",
+//         link: "https://chisel-promise-9ff.notion.site/7d80231fcdf040158d31e48e7cd570a2",
+//       },
+//       {
+//         label: "마푸를 소개해요",
+//         link: "/profile/introduction",
+//       },
+//       {
+//         label: "개발팀 소개",
+//         link: "https://chisel-promise-9ff.notion.site/112385a9a75b8094b784e868d6779c1c",
+//       },
+//     ],
+//   },
+//   {
+//     items: [
+//       {
+//         label: "로그아웃",
+//         action: () => {
+//           signOut()
+//         },
+//       },
+//       {
+//         label: "탈퇴하기",
+//         action: () => {
+//           confirm("정말 탈퇴하시겠어요?") &&
+//             quit().then(
+//               () => {
+//                 signOut()
+//               },
+//               () => {
+//                 alert("회원 탈퇴에 실패했어요 😉")
+//               }
+//             )
+//         },
+//       },
+//     ],
+//   },
+// ]
 
 export const ACCESS_TOKEN_KEY = "connect.sid"
 

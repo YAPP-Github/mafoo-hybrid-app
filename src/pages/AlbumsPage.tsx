@@ -1,16 +1,17 @@
 import React from "react"
-import { View, Button, Text } from "react-native"
+import { View, Text } from "react-native"
+import Albums from "../album/_component/Albums"
+import NewAlbumButton from "../album/_component/NewAlbumButton"
 
-const AlbumsPage = ({ navigation }: any) => {
+const AlbumsPage = () => {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text className="text-red-200">AlbumsPages</Text>
-      <Button
-        title="Go to Home"
-        onPress={() => {
-          navigation.navigate("home")
-        }}
-      />
+      <Text className="tp-header2-semibold w-full p-4 py-[14px]">내 앨범</Text>
+      <Albums />
+      {/* TODO: draggable 추가 */}
+      <NewAlbumButton />
+      {/* 하단 GNB */}
+      {/* <BottomBar variant="album" /> */}
     </View>
   )
 }
