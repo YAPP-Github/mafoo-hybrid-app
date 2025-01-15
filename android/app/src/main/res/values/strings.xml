@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">마푸</string>
+    <string name="kakao_app_key">7ef1511e74df8977b0f6623381da2fca</string>
 </resources>

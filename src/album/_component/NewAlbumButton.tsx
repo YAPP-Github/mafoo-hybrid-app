@@ -22,7 +22,7 @@ const NewAlbumButton = () => {
       style={styles.link}>
       <View style={styles.buttonContainer}>
         <Text style={styles.buttonText}>새 앨범 만들기</Text>
-        <Icon name="widgetAddOutline" size={20} color="white" />
+        {/* <Icon name="widgetAddOutline" size={20} color="white" /> */}
       </View>
     </TouchableOpacity>
   )
