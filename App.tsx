@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react"
-import { SafeAreaView } from "react-native"
+import { View } from "react-native"
 
 import SplashScreen from "react-native-splash-screen"
 import MafooRouter from "./src/store/routes/MafooRouter"
@@ -14,12 +14,11 @@ function App(): React.JSX.Element {
   return (
     <Fragment>
       <QueryProviders>
-        <SafeAreaView style={{ flex: 0, backgroundColor: "white" }} />
-        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <View className="flex-1">
           <MafooRouter />
           {/* 기존 Webview deprecated */}
           {/* <DeprecatedWebView /> */}
-        </SafeAreaView>
+        </View>
       </QueryProviders>
     </Fragment>
   )
