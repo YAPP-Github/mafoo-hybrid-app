@@ -1,4 +1,4 @@
-import HomePage from "../../pages/HomePage"
+import HomePage from "../../pages/Mainpage"
 import AlbumPage from "../../pages/AlbumsPage"
 import AlbumDetailPage from "../../pages/AlbumDetailPage"
 import SharedFriendPage from "../../pages/SharedFriendPage"
@@ -11,14 +11,35 @@ import ScannerPage from "../../pages/ScannerPage"
 import ScannerSelectAlbumPage from "../../pages/ScannerSelectAlbumPage"
 import SumonePage from "../../pages/SumonePage"
 
-export const UnprotectedRoutes = [
+export type RootStackParamList = {
+  home: undefined
+  album: undefined
+  "album/:id": { id: string }
+  "album/friend": undefined
+  "album/friend/add": undefined
+  "album/create": undefined
+  profile: undefined
+  introduction: undefined
+  "introduction/keyword": undefined
+  scanner: undefined
+  "scanner/select-album": undefined
+  sumone: undefined
+}
+
+type Route = {
+  name: keyof RootStackParamList
+  component: React.ComponentType
+}
+
+export const UnprotectedRoutes: Route[] = [
   {
     name: "home",
     component: HomePage,
   },
 ]
 
-export const ProtectedRoutes = [
+// ProtectedRoutes definition
+export const ProtectedRoutes: Route[] = [
   {
     name: "album",
     component: AlbumPage,
