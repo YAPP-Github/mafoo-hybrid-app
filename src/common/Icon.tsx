@@ -1,6 +1,6 @@
-import { ComponentProps } from "react"
-import Svg from "react-native-svg"
-import { cn } from "../utils"
+import React from "react"
+import { SvgProps, SvgXml } from "react-native-svg"
+import iconMap from "./iconMap"
 
 export type IconTypes =
   | "basketballBold"
@@ -40,69 +40,30 @@ export type IconTypes =
   | "permission"
   | "handShake"
   | "heartBold"
+  | "mafooLogo2025"
 
-export interface IconProps extends ComponentProps<"svg"> {
+export interface IconProps extends SvgProps {
   name: IconTypes
-  size: 16 | 20 | 24 | 28 | 36 | 44 | 56 | 64 | 120
+  size?: number
   color?: string
 }
 
-/**
- *
- * @param name 아이콘 이름과 타입 ex) heartAngleBold
- * @param size 아이콘 크기 ex) 16
- * @param color 아이콘에 적용할 컬러 ex) gray/600 -> gray-600 (기본값)
- */
-const Icon = ({
-  name,
-  size,
-  color = "gray-600",
-  className,
-  ...props
-}: IconProps) => {
-  // const uri = require(`../assets/${name}.svg`)
+const Icon = ({ name, size = 24, color = "#000", ...props }: IconProps) => {
+  const SvgComponent = iconMap[name]()
+  console.log(typeof SvgComponent)
+  if (!SvgComponent) {
+    throw new Error(`Icon not found: ${name}`)
+  }
+
   return (
-    <Svg
-      //{...props}
-      // uri={uri}
+    <SvgXml
+      xml={SvgComponent}
       width={size}
       height={size}
-      className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
+      fill={color}
+      onError={(err) => console.log(err)}
     />
   )
 }
 
 export default Icon
-
-export interface ImageIconProps extends ComponentProps<"svg"> {
-  name: IconTypes
-  width: number
-  height: number
-  color?: string
-}
-
-/**
- *
- * @param name 아이콘 이름과 타입 ex) heartAngleBold
- * @param size 아이콘 크기 ex) 16
- * @param color 아이콘에 적용할 컬러 ex) gray/600 -> gray-600 (기본값)
- */
-export const IconImage = ({
-  name,
-  width,
-  height,
-  color = "gray-600",
-  className,
-  ...props
-}: ImageIconProps) => {
-  // const uri = require(`../assets/${name}.svg`)
-  return (
-    <Svg
-      // {...props}
-      // uri={uri}
-      width={width}
-      height={height}
-      className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
-    />
-  )
-}
