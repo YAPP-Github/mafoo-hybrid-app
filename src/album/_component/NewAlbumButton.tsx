@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import Icon from "../../common/Icon"
+import MFText from "../../common/MFText"
+import NewAlbum from "../../assets/newAlbum.svg"
 
 export type RootStackParamList = {
   AlbumCreate: undefined
@@ -21,8 +23,13 @@ const NewAlbumButton = () => {
       accessibilityLabel="새 앨범 만들기"
       style={styles.link}>
       <View style={styles.buttonContainer}>
-        <Text style={styles.buttonText}>새 앨범 만들기</Text>
-        <Icon name="widgetAddOutline" size={20} color="white" />
+        <MFText
+          weight="SemiBold"
+          className="text-body1"
+          style={styles.buttonText}>
+          새 앨범 만들기
+        </MFText>
+        <NewAlbum size={20} color="white" />
       </View>
     </TouchableOpacity>
   )
@@ -40,10 +47,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    backgroundColor: "#16A34A",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    gap: 4,
+    backgroundColor: "#2D3541", // TODO: gray 800
+    paddingVertical: 15,
+    paddingHorizontal: 22,
     borderRadius: 9999,
   },
   buttonText: {

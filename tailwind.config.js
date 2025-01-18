@@ -159,6 +159,7 @@ module.exports = {
       caption1: ["12px", { lineHeight: "150%" }],
       caption2: ["10px", { lineHeight: "150%" }],
     },
+    extend: {},
   },
   plugins: [],
 }

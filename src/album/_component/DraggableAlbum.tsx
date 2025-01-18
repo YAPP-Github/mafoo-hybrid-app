@@ -82,5 +82,7 @@ export default DraggableAlbum
 
 // TODO: {`aspect-[164/150] w-[calc((100%-1rem)/2)] rounded-2xl transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg`}> */}
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    // backgroundColor: "red",
+  },
 })

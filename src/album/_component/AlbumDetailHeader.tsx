@@ -1,11 +1,12 @@
 import React from "react"
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-// import Icon from "@/common/Icon"
+import Icon from "../../common/Icon"
 import { albumDetailHeaderVariants as headerVariants } from "@/styles/variants"
 import { ICON_COLOR_STYLE, ICON_NAME } from "@/constants"
 import { AlbumInfo } from "@/album/types"
 import { cn } from "@/utils"
+import MFText from "../../common/MFText"
 
 interface HeaderProps {
   albumInfo: AlbumInfo
@@ -24,22 +25,26 @@ const AlbumDetailHeader = ({
   }
 
   return (
-    <View className={cn(headerVariants({ type: albumInfo.type }), className)}>
+    <View
+      style={styles.header}
+      className={cn(headerVariants({ type: albumInfo.type }), className)}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={styles.iconButton}>
-        {/* <Icon name="altArrowLeftOutline" size={28} /> */}
+        <Icon name="altArrowLeftOutline" size={28} />
       </TouchableOpacity>
       <View style={styles.titleContainer}>
-        {/* <Icon
+        <Icon
           name={ICON_NAME[albumInfo.type]}
           color={ICON_COLOR_STYLE[albumInfo.type]}
           size={28}
-        /> */}
-        <Text style={styles.title}>{albumInfo.name}</Text>
+        />
+        <MFText weight="SemiBold" className="text-title2" style={styles.title}>
+          {albumInfo.name}
+        </MFText>
       </View>
       <TouchableOpacity onPress={onTapMenu} style={styles.iconButton}>
-        {/* <Icon name="hamburger" size={28} /> */}
+        <Icon name="hamburger" size={28} />
       </TouchableOpacity>
     </View>
   )
@@ -49,13 +54,12 @@ export default AlbumDetailHeader
 
 const styles = StyleSheet.create({
   header: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    paddingVertical: 14,
+    height: 56,
   },
   default: {
     backgroundColor: "#f5f5f5",

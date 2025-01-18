@@ -38,7 +38,7 @@ export const albumDetailStickyHeaderVariants = cva("w-full", {
 })
 
 export const colorIconVariants = cva(
-  "flex items-center justify-center rounded-full",
+  "flex-1 items-center justify-center rounded-full",
   {
     variants: {
       iconColor: {
@@ -170,7 +170,7 @@ export const badgeVariants = cva(
 )
 
 export const bottomBarVariants = cva(
-  "fixed max-w-[430px] bottom-0 left-0 z-[1] flex w-full justify-evenly rounded-t-2xl pb-8 pt-5 tp-caption1-regular left-1/2 transform -translate-x-1/2",
+  "fixed flex-row max-w-[430px] bottom-0 left-0 z-[1] flex w-full justify-evenly rounded-t-2xl pb-8 pt-5 tp-caption1-regular transform-translate-x-1/2",
   {
     variants: {
       variant: {

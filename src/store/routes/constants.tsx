@@ -22,15 +22,12 @@ export const UnprotectedRoutes = [
   },
   {
     name: "album",
-    options: {
-      headerShown: false,
-    },
+    options: {},
     component: AlbumPage,
   },
   {
     name: "AlbumDetail",
     options: {
-      headerShown: false,
       // {/** Page 별 Custom Header */ */}
       // headerTitle: (props: any) => <AlbumDetailHeader {...props} />,
     },
@@ -38,14 +35,12 @@ export const UnprotectedRoutes = [
   },
   {
     name: "AlbumCreate",
-    options: {},
+
     component: AlbumCreatePage,
   },
   {
     name: "AddFriend",
-    options: {
-      headerShown: false,
-    },
+    options: {},
     component: AddFriendPage,
   },
   {

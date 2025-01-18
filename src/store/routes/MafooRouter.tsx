@@ -41,7 +41,7 @@ const MafooRouter = () => {
               key={route.name}
               name={route.name}
               component={route.component}
-              options={route?.options}
+              options={{ ...route?.options, headerShown: false }}
             />
           ))}
         </Stack.Navigator>

@@ -6,7 +6,8 @@ import { twMerge } from "tailwind-merge"
 import { AlbumValue } from "../types"
 import { albumItemVariants, photoCountVariants } from "../../styles/variants"
 // import Badge from "./Badge"
-//import ColorIcon from "../../common/ColorIcon"
+import ColorIcon from "../../common/ColorIcon"
+import MFText from "../../common/MFText"
 
 export interface AlbumItemProps extends VariantProps<typeof albumItemVariants> {
   value: AlbumValue
@@ -61,35 +62,37 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
         // Edit 모드
         <>
           <TextInput
-            className="tp-header1-semibold w-full rounded-lg bg-gray-100 py-2 px-3 caret-gray-600"
+            className="text-header1 w-full rounded-lg bg-gray-100 py-2 px-3 caret-gray-600"
             value={name}
             onChangeText={handleName}
             placeholder="새 앨범"
           />
-          <Text className="tp-body2-regular mt-1 text-right text-gray-500">
+          <Text className="text-body2 mt-1 text-right text-gray-500">
             {name.length}/8자
           </Text>
         </>
       ) : (
         // View 모드
         <>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className={`absolute left-0 top-0 h-full w-full rounded-2xl ${
               isSelected ? "opacity-100" : "opacity-0"
             }`}
-          />
-          <Text className="tp-title2-semibold text-gray-800">{name}</Text>
-          <Text className={photoCountVariants({ type })}>
+          /> */}
+          <MFText weight="SemiBold" className="text-title2 text-gray-800">
+            {name}
+          </MFText>
+          <MFText className={photoCountVariants({ type })}>
             사진 {photoCount}장
-          </Text>
+          </MFText>
           {/* {isNew && <Badge className="absolute -left-2 -top-2">New!</Badge>} */}
         </>
       )}
-      {/* <ColorIcon
+      <ColorIcon
         iconColor={type}
         className="absolute bottom-4 right-4"
         size={isEditable ? "large" : "medium"}
-      /> */}
+      />
     </View>
   )
 }

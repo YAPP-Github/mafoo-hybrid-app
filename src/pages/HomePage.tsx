@@ -4,8 +4,13 @@ import { useNavigation } from "@react-navigation/native"
 
 const HomePage = ({ navigation }: any) => {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>HomePage</Text>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+      <Text style={{ fontFamily: "Pretendard-Bold" }}>HomePage</Text>
       <Button
         title="Go to Home"
         onPress={() => {
