@@ -1,12 +1,13 @@
 import React from "react"
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import Icon from "../../common/Icon"
+import Icon from "@/common/Icon"
 import { albumDetailHeaderVariants as headerVariants } from "@/styles/variants"
 import { ICON_COLOR_STYLE, ICON_NAME } from "@/constants"
 import { AlbumInfo } from "@/album/types"
 import { cn } from "@/utils"
-import MFText from "../../common/MFText"
+import MFText from "@/common/MFText"
+import { ICON_COLOR_STYLE_HEX } from "@/constants"
 
 interface HeaderProps {
   albumInfo: AlbumInfo
@@ -36,7 +37,7 @@ const AlbumDetailHeader = ({
       <View style={styles.titleContainer}>
         <Icon
           name={ICON_NAME[albumInfo.type]}
-          color={ICON_COLOR_STYLE[albumInfo.type]}
+          color={ICON_COLOR_STYLE_HEX[albumInfo.type]}
           size={28}
         />
         <MFText weight="SemiBold" className="text-title2" style={styles.title}>
