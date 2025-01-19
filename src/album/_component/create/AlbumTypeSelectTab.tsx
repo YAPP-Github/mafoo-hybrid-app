@@ -23,7 +23,11 @@ function AlbumTypeSelectTab({ type, handleType }: AlbumTypeSelectTabProps) {
     <View style={styles.container}>
       {colors.map((color) => (
         <TouchableOpacity
-          style={{ height: color === type ? 48 : 36 }}
+          key={color}
+          style={{
+            height: color === type ? 48 : 36,
+            width: color === type ? 48 : 36,
+          }}
           onPress={() => handleType(color)}>
           <ColorIcon
             key={color}
