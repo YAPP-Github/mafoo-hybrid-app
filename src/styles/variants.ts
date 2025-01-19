@@ -51,7 +51,7 @@ export const colorIconVariants = cva(
       },
       size: {
         medium: "w-9 h-9",
-        large: "w-[52px] h-[52px]",
+        large: "w-[48px] h-[48px]",
       },
     },
     defaultVariants: {
