@@ -47,6 +47,7 @@ export interface IconProps extends ComponentProps<"svg"> {
   name: IconTypes
   size: 16 | 20 | 24 | 28 | 36 | 44 | 56 | 64 | 120
   color?: string
+  className?: string
 }
 
 /**
@@ -62,14 +63,13 @@ const Icon = ({
   className,
   ...props
 }: IconProps) => {
-  // const uri = require(`../assets/${name}.svg`)
-
   const SvgIcon = iconMap[name].default
 
   return (
     <SvgIcon
       width={size}
       height={size}
+      color={color}
       //className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
     />
   )
