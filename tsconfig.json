@@ -2,9 +2,17 @@
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
+    "module": "esnext",
+    "jsx": "react-jsx",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["custom.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "src/types/app.d.ts",
+    "custom.d.ts",
+    "src/types/**/*.ts"
+  ]
 }
