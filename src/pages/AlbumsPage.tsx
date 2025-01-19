@@ -1,5 +1,5 @@
 import React from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, SafeAreaView } from "react-native"
 import Albums from "../album/_component/Albums"
 import NewAlbumButton from "../album/_component/NewAlbumButton"
 import MafooLogo from "@/assets/mafooNewLogo.svg"
@@ -8,16 +8,18 @@ import BottomBar from "@/common/BottomBar"
 
 const AlbumsPage = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <MafooLogo width={112} height={36} color="#2D3541" />
-        <HeaderBell width={32} height={32} color="#B1B7BE" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <MafooLogo width={112} height={36} color="#2D3541" />
+          <HeaderBell width={32} height={32} color="#B1B7BE" />
+        </View>
+        <Albums />
+        {/* TODO: draggable 추가 */}
+        <NewAlbumButton />
+        <BottomBar variant="album" />
       </View>
-      <Albums />
-      {/* TODO: draggable 추가 */}
-      <NewAlbumButton />
-      <BottomBar variant="album" />
-    </View>
+    </SafeAreaView>
   )
 }
 

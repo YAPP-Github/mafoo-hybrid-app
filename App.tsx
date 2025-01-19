@@ -16,12 +16,9 @@ function App(): React.JSX.Element {
   return (
     <Fragment>
       <QueryProviders>
-        <SafeAreaView style={{ flex: 0, backgroundColor: "white" }} />
-        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-          <MafooRouter />
-          {/* 기존 Webview deprecated */}
-          {/* <DeprecatedWebView /> */}
-        </SafeAreaView>
+        <MafooRouter />
+        {/* 기존 Webview deprecated */}
+        {/* <DeprecatedWebView /> */}
       </QueryProviders>
     </Fragment>
   )
