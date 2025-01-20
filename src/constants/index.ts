@@ -21,6 +21,15 @@ export const ICON_COLOR_STYLE = {
   SMILE_FACE: "pink-600",
 } as const
 
+export const ICON_COLOR_STYLE_HEX = {
+  HEART: "#F56965",
+  FIRE: "#FF9B05",
+  BASKETBALL: "#30B57D",
+  BUILDING: "#146EC2",
+  STARFALL: "#B862EB",
+  SMILE_FACE: "#F966B2",
+} as const
+
 // export const LIST_ITEM_INFO: ListItemProps[] = [
 //   {
 //     items: [
