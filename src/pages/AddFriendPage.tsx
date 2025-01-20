@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, TextInput, ScrollView } from "react-native"
+import { View, Text, TextInput, ScrollView, SafeAreaView } from "react-native"
 import { useDebouncedCallback } from "use-debounce"
 import FriendElement from "../album/_component/add/FriendElement"
 import {
@@ -11,6 +11,7 @@ import {
 import { MemberSearchResult, searchMembers } from "../api/user"
 // import { SharePermissionDialog } from "./components/SharePermissionDialog"
 import { Header } from "../album/_component/add/Header"
+import MFText from "@/common/MFText"
 
 const AddFriendPage = ({ route }: { route: { params: { id: string } } }) => {
   const { id } = route.params
@@ -52,9 +53,9 @@ const AddFriendPage = ({ route }: { route: { params: { id: string } } }) => {
   const onSavePermissionLevel = (level: PermissionLevel) => {
     setAddDialogVisible(false)
     if (!editingMember) return
-    createSharedMember(id, editingMember.memberId, level).then(() => {
-      updateSearchResults(searchParam)
-    })
+    // createSharedMember(id, editingMember.memberId, level).then(() => {
+    //   updateSearchResults(searchParam)
+    // })
   }
 
   const initAlbum = async () => {
@@ -101,7 +102,9 @@ const AddFriendPage = ({ route }: { route: { params: { id: string } } }) => {
 
   return (
     <View className={`relative h-full w-full ${backgroundColorClass}`}>
-      <Header />
+      <SafeAreaView className={`${backgroundColorClass} pb-0`}>
+        <Header />
+      </SafeAreaView>
       {/*
       <SharePermissionDialog
         isOwnerMigrateVisible={false}
@@ -113,12 +116,15 @@ const AddFriendPage = ({ route }: { route: { params: { id: string } } }) => {
         onTapSave={onSavePermissionLevel}
       /> */}
       <View className="flex-1 px-6 py-4">
-        <Text className={`text-xl font-semibold ${textColorClass}`}>
-          <Text>{albumName}</Text> 앨범을
-        </Text>
-        <Text className="text-lg font-semibold text-gray-800">
+        <MFText weight="SemiBold" className={`text-header2 text-xl `}>
+          <MFText weight="SemiBold" className={textColorClass}>
+            {albumName || "24 Recap"}
+          </MFText>{" "}
+          앨범을
+        </MFText>
+        <MFText weight="SemiBold" className="text-header2 text-gray-800">
           공유할 친구를 찾아봐요
-        </Text>
+        </MFText>
         <TextInput
           className="mt-4 w-full rounded-lg bg-gray-100 p-3 text-gray-800"
           value={searchParam}
