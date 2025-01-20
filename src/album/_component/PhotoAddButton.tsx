@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native" // React Navigation 사용
 import { styled } from "nativewind"
 
-// import AddImageDialog from "@/app/album/[id]/_component/AddImageDialog"
+import { AddImageDialog } from "./add/AddImageDialog"
 import Icon from "@/common/Icon"
 
 interface PhotoAddButtonProps {
@@ -41,14 +41,15 @@ export const PhotoAddButton: React.FC<PhotoAddButtonProps> = ({
           <Icon name="galleryAddOutline" size={56} color="#CBD0D6" />
         </View>
       </StyledTouchableOpacity>
+      {/* isAddDialogShow == true인 경우 렌더링 */}
 
-      {/* <AddImageDialog
+      <AddImageDialog
         currentAlbumId={albumId}
         isVisible={isAddDialogShow}
         onTapQrScan={onTapQrScan}
         onTapBackdrop={onTapBackdrop}
         onImageUploaded={onImageUploaded}
-      /> */}
+      />
     </>
   )
 }

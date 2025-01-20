@@ -12,6 +12,7 @@ export interface SquareButtonProps extends VariantProps<typeof buttonVariants> {
   style?: ViewStyle | TextStyle | Array<ViewStyle | TextStyle>
   text?: string
   children?: React.ReactElement
+  className?: string
 }
 
 const SquareButton = forwardRef<any, SquareButtonProps>(
@@ -26,6 +27,7 @@ const SquareButton = forwardRef<any, SquareButtonProps>(
       onPress,
       text,
       children,
+      className,
       ...props
     },
     ref

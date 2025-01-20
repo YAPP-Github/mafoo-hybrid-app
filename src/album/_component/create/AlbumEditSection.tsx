@@ -32,7 +32,6 @@ export function AlbumEditSection({
   //const { postAlbum } = usePostAlbum()
 
   const handleType = (type: AlbumType) => {
-    // color 전달
     const nextValue = { ...value, type }
     setValue(nextValue)
   }
