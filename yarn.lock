@@ -6457,6 +6457,11 @@ react-native-gesture-handler@^2.21.2:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
 
+react-native-image-picker@^7.2.3:
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-7.2.3.tgz#9c402591462af256cdd9aed796c28083a48f90cd"
+  integrity sha512-zKIZUlQNU3EtqizsXSH92zPeve4vpUrsqHu2kkpCxWE9TZhJFZBb+irDsBOY8J21k0+Edgt06TMQGJ+iPUIXyA==
+
 react-native-reanimated@^3.16.6:
   version "3.16.7"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.16.7.tgz#6c7fa516f62c6743c24d955dada00e3c5323d50d"
@@ -6600,6 +6605,13 @@ react-test-renderer@18.2.0:
     react-is "^18.2.0"
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.0"
+
+react-toastify@^11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-11.0.3.tgz#1684de60baf745e761d3c608bb29581657e2fe01"
+  integrity sha512-cbPtHJPfc0sGqVwozBwaTrTu1ogB9+BLLjd4dDXd863qYLj7DGrQ2sg5RAChjFUB4yc3w8iXOtWcJqPK/6xqRQ==
+  dependencies:
+    clsx "^2.1.1"
 
 react@18.2.0:
   version "18.2.0"
