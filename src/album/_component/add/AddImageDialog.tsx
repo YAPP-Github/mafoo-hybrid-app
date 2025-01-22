@@ -10,18 +10,24 @@ import MFText from "@/common/MFText"
 
 interface AddImageDialogProps {
   currentAlbumId: string
-  isVisible: boolean
+  isAddDialogShow: boolean
+  backDropShow: boolean
   onTapQrScan: () => void
   onTapBackdrop: () => void
   onImageUploaded: () => void
+  onClossAddDialog: () => void
+  onCloseAddDialogOnly: () => void
 }
 
 export const AddImageDialog: React.FC<AddImageDialogProps> = ({
   currentAlbumId,
-  isVisible,
+  isAddDialogShow,
+  backDropShow,
   onTapQrScan,
   onTapBackdrop,
   onImageUploaded,
+  onClossAddDialog,
+  onCloseAddDialogOnly,
 }) => {
   const [isUploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -33,27 +39,71 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
     { run: () => Promise<unknown>; cancel: () => void }[]
   >([])
 
-  const testProgressBar = () => {
-    onTapBackdrop()
-    setUploading(true)
+  const onTapCancel = () => {
+    //   tasks.forEach((task) => task.cancel())
+    setUploading(false)
+    toast.error("업로드 진행이 취소됐어요")
   }
 
   const handleImageSelection = useCallback(async () => {
-    // const result = await launchImageLibrary({
-    //   mediaType: "photo",
-    //   selectionLimit: 30,
-    // })
-    // if (result.didCancel) return
-    // if (result.assets && result.assets.length > 30) {
-    //   setOverLimit(true)
-    //   return
-    // }
-    // const files = result.assets || []
-    // setProgress(0)
-    // setCurrentUploaded(0)
-    // setTotalFiles(files.length)
-    // setUploading(true)
-    // setTasks([])
+    const result = await launchImageLibrary({
+      mediaType: "photo",
+      selectionLimit: 30, // 최대 30개
+    })
+
+    if (result.didCancel) {
+      return
+    }
+    if (result.assets && result.assets.length > 30) {
+      setOverLimit(true)
+      return
+    }
+    const files = result.assets || []
+    setProgress(0)
+    setCurrentUploaded(0)
+    setTotalFiles(files.length)
+
+    /* 업로드 먼저 띄우고 (true로 유지) 기존 모달 닫기 */
+    setUploading(true)
+    onCloseAddDialogOnly()
+
+    setTasks([])
+
+    try {
+      function delay10Seconds() {
+        return new Promise((resolve, reject) => {
+          // 3초 후에 에러 발생
+          // const errorTimeout = setTimeout(() => {
+          //   reject(new Error("업로드 중 에러 발생"))
+          // }, 3000)
+
+          // 5초 후에 resolve
+          const resolveTimeout = setTimeout(() => {
+            //clearTimeout(errorTimeout)
+            resolve("5초 후 Resolve ")
+          }, 5000)
+        })
+      }
+
+      delay10Seconds()
+        .then((message) => {
+          console.log(message)
+          onImageUploaded()
+          setUploading(false)
+        })
+        .catch((error) => {
+          console.log(error.message)
+          /* 에러 모달 띄운 후 업로드 모달 닫기, 모달이 닫히는 상태 방지 */
+          setError(true)
+          setUploading(false)
+        })
+    } catch (e) {
+      console.error("에러 발생")
+      setError(true)
+    } finally {
+      // setUploading(false)
+    }
+
     // try {
     //   const preSignedResponse = await generatePreSignedUrls(
     //     files.map((file) => file.fileName!)
@@ -97,14 +147,23 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
   return (
     <>
       {/* isVisible: QR 코드 스캔 / 갤러리 선택 상태 */}
-      {isVisible && (
-        <Modal transparent visible={isVisible}>
-          <TouchableOpacity
-            onPress={onTapBackdrop}
-            activeOpacity={0.45}
-            style={{ opacity: 0.45, paddingHorizontal: 21 }}
-            className="flex-1 bg-gray-700"
-          />
+      <Modal
+        transparent
+        visible={backDropShow && (isAddDialogShow || isUploading || isError)}>
+        <TouchableOpacity
+          onPress={() => {
+            if (isAddDialogShow) {
+              onClossAddDialog() // 백드랍 + 이미지 모달 둘 다 닫음
+              setUploading(false)
+              setError(false)
+            }
+          }}
+          activeOpacity={0.45}
+          style={{ opacity: 0.45, paddingHorizontal: 21 }}
+          className="flex-1 bg-gray-700"
+        />
+
+        {isAddDialogShow && (
           <View
             style={{ transform: [{ translateX: 20 }] }}
             className="absolute z-30 w-[calc(100%-40px)] bottom-[24px] bg-white rounded-[16px]">
@@ -120,7 +179,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                 </View>
               </TouchableOpacity>
               <View className="w-[1px] h-full bg-gray-200" />
-              <TouchableOpacity onPress={testProgressBar}>
+              <TouchableOpacity onPress={handleImageSelection}>
                 <View className="px-[24px] py-[16px] items-center gap-[8px]">
                   <Icon name="galleryIcon" size={28} color="gray" />
                   <MFText
@@ -132,78 +191,81 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
               </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-      )}
-      {isUploading && (
-        <Modal transparent visible={isUploading}>
-          <TouchableOpacity
-            onPress={onTapBackdrop}
-            activeOpacity={0.45}
-            style={{ opacity: 0.45, paddingHorizontal: 21 }}
-            className="fixed flex-1 left-0 top-0 z-10 flex h-dvh w-dvw items-center justify-center bg-gray-800/50 px-5 transition-all duration-500"
-          />
-          <View>
-            {/* <TouchableOpacity
-            onPress={onTapBackdrop}
-            className="fixed left-0 top-0 z-10 flex h-dvh w-dvw items-center justify-center bg-gray-800/50 px-5 transition-all duration-500"> */}
+        )}
+
+        {isUploading && (
+          <View
+            style={{ transform: [{ translateX: 25 }, { translateY: 300 }] }}
+            className="absolute z-30 w-[350px] bg-white rounded-[16px] px-[20px]">
             <View className="w-full rounded-2xl bg-white p-6 px-8">
               <View className="flex flex-col items-center gap-1">
+                {/* 업로드 %, 텍스트 */}
                 <View className="flex flex-col items-center gap-1">
-                  <MFText className="tp-header2-semibold text-gray-900">
+                  <MFText
+                    weight="SemiBold"
+                    className="text-header2 text-gray-900">
                     {progress}%
                   </MFText>
-                  <MFText className="tp-body1-regular text-gray-500">
+                  <MFText className="text-body1 text-gray-500">
                     마푸가 열심히 올리는 중...
                   </MFText>
                 </View>
+                {/* 마푸 아이콘 */}
                 <Icon name="uploadMafoo" size={120} color="gray-500" />
-                <View className="flex w-full flex-col items-end">
-                  <View
-                    className="relative h-2 w-full bg-gray-200"
-                    style={{ borderRadius: "64px" }}>
+                {/* Progress bar */}
+                <View className="flex w-full flex-col items-end gap-1">
+                  <View className="relative h-2 w-full bg-gray-200 rounded-[64px]">
                     <View
-                      className="absolute h-2 bg-green-600"
+                      className="absolute h-2 bg-green-600 rounded-[64px]"
                       style={{
-                        borderRadius: "64px",
                         width: progress + "%",
-                      }}></View>
+                      }}
+                    />
                   </View>
                   <MFText className="tp-caption1-regular text-gray-400">
                     {currentUploaded} / {totalFiles}장
                   </MFText>
                 </View>
-                <View className="h-3" />
+
                 <View className="flex w-full">
-                  {/* <SquareButton
-                    className="flex-1"
+                  {/* onTapCancel */}
+                  <SquareButton
+                    className="flex-1 mt-[20px]"
                     variant="weak"
                     size="medium"
-                    theme="red"
-                    onClick={onTapCancel}>
-                    업로드 그만두기
-                  </SquareButton> */}
+                    theme="red">
+                    <TouchableOpacity onPress={onTapCancel}>
+                      <MFText
+                        weight="SemiBold"
+                        className="text-body2 text-red-600">
+                        업로드 그만두기
+                      </MFText>
+                    </TouchableOpacity>
+                  </SquareButton>
                 </View>
               </View>
             </View>
             {/* </TouchableOpacity> */}
           </View>
-        </Modal>
-      )}
-      {isError && (
-        <View className="absolute inset-0">
-          <View className="items-center justify-center">
-            <Icon name="sadMafoo" size={120} color="gray" />
-            <Text className="text-lg font-bold text-gray-900">업로드 실패</Text>
-            <SquareButton
-              className="mt-4"
-              onPress={() => setError(false)}
-              variant="weak"
-              size="medium">
-              <Text>닫기</Text>
-            </SquareButton>
+        )}
+        {isError && (
+          <View className="absolute inset-0">
+            <View className="items-center justify-center">
+              <Icon name="sadMafoo" size={120} color="gray" />
+              <Text className="text-lg font-bold text-gray-900">
+                업로드 실패
+              </Text>
+              <SquareButton
+                className="mt-4"
+                onPress={() => setError(false)}
+                variant="weak"
+                size="medium">
+                <Text>닫기</Text>
+              </SquareButton>
+            </View>
           </View>
-        </View>
-      )}
+        )}
+      </Modal>
     </>
   )
 }

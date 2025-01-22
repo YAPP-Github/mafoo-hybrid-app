@@ -19,6 +19,7 @@ export const PhotoAddButton: React.FC<PhotoAddButtonProps> = ({
 }) => {
   const navigation = useNavigation()
   const [isAddDialogShow, setIsAddDialogShow] = useState(false)
+  const [backDropShow, setBackDropShow] = useState(false)
 
   const onTapQrScan = () => {
     // navigation.navigate("Scanner", { albumId })
@@ -26,10 +27,21 @@ export const PhotoAddButton: React.FC<PhotoAddButtonProps> = ({
 
   const onClickAdd = () => {
     setIsAddDialogShow(true)
+    setBackDropShow(true)
+  }
+
+  const onCloseAddDialogOnly = () => {
+    setIsAddDialogShow(false)
+  }
+
+  const onClossAddDialog = () => {
+    setIsAddDialogShow(false)
+    setBackDropShow(false)
   }
 
   const onTapBackdrop = () => {
-    setIsAddDialogShow(false)
+    // setIsAddDialogShow(false)
+    setBackDropShow(false)
   }
 
   return (
@@ -41,14 +53,15 @@ export const PhotoAddButton: React.FC<PhotoAddButtonProps> = ({
           <Icon name="galleryAddOutline" size={56} color="#CBD0D6" />
         </View>
       </StyledTouchableOpacity>
-      {/* isAddDialogShow == true인 경우 렌더링 */}
-
       <AddImageDialog
         currentAlbumId={albumId}
-        isVisible={isAddDialogShow}
+        isAddDialogShow={isAddDialogShow}
         onTapQrScan={onTapQrScan}
         onTapBackdrop={onTapBackdrop}
         onImageUploaded={onImageUploaded}
+        onClossAddDialog={onClossAddDialog}
+        backDropShow={backDropShow}
+        onCloseAddDialogOnly={onCloseAddDialogOnly}
       />
     </>
   )
