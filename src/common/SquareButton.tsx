@@ -4,6 +4,7 @@ import { VariantProps } from "class-variance-authority"
 import { styled } from "nativewind"
 
 import { buttonVariants } from "@/styles/variants"
+import MFText from "./MFText"
 
 export interface SquareButtonProps extends VariantProps<typeof buttonVariants> {
   asChild?: boolean
@@ -52,7 +53,7 @@ const SquareButton = forwardRef<any, SquareButtonProps>(
         onPress={disabled ? undefined : onPress}
         ref={ref}
         {...props}>
-        <Text>{children}</Text>
+        <MFText>{children}</MFText>
       </StyledPressable>
     )
   }
