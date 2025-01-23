@@ -42,6 +42,7 @@ export type IconTypes =
   | "permission"
   | "handShake"
   | "heartBold"
+  | "checkCircleBold"
 
 export interface IconProps extends ComponentProps<"svg"> {
   name: IconTypes

@@ -110,9 +110,9 @@ export const buttonVariants = cva(
       },
       theme: { green: "", red: "", gray: "" },
       size: {
-        large: "h-14 px-6 tp-body1-semibold",
-        medium: "h-10 px-5 tp-body2-semibold",
-        small: "h-8 px-4 tp-caption1-semibold",
+        large: "h-14 px-6 text-body1",
+        medium: "h-10 px-5 text-body2",
+        small: "h-8 px-4 text-caption1",
       },
     },
     compoundVariants: [

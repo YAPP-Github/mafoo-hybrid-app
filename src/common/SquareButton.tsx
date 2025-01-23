@@ -33,19 +33,18 @@ const SquareButton = forwardRef<any, SquareButtonProps>(
     },
     ref
   ) => {
-    const buttonStyles = buttonVariants({ variant, size, theme })
     const StyledPressable = styled(Pressable)
 
-    // buttonStyles: inline-flex items-center ...
+    // weak medium
     return asChild ? (
       <View
-        className={buttonStyles}
+        className={buttonVariants({ variant, size, theme })}
         style={[disabled && { backgroundColor: "#e5e5e5" }]}>
         {children}
       </View>
     ) : (
       <StyledPressable
-        className={buttonStyles}
+        className={buttonVariants({ variant, size, theme })}
         style={[
           style,
           disabled && { backgroundColor: "#e5e5e5", color: "#a1a1a1" },
