@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from "react"
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native"
 import { launchImageLibrary } from "react-native-image-picker"
-import { toast } from "react-toastify"
+import Toast from "react-native-toast-message"
 import { generatePreSignedUrls, uploadPhotosWithUrls } from "@/api/photo"
 import Icon from "@/common/Icon"
 import SquareButton from "@/common/SquareButton"
@@ -42,13 +42,16 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
   const onTapCancel = () => {
     //   tasks.forEach((task) => task.cancel())
     setUploading(false)
-    toast.error("업로드 진행이 취소됐어요")
+    Toast.show({
+      type: "errorToast",
+      text1: "업로드 진행이 취소됐어요",
+    })
   }
 
   const handleImageSelection = useCallback(async () => {
     const result = await launchImageLibrary({
       mediaType: "photo",
-      selectionLimit: 30, // 최대 30개
+      selectionLimit: 30,
     })
 
     if (result.didCancel) {
@@ -218,7 +221,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                     <View
                       className="absolute h-2 bg-green-600 rounded-[64px]"
                       style={{
-                        width: progress + "%",
+                        width: progress,
                       }}
                     />
                   </View>
@@ -226,9 +229,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                     {currentUploaded} / {totalFiles}장
                   </MFText>
                 </View>
-
                 <View className="flex w-full">
-                  {/* onTapCancel */}
                   <SquareButton
                     className="flex-1 mt-[20px]"
                     variant="weak"
@@ -245,23 +246,38 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                 </View>
               </View>
             </View>
-            {/* </TouchableOpacity> */}
           </View>
         )}
         {isError && (
-          <View className="absolute inset-0">
-            <View className="items-center justify-center">
-              <Icon name="sadMafoo" size={120} color="gray" />
-              <Text className="text-lg font-bold text-gray-900">
-                업로드 실패
-              </Text>
-              <SquareButton
-                className="mt-4"
-                onPress={() => setError(false)}
-                variant="weak"
-                size="medium">
-                <Text>닫기</Text>
-              </SquareButton>
+          <View
+            style={{ transform: [{ translateX: 25 }, { translateY: 300 }] }}
+            className="absolute z-30 w-[350px] bg-white rounded-[16px]">
+            <View className="w-full rounded-2xl bg-white p-6 px-8">
+              <View className="flex flex-col items-center gap-1">
+                <View className="flex flex-col items-center gap-1">
+                  <MFText
+                    weight="SemiBold"
+                    className="text-header2 text-gray-900">
+                    앗, 다시 시도해주세요
+                  </MFText>
+                  <MFText className="text-body1 text-gray-500">
+                    네트워크가 잘 연결되었는지 확인해주세요
+                  </MFText>
+                </View>
+                <Icon name="sadMafoo" size={120} color="gray" />
+                <View className="flex w-full">
+                  <SquareButton
+                    className="mt-4"
+                    onPress={() => setError(false)}
+                    theme="gray"
+                    variant="weak"
+                    size="medium">
+                    <MFText weight="SemiBold" className="text-body2">
+                      닫기
+                    </MFText>
+                  </SquareButton>
+                </View>
+              </View>
             </View>
           </View>
         )}
