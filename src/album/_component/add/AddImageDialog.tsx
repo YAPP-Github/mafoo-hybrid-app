@@ -229,19 +229,18 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                     {currentUploaded} / {totalFiles}장
                   </MFText>
                 </View>
-                <View className="flex w-full">
+                <View className="flex w-full mt-[20px]">
                   <SquareButton
+                    onPress={onTapCancel}
                     className="flex-1 mt-[20px]"
                     variant="weak"
                     size="medium"
                     theme="red">
-                    <TouchableOpacity onPress={onTapCancel}>
-                      <MFText
-                        weight="SemiBold"
-                        className="text-body2 text-red-600">
-                        업로드 그만두기
-                      </MFText>
-                    </TouchableOpacity>
+                    <MFText
+                      weight="SemiBold"
+                      className="text-body2 text-red-600">
+                      업로드 그만두기
+                    </MFText>
                   </SquareButton>
                 </View>
               </View>

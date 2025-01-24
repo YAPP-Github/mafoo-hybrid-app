@@ -37,11 +37,12 @@ const SquareButton = forwardRef<any, SquareButtonProps>(
 
     // weak medium
     return asChild ? (
-      <View
+      <StyledPressable
+        onPress={disabled ? undefined : onPress}
         className={buttonVariants({ variant, size, theme })}
         style={[disabled && { backgroundColor: "#e5e5e5" }]}>
         {children}
-      </View>
+      </StyledPressable>
     ) : (
       <StyledPressable
         className={buttonVariants({ variant, size, theme })}
