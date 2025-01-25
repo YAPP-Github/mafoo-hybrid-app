@@ -45,23 +45,25 @@ export type IconTypes =
 export interface IconProps extends SvgProps {
   name: IconTypes
   size?: number
+  height?: number
   color?: string
 }
 
-const Icon = ({ name, size = 24, color = "#000", ...props }: IconProps) => {
-  const SvgComponent = iconMap[name]()
-  console.log(typeof SvgComponent)
-  if (!SvgComponent) {
-    throw new Error(`Icon not found: ${name}`)
-  }
+const Icon = ({
+  name,
+  size = 24,
+  height,
+  color = "#000",
+  ...props
+}: IconProps) => {
+  const SvgComponent = iconMap[name].default
 
   return (
-    <SvgXml
-      xml={SvgComponent}
+    <SvgComponent
+      {...props}
       width={size}
-      height={size}
+      height={height || size}
       fill={color}
-      onError={(err) => console.log(err)}
     />
   )
 }
