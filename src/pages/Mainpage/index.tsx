@@ -3,23 +3,55 @@ import { View, Text, Image, Button, Pressable } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import MainpageImgSrc from "./_assets/MainpageImage.png"
 import PageContainer from "@/common/PageContainer"
-import Icon from "@/common/Icon"
+// import Icon from "@/common/Icon"
 import { login, logout } from "@react-native-seoul/kakao-login"
+import Icon from "@/common/Icon"
+import { useAuth } from "@/store/auth/AuthProvider"
+import { setRefreshToken } from "@/store/auth/util"
+import appleAuth from "@invertase/react-native-apple-authentication"
+import { mafooAppleLogin } from "@/api/signIn"
+import { Platform } from "react-native"
 
 const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
+  const { signIn } = useAuth()
+
   const kakaoLogin = () => {
     console.log("kakao login")
     signInWithKakao()
   }
 
-  const appleLogin = () => {
-    console.log("apple login")
-    signOutWithKakao()
+  const appleLogin = async () => {
+    // performs login request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      // Note: it appears putting FULL_NAME first is important, see issue #293
+      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+    })
+    // get current authentication state for user
+    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+    const credentialState = await appleAuth.getCredentialStateForUser(
+      appleAuthRequestResponse.user
+    )
+
+    // use credentialState response to ensure the user is authenticated
+    if (
+      credentialState === appleAuth.State.AUTHORIZED &&
+      appleAuthRequestResponse.identityToken
+    ) {
+      // user is authenticated
+      console.log("apple login success", appleAuthRequestResponse)
+      const response = await mafooAppleLogin(
+        appleAuthRequestResponse.identityToken
+      )
+      console.log(response)
+    }
   }
 
   const signInWithKakao = async (): Promise<void> => {
     try {
       const token = await login()
+      signIn(token.accessToken)
+      setRefreshToken(token.refreshToken)
       console.log(token)
     } catch (err) {
       console.error("login err", err)
@@ -54,10 +86,11 @@ const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
 
   return (
     <Pressable
-      className={`flex items-center justify-center w-full py-4 rounded-xl ${loginButtonMap[type].buttonColor}`}
+      style={{ gap: 6 }}
+      className={`flex items-center flex-row justify-center w-full py-4 rounded-xl ${loginButtonMap[type].buttonColor}`}
       onPress={loginButtonMap[type].onLogin}>
       {/* TODO: Icon */}
-      {/* {loginButtonMap[type].logo} */}
+      {loginButtonMap[type].logo}
       <Text
         className={`font-semibold text-body ${loginButtonMap[type].textColor}`}>
         {loginButtonMap[type].buttonText}
@@ -74,17 +107,23 @@ const HomePage = ({ navigation }: any) => {
         locations={[0.0692, 0.1577, 0.5672, 0.834]}
         className="flex flex-1 px-6">
         <View className="flex items-center justify-between w-full h-full pt-12 pb-6">
-          <Text className="text-title2 font-regular">
-            함께 쌓고 연결되는 공유앨범
-          </Text>
+          <View style={{ gap: 12 }} className="flex flex-col items-center">
+            <Text className="text-title2 font-regular">
+              함께 쌓고 연결되는 공유앨범
+            </Text>
+            <Icon name="mafooLogo2025" size={220} height={57} />
+          </View>
           {/* TODO: Icon issue 해결 후 logo svg 삽입 */}
-          {/* <Icon name="mafooLogo2025" size={180} /> */}
 
           <Image source={MainpageImgSrc} className="fixed" />
 
           <View style={{ gap: 16 }} className="flex flex-col w-full">
             <LoginButton type="kakao" />
-            <LoginButton type="apple" />
+            {Platform.OS === "ios" && <LoginButton type="apple" />}
+            <Button
+              title="test123"
+              onPress={() => navigation.navigate("scanner")}
+            />
           </View>
         </View>
       </LinearGradient>
