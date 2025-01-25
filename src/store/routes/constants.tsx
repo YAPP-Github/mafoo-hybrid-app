@@ -20,38 +20,42 @@ export const UnprotectedRoutes = [
     options: {
       headerShown: false,
     },
-    children: () => <HomePage />,
+    components: HomePage,
   },
   {
     name: "album",
     options: {
       headerShown: false,
     },
-    children: () => <AlbumPage />,
+    components: AlbumPage,
   },
   {
     name: "AlbumDetail",
     options: {
       headerShown: false,
     },
-    children: () => <AlbumDetailPage />,
+    components: AlbumDetailPage,
   },
   {
     name: "AlbumCreate",
     options: {},
-    children: () => <AlbumCreatePage />,
+    components: AlbumCreatePage,
   },
   {
     name: "AddFriend",
     options: {
       headerShown: false,
     },
-    children: () => <AddFriendPage />,
+    components: AddFriendPage,
   },
   {
     name: "SharedFriend",
     options: {},
-    children: () => <SharedFriendPage />,
+    components: SharedFriendPage,
+  },
+  {
+    name: "scanner",
+    components: ScannerPage,
   },
 ]
 
@@ -60,56 +64,56 @@ export const ProtectedRoutes = [
   {
     name: "album",
     options: {},
-    children: () => <AlbumPage />,
+    components: AlbumPage,
   },
   {
     name: "AlbumDetail",
     options: {},
-    children: () => <AlbumDetailPage />,
+    components: AlbumDetailPage,
   },
   {
     name: "SharedFriend",
     options: {},
-    children: () => <SharedFriendPage />,
+    components: SharedFriendPage,
   },
   {
     name: "AddFriend",
     options: {},
-    children: () => <AddFriendPage />,
+    components: AddFriendPage,
   },
   {
     name: "album/create",
     options: {},
-    children: () => <AlbumCreatePage />,
+    components: AlbumCreatePage,
   },
   {
     name: "profile",
     options: {},
-    children: () => <ProfilePage />,
+    components: ProfilePage,
   },
   {
     name: "introduction",
     options: {},
-    children: () => <IntroductionPage />,
+    components: IntroductionPage,
   },
   {
     name: "introduction/keyword",
     options: {},
-    children: () => <KeywordPage />,
+    components: KeywordPage,
   },
   {
     name: "scanner",
     options: {},
-    children: () => <ScannerPage />,
+    components: ScannerPage,
   },
   {
     name: "scanner/select-album",
     options: {},
-    children: () => <ScannerSelectAlbumPage />,
+    components: ScannerSelectAlbumPage,
   },
   {
     name: "sumone",
     options: {},
-    children: () => <SumonePage />,
+    components: SumonePage,
   },
 ]
