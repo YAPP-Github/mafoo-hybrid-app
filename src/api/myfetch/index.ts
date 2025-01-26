@@ -42,7 +42,7 @@ export const createUnauthorizedFetcher = (path: string) => {
 
 export const createFetcher = (path: string) => {
   const instance = axios.create({
-    baseURL: `${process.env.REACT_APP_API_URL}${path}`,
+    baseURL: `${API_URL}${path}`,
     timeout: FETCHER_TIME_OUT,
   })
 
@@ -76,13 +76,10 @@ export const createFetcher = (path: string) => {
         return Promise.reject(_err)
       }
       try {
-        const reissueResponse = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/reissue`,
-          {
-            accessToken,
-            refreshToken,
-          }
-        )
+        const reissueResponse = await axios.post(`${API_URL}/reissue`, {
+          accessToken,
+          refreshToken,
+        })
 
         setAccessToken(reissueResponse.data.accessToken)
         setRefreshToken(reissueResponse.data.refreshToken)
