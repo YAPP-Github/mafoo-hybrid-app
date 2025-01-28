@@ -1,57 +1,90 @@
-"use client"
-
-import Image from "next/image"
-import { useEffect } from "react"
-
-import { recapColorVariants } from "@/styles/variants"
-import { cn } from "@/utils"
-
-import { AlbumType } from "../../types"
+import { useState } from "react"
+import { View, StyleSheet, Modal, TouchableOpacity, Image } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
+import { recapColorLinearGradient } from "@/styles/variants"
+import { AlbumType } from "@/album/types"
+import MFText from "@/common/MFText"
+import Icon from "@/common/Icon"
 
 interface VideoLoadingProps {
   type: AlbumType
+  visible: boolean
+  closeRecapModal: () => void
 }
 
-const VideoLoading = ({ type }: VideoLoadingProps) => {
-  useEffect(() => {
-    // 로딩 중일 때 스크롤 비활성화
-    document.body.style.overflow = "hidden"
-    // 컴포넌트가 언마운트될 때 스크롤을 원래 상태로 복구
-    return () => {
-      document.body.style.overflow = "auto"
-    }
-  }, [])
+const VideoLoading = ({
+  type,
+  visible,
+  closeRecapModal,
+}: VideoLoadingProps) => {
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
 
   return (
-    <div className="fixed left-0 top-0 z-10 h-dvh w-full overflow-hidden bg-gray-800 bg-opacity-50">
-      <div
-        role="status"
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
-        <div
-          className={cn(
-            recapColorVariants({ type }),
-            "flex h-[224px] w-[345px] flex-col items-center rounded-[24px]"
-          )}
-          style={{
-            borderRadius: "24px",
-            boxShadow:
-              "0px 16px 20px 0px rgba(101, 125, 159, 0.12), 0px 0px 8px 0px rgba(88, 100, 117, 0.08)",
-          }}>
-          <Image
-            className="mb-2 mt-6"
-            src="/images/reel.gif"
-            width={170}
-            height={170}
-            alt="loading"
-          />
-
-          <span className="tp-title1-semibold whitespace-pre text-center text-white">
-            {"앨범 속 추억을\n리캡으로 만드는 중이에요.."}
-          </span>
-        </div>
-      </div>
-    </div>
+    <Modal visible={visible} transparent>
+      <TouchableOpacity
+        activeOpacity={0.45}
+        style={{ opacity: 0.45 }}
+        className="flex-1 bg-gray-700 px-[21px]"
+        // onPress={closeRecapModal}
+      />
+      <View
+        className="absolute left-[50%] top-[50%]"
+        onLayout={(event) => {
+          // 컴포넌트 크기 기준 레이아웃 계산
+          const { width, height } = event.nativeEvent.layout
+          setOffset({ x: -width / 2, y: -height / 2 })
+        }}
+        style={{
+          transform: [{ translateX: offset.x }, { translateY: offset.y }],
+        }}>
+        <LinearGradient
+          className="rounded-[24px]"
+          {...recapColorLinearGradient.SMILE_FACE}>
+          <View
+            style={[
+              styles.card,
+              {
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 16 },
+                shadowOpacity: 0.12,
+                shadowRadius: 20,
+              },
+            ]}>
+            <View className="w-full items-end pt-[16px] px-[12px]">
+              <TouchableOpacity onPress={closeRecapModal}>
+                <Icon
+                  name="closeCircleBold"
+                  size={36}
+                  color="gray-300"
+                  // className="mix-blend-multiply"
+                />
+              </TouchableOpacity>
+            </View>
+            <Image
+              style={{ width: 169, height: 169, marginTop: -50 }}
+              className="mb-2"
+              source={require("@/assets/reel.gif")}
+              resizeMode="contain"
+            />
+            <MFText
+              weight="SemiBold"
+              className="text-title1 text-center text-sumone-white mt-[-28px]">
+              {"앨범 속 추억을\n리캡으로 만드는 중이에요.."}
+            </MFText>
+          </View>
+        </LinearGradient>
+      </View>
+    </Modal>
   )
 }
 
 export default VideoLoading
+
+const styles = StyleSheet.create({
+  card: {
+    flexDirection: "column",
+    alignItems: "center",
+    height: 224,
+    width: 345,
+  },
+})

@@ -209,14 +209,14 @@ export const recapColorLinearGradient = {
     end: { x: 1, y: 0 },
   },
   FIRE: {
-    colors: ["#FF8E75", "#FFA654"],
+    colors: ["#FFB864", "#F8E47A"],
     start: { x: 0, y: 0 },
-    end: { x: 1, y: 0 },
+    end: { x: 0, y: 1 },
   },
   BASKETBALL: {
-    colors: ["#38D934", "#46E4D1"],
+    colors: ["#6DE694", "#F7F286"],
     start: { x: 0, y: 0 },
-    end: { x: 1, y: 0 },
+    end: { x: 0, y: 1 },
   },
   BUILDING: {
     colors: ["#92AAFF", "#9FE7FC"],
@@ -224,14 +224,14 @@ export const recapColorLinearGradient = {
     end: { x: 0, y: 1 },
   },
   STARFALL: {
-    colors: ["#C680FF", "#FF82C6"],
+    colors: ["#DF9AFF", "#BAC5FF"],
     start: { x: 0, y: 0 },
-    end: { x: 1, y: 0 },
+    end: { x: 0, y: 1 },
   },
   SMILE_FACE: {
-    colors: ["#FF7BBF", "#FF79A9"],
+    colors: ["#FF9DC7", "#FCE4A4"],
     start: { x: 0, y: 0 },
-    end: { x: 1, y: 0 },
+    end: { x: 0, y: 1 },
   },
   false: {
     colors: ["#C680FF", "#FF82C6"],
