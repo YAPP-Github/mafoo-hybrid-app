@@ -1,20 +1,12 @@
-import React, { useEffect, useRef, useState } from "react"
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native"
+import { useEffect, useRef, useState } from "react"
+import { View, TouchableOpacity, StyleSheet } from "react-native"
 import MasonryList from "@react-native-seoul/masonry-list"
-// import VideoLoading from "../_component/VideoLoading"
-// import VideoRecap from "../_component/VideoRecap"
 import {
   deletePhoto,
   generateRecap,
   getPhotos,
   PermissionLevel,
-} from "../../api/photo"
+} from "@/api/photo"
 // import Button from "@/common/Button"
 // import Icon from "@/common/Icon"
 import { recapColorVariants } from "@/styles/variants"
@@ -22,7 +14,7 @@ import { AlbumInfo, PhotoInfo } from "../types"
 import ImageDetail from "./ImageDetail"
 import { Photo } from "./Photo"
 import { PhotoAddButton } from "./PhotoAddButton"
-import { photo as data } from "../../dummy"
+import { photo as data } from "@/dummy"
 
 interface AlbumPhotosProps {
   albumInfo: AlbumInfo
@@ -77,10 +69,6 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
     fetchAlbums()
   }
 
-  const handleCloseRecap = () => {
-    setIsRecapOpen(false)
-  }
-
   useEffect(() => {
     fetchAlbums()
   }, [albumInfo.albumId])
@@ -105,6 +93,7 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
         <MasonryList
           data={[headerInfo, ...photos]}
           numColumns={2}
+          style={{ gap: 13 }}
           keyExtractor={(item) => item.photoId.toString()}
           renderItem={({ item, i }) =>
             // (myPermission === PermissionLevel.OWNER ||
@@ -122,7 +111,6 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
               </TouchableOpacity>
             )
           }
-          contentContainerStyle={styles.masonryContent}
         />
         {imageDetailShown && (
           <ImageDetail
@@ -133,31 +121,7 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
             onDelete={handleDelete}
           />
         )}
-
-        {photos.length >= 232323 && (
-          <View style={styles.recapButtonContainer}>
-            {/* <Button
-            style={[
-              styles.recapButton,
-              recapColorVariants({ type: albumInfo.type }),
-            ]}
-            onPress={() => setIsRecapOpen(true)}>
-            >
-              <View style={styles.recapButtonContent}>
-                <Text style={styles.recapText}>리캡 만들기</Text>
-                <Icon name="reelOutline" size={24} color="white" />
-              </View>
-            </Button> */}
-          </View>
-        )}
       </View>
-
-      {/* {isRecapOpen &&
-        (videoUrl ? (
-          <VideoRecap url={videoUrl} closeModal={handleCloseRecap} />
-        ) : (
-          <VideoLoading type={albumInfo.type} />
-        ))} */}
     </>
   )
 }
@@ -168,20 +132,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 24,
   },
-  masonryContent: {
-    paddingBottom: 16,
-    // paddingRight: 12,
-    padding: 2,
-  },
   photoContainer: {
-    marginBottom: 12,
-    marginLeft: 20,
-  },
-  recapButtonContainer: {
-    // position: "absolute",
-    // bottom: 32,
-    // left: "50%",
-    // transform: [{ translateX: -50 }],
+    width: "100%",
   },
   recapButton: {
     borderRadius: 50,

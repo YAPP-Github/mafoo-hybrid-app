@@ -48,7 +48,7 @@ export const PhotoAddButton: React.FC<PhotoAddButtonProps> = ({
     <>
       <StyledTouchableOpacity
         onPress={onClickAdd}
-        className="aspect-square w-full overflow-hidden rounded-xl">
+        className="aspect-square w-full overflow-hidden rounded-xl mb-[13px]">
         <View className="mb-3 flex aspect-square w-full items-center justify-center rounded-xl border border-gray-200 bg-gray-100">
           <Icon name="galleryAddOutline" size={56} color="#CBD0D6" />
         </View>

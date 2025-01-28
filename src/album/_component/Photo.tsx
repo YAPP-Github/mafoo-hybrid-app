@@ -1,31 +1,29 @@
-import React from "react"
-import { View, Image, StyleSheet } from "react-native"
+import { useState } from "react"
+import { View, Image } from "react-native"
 import { PhotoInfo } from "../types"
 
 export const Photo = ({ photo }: { photo: PhotoInfo }) => {
   const { photoUrl } = photo
 
+  const [height, setHeight] = useState(0)
+  //  const { width } = Dimensions.get("window")
+
+  /**
+   * RN은 height: auto 사용불가
+   * 가로: 화면비율
+   * 세로: 이미지 크기
+   */
+  Image.getSize(photo.photoUrl, (w, h) => {
+    setHeight(h * (170 / w))
+  })
+
   return (
-    <View style={styles.container}>
+    <View className="mb-[13px]">
       <Image
-        source={{ uri: photoUrl }}
-        style={styles.image}
+        source={{ uri: photoUrl, height }}
+        className="rounded-[12px] border border-gray-200"
         resizeMode="cover"
       />
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    borderRadius: 12,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "#E1E4E8",
-  },
-  image: {
-    width: "100%",
-    aspectRatio: 1, // 1:1 비율 유지
-  },
-})
