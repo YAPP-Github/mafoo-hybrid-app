@@ -31,7 +31,7 @@ export const SharePermissionDialog = ({
     <>
       {isVisible && (
         <div className="fixed top-0 z-10 flex h-dvh w-dvw items-center justify-center bg-gray-800/50 px-5 pb-5 transition-all duration-500">
-          <div className="w-full rounded-2xl bg-white p-3 px-5 pt-6">
+          <div className="w-full rounded-2xl bg-sumone-white p-3 px-5 pt-6">
             <div className="flex flex-col items-center gap-2">
               <Image
                 crossOrigin="anonymous"

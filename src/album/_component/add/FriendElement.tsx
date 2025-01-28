@@ -43,7 +43,7 @@ const SharedButton = ({
 }) => {
   const buttonStyle = isShared
     ? "rounded-full bg-gray-100 px-4 py-1.5 flex justify-center items-center text-gray-400"
-    : "rounded-full bg-white px-4 py-1.5 flex justify-center items-center text-gray-700"
+    : "rounded-full bg-sumone-white px-4 py-1.5 flex justify-center items-center text-gray-700"
   const textStyle = isShared ? "text-gray-400" : "text-gray-700"
 
   return (

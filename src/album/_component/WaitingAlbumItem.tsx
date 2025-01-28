@@ -75,7 +75,7 @@ const WaitingAlbumItem: React.FC<any> = ({
       <View className="flex flex-row justify-between gap-2">
         {/* <SquareButton
           onPress={() => onReject?.(value)}
-          className="tp-body2-semibold round-[10px] h-10 grow bg-white px-5 py-0 text-gray-600">
+          className="tp-body2-semibold round-[10px] h-10 grow bg-sumone-white px-5 py-0 text-gray-600">
           거절
         </SquareButton>
         <SquareButton
