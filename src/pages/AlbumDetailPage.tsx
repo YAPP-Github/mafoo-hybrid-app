@@ -43,13 +43,12 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import React from "react"
 import MFText from "../common/MFText"
 import Icon from "../common/Icon"
-import VideoLoading from "@/album/_component/VideoLoading"
 
 export type RootStackParamList = {
   AddFriend: { albumId: string } | undefined
   SharedFriend: { albumId: string } | undefined
   Recap?: undefined
-  Frame?: undefined
+  Frame?: { albumInfo: any } // TODO: albumInfo 타입 추가
 }
 
 export type AlbumDetailPageProps = {
@@ -260,7 +259,9 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
                 recapColorVariants({ type: albumInfo.type }),
                 "rounded-[100px] px-[16px] py-[8px] bg-red-400"
               )}
-              onPress={() => navigation.navigate("Frame")}>
+              onPress={() =>
+                navigation.navigate("Frame", { albumInfo: albumInfo })
+              }>
               <View className="flex-row gap-1 items-center">
                 <Icon name="clapperBoardPlay" size={20} color="white" />
                 <MFText

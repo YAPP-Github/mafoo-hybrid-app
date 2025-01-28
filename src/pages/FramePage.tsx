@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
-import { useCallback, useRef } from "react"
+import { useCallback, useRef, useState } from "react"
 import Icon from "@/common/Icon"
 import MFText from "@/common/MFText"
 import { photo } from "@/dummy"
@@ -14,10 +14,23 @@ import LinearGradient from "react-native-linear-gradient"
 import RedSvgFrame from "@/assets/frame/redFrame.svg"
 import ViewShot, { captureRef } from "react-native-view-shot"
 import { useNavigation } from "@react-navigation/native"
+import VideoLoading from "@/album/_component/VideoLoading"
 
 const nativeProp = Platform.OS === "ios" ? "source" : "src"
 
-const FramePage = () => {
+export type FramePageProps = {
+  route: {
+    params: {
+      albumInfo: any
+    }
+  }
+}
+
+const FramePage = ({ route }: FramePageProps) => {
+  const { albumInfo } = route.params
+
+  const [isRecapOpen, setIsRecapOpen] = useState(false)
+
   const viewRef = useRef<any>()
   const imageRef = useRef<any>()
 
@@ -33,9 +46,13 @@ const FramePage = () => {
         format: "png",
         quality: 0.8,
       })
-      // console.log("uri", uri)
+      console.log("uri", uri)
     }
   }, [])
+
+  const closeRecapModal = () => {
+    setIsRecapOpen(false)
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-black">
@@ -84,6 +101,7 @@ const FramePage = () => {
           <TouchableOpacity
             onPress={() => {
               onCapture()
+              setIsRecapOpen(true)
             }}
             className="flex-row h-14 flex-1 items-center justify-center rounded-[100px] bg-gray-800 text-white">
             <MFText
@@ -94,6 +112,11 @@ const FramePage = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <VideoLoading
+        visible={isRecapOpen}
+        type={albumInfo.type}
+        closeRecapModal={closeRecapModal}
+      />
     </SafeAreaView>
   )
 }
