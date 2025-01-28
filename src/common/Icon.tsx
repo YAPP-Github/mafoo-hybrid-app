@@ -43,6 +43,7 @@ export type IconTypes =
   | "handShake"
   | "heartBold"
   | "checkCircleBold"
+  | "clapperBoardPlay"
 
 export interface IconProps extends ComponentProps<"svg"> {
   name: IconTypes
@@ -71,7 +72,7 @@ const Icon = ({
       width={size}
       height={size}
       color={color}
-      //className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
+      className={cn(className, color ? `text-${color}` : "text-gray-600")}
     />
   )
 }

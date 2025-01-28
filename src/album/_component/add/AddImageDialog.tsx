@@ -169,7 +169,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
         {isAddDialogShow && (
           <View
             style={{ transform: [{ translateX: 20 }] }}
-            className="absolute z-30 w-[calc(100%-40px)] bottom-[24px] bg-white rounded-[16px]">
+            className="absolute z-30 w-[calc(100%-40px)] bottom-[24px] bg-sumone-white rounded-[16px]">
             <View className="p-[12px] flex-row justify-center gap-[6px]">
               <TouchableOpacity onPress={onTapQrScan}>
                 <View className="px-[24px] py-[16px] items-center gap-[8px]">
@@ -199,8 +199,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
         {isUploading && (
           <View
             style={{ transform: [{ translateX: 25 }, { translateY: 300 }] }}
-            className="absolute z-30 w-[350px] bg-white rounded-[16px] px-[20px]">
-            <View className="w-full rounded-2xl bg-white p-6 px-8">
+            className="absolute z-30 w-[350px] bg-sumone-white rounded-[16px] px-[20px]">
+            <View className="w-full rounded-2xl bg-sumone-white p-6 px-8">
               <View className="flex flex-col items-center gap-1">
                 {/* 업로드 %, 텍스트 */}
                 <View className="flex flex-col items-center gap-1">
@@ -250,8 +250,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
         {isError && (
           <View
             style={{ transform: [{ translateX: 25 }, { translateY: 300 }] }}
-            className="absolute z-30 w-[350px] bg-white rounded-[16px]">
-            <View className="w-full rounded-2xl bg-white p-6 px-8">
+            className="absolute z-30 w-[350px] bg-sumone-white rounded-[16px]">
+            <View className="w-full rounded-2xl bg-sumone-white p-6 px-8">
               <View className="flex flex-col items-center gap-1">
                 <View className="flex flex-col items-center gap-1">
                   <MFText

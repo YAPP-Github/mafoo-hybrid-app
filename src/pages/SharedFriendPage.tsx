@@ -72,7 +72,7 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
   const sharedMembers = albumInfo.sharedMembers || []
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-sumone-white">
       <Header friendCount={sharedMembers.length} />
       {/* <SharePermissionDialog
         isOwnerMigrateVisible={selectedMember?.shareStatus !== "PENDING"}
