@@ -27,7 +27,10 @@ import {
 } from "../api/photo"
 // import { useGetProfile } from "@/app/profile/hooks/useProfile"
 //import Icon from "@/common/Icon"
-import { albumDetailStickyHeaderVariants as headerVariants } from "../styles/variants"
+import {
+  albumDetailStickyHeaderVariants as headerVariants,
+  recapColorVariants,
+} from "../styles/variants"
 import { cn } from "../utils"
 import { AlbumPhotos } from "../album/_component/AlbumPhotos"
 import AlbumDetailHeader from "../album/_component/AlbumDetailHeader"
@@ -40,10 +43,13 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import React from "react"
 import MFText from "../common/MFText"
 import Icon from "../common/Icon"
+import VideoLoading from "@/album/_component/VideoLoading"
 
 export type RootStackParamList = {
   AddFriend: { albumId: string } | undefined
   SharedFriend: { albumId: string } | undefined
+  Recap?: undefined
+  Frame?: undefined
 }
 
 export type AlbumDetailPageProps = {
@@ -62,6 +68,9 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
+  const [isRecapOpen, setIsRecapOpen] = useState(false)
+  const [videoUrl, setVideoUrl] = useState<string | null>()
+
   const queryClient = useQueryClient()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
@@ -75,6 +84,21 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     }
     initAlbum()
   }, [id])
+
+  useEffect(() => {
+    if (isRecapOpen) {
+      // generateRecap(albumInfo.albumId).then(
+      //   (data) => {
+      //     console.log(data.recapUrl)
+      //     setVideoUrl(data.recapUrl)
+      //   },
+      //   (error) => {
+      //     console.error(error)
+      //     setIsRecapOpen(false)
+      //   }
+      // )
+    }
+  }, [isRecapOpen])
 
   if (!albumInfo) return
 
@@ -114,6 +138,10 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     //   }
   }
 
+  const closeRecapModal = () => {
+    setIsRecapOpen(false)
+  }
+
   const deleteDialogProps = {
     title: "앨범을 삭제할까요?", //`'${albumInfo.name}' 앨범을 삭제할까요?`,
     desc: "모든 사진도 함께 삭제되며, 복구할 수 없어요",
@@ -148,6 +176,10 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     // }
   }
 
+  const moveToRecap = () => {
+    navigation.navigate("Recap")
+  }
+
   const typeToBackgroundColor: Record<string, string> = {
     HEART: "bg-red-200",
     FIRE: "bg-butter-200",
@@ -162,7 +194,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     : "bg-gray-200"
 
   return (
-    <View className="flex-1">
+    <View className={`flex-1 ${headerVariants({ type: albumInfo.type })} `}>
       <SafeAreaView
         className={`${headerVariants({ type: albumInfo.type })} pb-0`}>
         <AlbumDetailHeader
@@ -212,18 +244,48 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
           previewMembers={sharedMembersPreviewDummy as any} // TODO: 데이터 변경
         />
       </View>
-      <View className="sticky z-10 flex w-full flex-row justify-between bg-white rounded-tl-3xl rounded-tr-3xl">
+      <View className="sticky z-10 flex w-full flex-row justify-between bg-sumone-white rounded-tl-3xl rounded-tr-3xl">
         <View className="flex flex-col px-6 pb-2 pt-6 w-full">
           <MFText className="text-body2 text-gray-500 pb-[8px]">
             함께 찍은 추억
           </MFText>
-          <MFText weight="SemiBold" className="text-header1 text-gray-800">
-            {albumInfo.photoCount}장
-          </MFText>
+          <View className="flex-row justify-between items-center">
+            <MFText weight="SemiBold" className="text-header1 text-gray-800">
+              {albumInfo.photoCount}장
+            </MFText>
+            {/* 리캡 만들기 */}
+            {/* {photos.length >= 232323 && ( */}
+            <TouchableOpacity
+              className={cn(
+                recapColorVariants({ type: albumInfo.type }),
+                "rounded-[100px] px-[16px] py-[8px] bg-red-400"
+              )}
+              onPress={() => navigation.navigate("Frame")}>
+              <View className="flex-row gap-1 items-center">
+                <Icon name="clapperBoardPlay" size={20} color="white" />
+                <MFText
+                  weight="SemiBold"
+                  className="text-body2 text-sumone-white">
+                  리캡 만들기
+                </MFText>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       {/*myPermission*/}
       <AlbumPhotos albumInfo={albumInfo} myPermission={undefined} />
+
+      {/* // (videoUrl ? (
+        //   <VideoRecap url={videoUrl} closeModal={handleCloseRecap} />
+        // ) : (
+        //   <VideoLoading type={albumInfo.type} />
+        // ))} */}
+      {/* <VideoLoading
+        visible={isRecapOpen}
+        type={albumInfo.type}
+        closeRecapModal={closeRecapModal}
+      /> */}
     </View>
   )
 }
@@ -242,7 +304,7 @@ const ShareBar: React.FC<ShareBarProps> = ({
   canAddFriend,
 }) => {
   return (
-    <View className="tp-title2-semibold flex-row items-center justify-between rounded-2xl bg-white p-4 py-[16px] text-gray-700 shadow-sm">
+    <View className="tp-title2-semibold flex-row items-center justify-between rounded-2xl bg-sumone-white p-4 py-[16px] text-gray-700 shadow-sm">
       <View className="flex-row items-center space-x-2">
         {previewMembers.length === 1 ? (
           <View className="my-1 flex-row items-center space-x-2">
