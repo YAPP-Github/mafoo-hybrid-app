@@ -174,9 +174,9 @@ export const bottomBarVariants = cva(
   {
     variants: {
       variant: {
-        album: "bg-white text-gray-400",
+        album: "bg-sumone-white text-gray-400",
         scanner: "bg-gray-900 text-gray-600",
-        profile: "bg-white text-gray-400",
+        profile: "bg-sumone-white text-gray-400",
       },
     },
     defaultVariants: {
@@ -201,3 +201,41 @@ export const recapColorVariants = cva("", {
     type: false,
   },
 })
+
+export const recapColorLinearGradient = {
+  HEART: {
+    colors: ["#FF9B9C", "#F89AFF"],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 0 },
+  },
+  FIRE: {
+    colors: ["#FF8E75", "#FFA654"],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 0 },
+  },
+  BASKETBALL: {
+    colors: ["#38D934", "#46E4D1"],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 0 },
+  },
+  BUILDING: {
+    colors: ["#92AAFF", "#9FE7FC"],
+    start: { x: 0, y: 0 },
+    end: { x: 0, y: 1 },
+  },
+  STARFALL: {
+    colors: ["#C680FF", "#FF82C6"],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 0 },
+  },
+  SMILE_FACE: {
+    colors: ["#FF7BBF", "#FF79A9"],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 0 },
+  },
+  false: {
+    colors: ["#C680FF", "#FF82C6"],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 0 },
+  },
+}
