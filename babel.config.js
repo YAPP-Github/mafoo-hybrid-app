@@ -13,5 +13,16 @@ module.exports = {
       },
     ],
     "jest-hoist",
+    [
+      "module:react-native-dotenv",
+      {
+        moduleName: "@env",
+        path: ".env.local",
+        blocklist: null,
+        whitelist: null,
+        safe: false,
+        allowUndefined: true,
+      },
+    ],
   ],
 }
