@@ -1,7 +1,8 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
-import ColorIcon from "../../../common/ColorIcon"
+import ColorIcon, { iconSize } from "../../../common/ColorIcon"
 import { AlbumType } from "../../types"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 interface AlbumTypeSelectTabProps {
   type: AlbumType
@@ -21,13 +22,20 @@ function AlbumTypeSelectTab({ type, handleType }: AlbumTypeSelectTabProps) {
   return (
     <View style={styles.container}>
       {colors.map((color) => (
-        <ColorIcon
+        <TouchableOpacity
           key={color}
-          iconColor={color}
-          size={color === type ? "large" : "medium"}
-          style={color !== type ? styles.inactiveIcon : undefined}
-          onPress={() => handleType(color)} // onClick -> onPress
-        />
+          style={{
+            height: color === type ? 48 : 36,
+            width: color === type ? 48 : 36,
+          }}
+          onPress={() => handleType(color)}>
+          <ColorIcon
+            key={color}
+            iconColor={color}
+            size={color === type ? "large" : "medium"}
+            style={color !== type ? styles.inactiveIcon : undefined}
+          />
+        </TouchableOpacity>
       ))}
     </View>
   )

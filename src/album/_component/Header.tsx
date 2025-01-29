@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import Icon from "@/common/Icon"
 import { ICON_COLOR_STYLE, ICON_NAME } from "@/constants"
 import { albumDetailHeaderVariants as headerVariants } from "@/styles/variants"
-import { cn } from "@/utils"
+import { cn } from "../utils"
 
 import { AlbumInfo } from "../../types"
 

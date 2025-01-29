@@ -3,9 +3,12 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
 
 import AlbumItem from "../AlbumItem"
 import SquareButton from "@/common/SquareButton"
+//import SquareButton from "../../../common/SquareButton"
 import AlbumTypeSelectTab from "./AlbumTypeSelectTab"
 
 import { AlbumType, AlbumValue } from "../../types"
+import MFText from "../../../common/MFText"
+
 // import { usePostAlbum } from "../hooks/useAlbum"
 
 interface AlbumEditSectionProps {
@@ -44,20 +47,24 @@ export function AlbumEditSection({
 
   return (
     <>
-      {/* AlbumItem */}
       <View style={styles.albumItemContainer}>
         <AlbumItem value={value} handleValue={handleValue} />
       </View>
-
-      {/* Footer Section */}
+      <View style={styles.descContainer}>
+        <MFText className="text-body1 text-gray-500">
+          한 번 정한 앨범 이름은 바꾸기 어려워요.
+        </MFText>
+      </View>
       <View style={styles.footerContainer}>
         <AlbumTypeSelectTab type={type} handleType={handleType} />
-        <SquareButton
-          style={styles.submitButton}
-          onPress={handleSubmit}
-          disabled={!value.name.length}>
-          <Text style={styles.submitButtonText}>다음으로</Text>
-        </SquareButton>
+        <View style={styles.buttonContainer}>
+          <SquareButton
+            style={styles.submitButton}
+            onPress={handleSubmit}
+            disabled={!value.name.length}>
+            <MFText style={styles.submitButtonText}>다음으로</MFText>
+          </SquareButton>
+        </View>
       </View>
     </>
   )
@@ -65,30 +72,43 @@ export function AlbumEditSection({
 
 const styles = StyleSheet.create({
   albumItemContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // paddingTop: 24, // TailwindCSS의 pt-6
+    paddingTop: 24,
+    paddingBottom: 8,
+  },
+  descContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
   },
   footerContainer: {
+    flex: 1,
     position: "absolute",
     bottom: 0,
     width: "100%",
     maxWidth: 430,
     alignItems: "center",
-    backgroundColor: "#FFFFFF", // 배경색 추가
+    justifyContent: "center",
+    borderTopWidth: 1,
+    borderTopColor: "#F0F2F4",
   },
+  buttonContainer: {
+    width: "100%",
+    paddingHorizontal: 24,
+  },
+
   submitButton: {
-    marginBottom: 44, // TailwindCSS의 mb-11
-    marginTop: 12, // TailwindCSS의 mt-3
-    // width: "calc(100% - 48px)", // TailwindCSS의 w-[calc(100%-3rem)]
-    backgroundColor: "#4CAF50", // 버튼 배경색 (예: 녹색)
-    borderRadius: 8,
     alignItems: "center",
+    marginBottom: 44,
+    marginTop: 12,
+    width: "100%",
+    backgroundColor: "#F0F2F4", // TODO: grey 100
+    borderRadius: 8,
     paddingVertical: 12,
   },
   submitButtonText: {
-    color: "#FFFFFF",
+    color: "#B1B7BE",
     fontSize: 16,
     fontWeight: "bold",
   },

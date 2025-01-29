@@ -1,6 +1,8 @@
 import { ComponentProps } from "react"
 import Svg from "react-native-svg"
 import { cn } from "../utils"
+import React from "react"
+import iconMap from "./iconMap"
 
 export type IconTypes =
   | "basketballBold"
@@ -40,11 +42,13 @@ export type IconTypes =
   | "permission"
   | "handShake"
   | "heartBold"
+  | "checkCircleBold"
 
 export interface IconProps extends ComponentProps<"svg"> {
   name: IconTypes
   size: 16 | 20 | 24 | 28 | 36 | 44 | 56 | 64 | 120
   color?: string
+  className?: string
 }
 
 /**
@@ -60,14 +64,14 @@ const Icon = ({
   className,
   ...props
 }: IconProps) => {
-  // const uri = require(`../assets/${name}.svg`)
+  const SvgIcon = iconMap[name].default
+
   return (
-    <Svg
-      //{...props}
-      // uri={uri}
+    <SvgIcon
       width={size}
       height={size}
-      className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
+      color={color}
+      //className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
     />
   )
 }
@@ -102,7 +106,7 @@ export const IconImage = ({
       // uri={uri}
       width={width}
       height={height}
-      className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
+      // className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
     />
   )
 }

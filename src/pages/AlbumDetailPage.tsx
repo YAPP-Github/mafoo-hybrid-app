@@ -2,7 +2,15 @@
 
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import {
+  Image,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 
 // import {
 //   AlbumMenuAction,
@@ -29,6 +37,9 @@ import {
 } from "../dummy"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
+import React from "react"
+import MFText from "../common/MFText"
+import Icon from "../common/Icon"
 
 export type RootStackParamList = {
   AddFriend: { albumId: string } | undefined
@@ -151,13 +162,15 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     : "bg-gray-200"
 
   return (
-    <View
-      className={`flex flex-1 ${cn(headerVariants({ type: albumInfo.type }))}`}>
-      <AlbumDetailHeader
-        albumInfo={albumInfo}
-        className={`sticky top-0 z-20 ${backgroundColorClass}`}
-        onTapMenu={() => setIsMenuVisible(true)}
-      />
+    <View className="flex-1">
+      <SafeAreaView
+        className={`${headerVariants({ type: albumInfo.type })} pb-0`}>
+        <AlbumDetailHeader
+          albumInfo={albumInfo}
+          className={`sticky top-0 z-20 ${backgroundColorClass}`}
+          onTapMenu={() => setIsMenuVisible(true)}
+        />
+      </SafeAreaView>
       {/* {isDeleteModalShown && <Dialog {...deleteDialogProps} />}
         {isQuitModalShown && <Dialog {...quitDialogProps} />}
         {myPermission && (
@@ -179,6 +192,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
             앨범을 공유해보세요
           </span>
         </div> */}
+
       <View
         className={cn(
           headerVariants({ type: albumInfo.type }),
@@ -198,12 +212,14 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
           previewMembers={sharedMembersPreviewDummy as any} // TODO: 데이터 변경
         />
       </View>
-      <View className="sticky z-10 flex w-full flex-row justify-between bg-white">
-        <View className="flex flex-col px-6 pb-2 pt-6">
-          <Text className="tp-body2-regular text-gray-500">함께 찍은 추억</Text>
-          <Text className="tp-header1-semibold text-gray-800">
+      <View className="sticky z-10 flex w-full flex-row justify-between bg-white rounded-tl-3xl rounded-tr-3xl">
+        <View className="flex flex-col px-6 pb-2 pt-6 w-full">
+          <MFText className="text-body2 text-gray-500 pb-[8px]">
+            함께 찍은 추억
+          </MFText>
+          <MFText weight="SemiBold" className="text-header1 text-gray-800">
             {albumInfo.photoCount}장
-          </Text>
+          </MFText>
         </View>
       </View>
       {/*myPermission*/}
@@ -226,12 +242,14 @@ const ShareBar: React.FC<ShareBarProps> = ({
   canAddFriend,
 }) => {
   return (
-    <View className="tp-title2-semibold flex-row items-center justify-between rounded-2xl bg-white p-4 py-[11px] text-gray-700 shadow-sm">
+    <View className="tp-title2-semibold flex-row items-center justify-between rounded-2xl bg-white p-4 py-[16px] text-gray-700 shadow-sm">
       <View className="flex-row items-center space-x-2">
         {previewMembers.length === 1 ? (
           <View className="my-1 flex-row items-center space-x-2">
-            {/* Icon 추가 */}
-            <Text className="text-gray-700">친구랑 앨범 공유하기</Text>
+            <Icon name="message" size={28} color="#FFCF55" />
+            <MFText weight="SemiBold" className="text-title2 text-gray-700">
+              친구랑 앨범 공유하기
+            </MFText>
           </View>
         ) : (
           <View className="flex-row -space-x-4 h-11">
@@ -248,7 +266,7 @@ const ShareBar: React.FC<ShareBarProps> = ({
       </View>
       {/* {previewMembers.length > 1 && onTapViewFriend && ( */}
       <View className="flex-row space-x-2">
-        {previewMembers && onTapViewFriend && (
+        {previewMembers.length > 1 && onTapViewFriend && (
           <TouchableOpacity
             onPress={onTapViewFriend}
             className="rounded-md bg-gray-100 px-3 py-2 active:bg-gray-200">

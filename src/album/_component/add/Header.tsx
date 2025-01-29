@@ -1,8 +1,8 @@
 import React from "react"
 import { View, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-// import { Icon } from "../common/Icon" // 아이콘 컴포넌트 경로 유지
-import { cn } from "@/utils" // cn 함수 경로 유지
+import Icon from "@/common/Icon" // 아이콘 컴포넌트 경로 유지
+import { cn } from "../../../utils" // cn 함수 경로 유지
 
 interface HeaderProps {
   className?: string
@@ -18,7 +18,7 @@ export const Header = ({ className }: HeaderProps) => {
         className
       )}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        {/* <Icon name="altArrowLeftOutline" size={28} /> */}
+        <Icon name="altArrowLeftOutline" size={28} />
       </TouchableOpacity>
       <View />
     </View>

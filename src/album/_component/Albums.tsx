@@ -22,11 +22,10 @@ export default Albums
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
     padding: 24,
-    gap: 16,
+    gap: 20,
   },
 })

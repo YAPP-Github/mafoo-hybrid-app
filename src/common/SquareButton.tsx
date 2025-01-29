@@ -4,6 +4,7 @@ import { VariantProps } from "class-variance-authority"
 import { styled } from "nativewind"
 
 import { buttonVariants } from "@/styles/variants"
+import MFText from "./MFText"
 
 export interface SquareButtonProps extends VariantProps<typeof buttonVariants> {
   asChild?: boolean
@@ -12,6 +13,7 @@ export interface SquareButtonProps extends VariantProps<typeof buttonVariants> {
   style?: ViewStyle | TextStyle | Array<ViewStyle | TextStyle>
   text?: string
   children?: React.ReactElement
+  className?: string
 }
 
 const SquareButton = forwardRef<any, SquareButtonProps>(
@@ -26,23 +28,24 @@ const SquareButton = forwardRef<any, SquareButtonProps>(
       onPress,
       text,
       children,
+      className,
       ...props
     },
     ref
   ) => {
-    const buttonStyles = buttonVariants({ variant, size, theme })
     const StyledPressable = styled(Pressable)
 
-    // buttonStyles: inline-flex items-center ...
+    // weak medium
     return asChild ? (
-      <View
-        className={buttonStyles}
+      <StyledPressable
+        onPress={disabled ? undefined : onPress}
+        className={buttonVariants({ variant, size, theme })}
         style={[disabled && { backgroundColor: "#e5e5e5" }]}>
         {children}
-      </View>
+      </StyledPressable>
     ) : (
       <StyledPressable
-        className={buttonStyles}
+        className={buttonVariants({ variant, size, theme })}
         style={[
           style,
           disabled && { backgroundColor: "#e5e5e5", color: "#a1a1a1" },
@@ -50,7 +53,7 @@ const SquareButton = forwardRef<any, SquareButtonProps>(
         onPress={disabled ? undefined : onPress}
         ref={ref}
         {...props}>
-        <Text>{children}</Text>
+        <MFText>{children}</MFText>
       </StyledPressable>
     )
   }

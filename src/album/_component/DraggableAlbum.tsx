@@ -1,9 +1,9 @@
-import React, { useState } from "react"
-import { TouchableOpacity, StyleSheet } from "react-native"
+import { useState } from "react"
+import { TouchableOpacity } from "react-native"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigation } from "@react-navigation/native"
 
-import { deleteSharedMember, updateSharedMemberStatus } from "../../api/photo"
+import { deleteSharedMember, updateSharedMemberStatus } from "@/api/photo"
 import { usePatchAlbumMove } from "../hooks/useAlbum"
 import AlbumItem from "./AlbumItem"
 import WaitingAlbumItem from "./WaitingAlbumItem"
@@ -64,7 +64,7 @@ const DraggableAlbum = ({ album }: AlbumItemProps) => {
   }
 
   return (
-    <TouchableOpacity onPress={onClick} style={styles.container}>
+    <TouchableOpacity onPress={onClick}>
       {isShared ? (
         <AlbumItem value={value} handleValue={() => null} />
       ) : (
@@ -79,8 +79,3 @@ const DraggableAlbum = ({ album }: AlbumItemProps) => {
 }
 
 export default DraggableAlbum
-
-// TODO: {`aspect-[164/150] w-[calc((100%-1rem)/2)] rounded-2xl transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg`}> */}
-const styles = StyleSheet.create({
-  container: {},
-})

@@ -29,6 +29,14 @@ interface AlbumPhotosProps {
   myPermission: PermissionLevel | undefined
 }
 
+const headerInfo: PhotoInfo = {
+  photoId: "",
+  photoUrl: "",
+  albumId: "",
+  brand: "",
+  createdAt: "",
+}
+
 export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   const [photos, setPhotos] = useState<PhotoInfo[]>([])
   const [imageDetailShown, setImageDetailShown] = useState(false)
@@ -95,25 +103,25 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
     <>
       <View style={styles.container}>
         <MasonryList
-          data={photos}
+          data={[headerInfo, ...photos]}
           numColumns={2}
           keyExtractor={(item) => item.photoId.toString()}
-          renderItem={({ item, i }) => (
-            <TouchableOpacity
-              style={styles.photoContainer}
-              onPress={() => onPhotoClick(i)}>
-              <Photo photo={item} />
-            </TouchableOpacity>
-          )}
-          // ListHeaderComponent={
-          //   (myPermission === PermissionLevel.OWNER ||
-          //     myPermission === PermissionLevel.FULL_ACCESS) && (
-          //     <PhotoAddButton
-          //       albumId={albumInfo.albumId}
-          //       onImageUploaded={onImageUploaded}
-          //     />
-          //   )
-          // }
+          renderItem={({ item, i }) =>
+            // (myPermission === PermissionLevel.OWNER ||
+            //   myPermission === PermissionLevel.FULL_ACCESS) && (
+            i == 0 ? (
+              <PhotoAddButton
+                albumId={albumInfo.albumId}
+                onImageUploaded={onImageUploaded}
+              />
+            ) : (
+              <TouchableOpacity
+                style={styles.photoContainer}
+                onPress={() => onPhotoClick(i - 1)}>
+                <Photo photo={item} />
+              </TouchableOpacity>
+            )
+          }
           contentContainerStyle={styles.masonryContent}
         />
         {imageDetailShown && (
@@ -158,13 +166,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    padding: 16,
+    padding: 24,
   },
   masonryContent: {
     paddingBottom: 16,
+    // paddingRight: 12,
+    padding: 2,
   },
   photoContainer: {
     marginBottom: 12,
+    marginLeft: 20,
   },
   recapButtonContainer: {
     // position: "absolute",
