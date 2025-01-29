@@ -1,15 +1,21 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { View, StyleSheet, Modal, TouchableOpacity, Image } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { recapColorLinearGradient } from "@/styles/variants"
 import { AlbumType } from "@/album/types"
 import MFText from "@/common/MFText"
 import Icon from "@/common/Icon"
+import { useNavigation } from "@react-navigation/native"
+import { StackNavigationProp } from "@react-navigation/stack"
 
 interface VideoLoadingProps {
   type: AlbumType
   visible: boolean
   closeRecapModal: () => void
+}
+
+export type RootStackParams = {
+  Recap: undefined
 }
 
 const VideoLoading = ({
@@ -18,6 +24,15 @@ const VideoLoading = ({
   closeRecapModal,
 }: VideoLoadingProps) => {
   const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
+
+  // TODO: 3초 뒤 Recap 페이지로 이동 (테스트 후 삭제)
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate("Recap")
+      closeRecapModal()
+    }, 3000)
+  }, [])
 
   return (
     <Modal visible={visible} transparent>

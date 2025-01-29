@@ -233,6 +233,11 @@ export const recapColorLinearGradient = {
     start: { x: 0, y: 0 },
     end: { x: 0, y: 1 },
   },
+  INSTA: {
+    colors: ["#FFD735", "#FF6C5A", "#E848C8", "#4A8CF0"],
+    start: { x: 1, y: 0 },
+    end: { x: 0, y: 0 },
+  },
   false: {
     colors: ["#C680FF", "#FF82C6"],
     start: { x: 0, y: 0 },
