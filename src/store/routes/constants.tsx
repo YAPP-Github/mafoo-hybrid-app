@@ -1,4 +1,6 @@
-import HomePage from "../../pages/HomePage"
+import React from "react"
+
+import HomePage from "../../pages/Mainpage"
 import AlbumPage from "../../pages/AlbumsPage"
 import AlbumDetailPage from "../../pages/AlbumDetailPage"
 import SharedFriendPage from "../../pages/SharedFriendPage"
@@ -11,56 +13,107 @@ import ScannerPage from "../../pages/ScannerPage"
 import ScannerSelectAlbumPage from "../../pages/ScannerSelectAlbumPage"
 import SumonePage from "../../pages/SumonePage"
 
+// TODO: 토큰 부착 후 Unprotected Screen 제거
 export const UnprotectedRoutes = [
   {
     name: "home",
-    component: HomePage,
+    options: {
+      headerShown: false,
+    },
+    components: HomePage,
   },
-]
-
-export const ProtectedRoutes = [
   {
     name: "album",
-    component: AlbumPage,
+    options: {
+      headerShown: false,
+    },
+    components: AlbumPage,
   },
   {
-    name: "album/:id",
-    component: AlbumDetailPage,
+    name: "AlbumDetail",
+    options: {
+      headerShown: false,
+    },
+    components: AlbumDetailPage,
   },
   {
-    name: "album/friend",
-    component: SharedFriendPage,
+    name: "AlbumCreate",
+    options: {},
+    components: AlbumCreatePage,
   },
   {
-    name: "album/friend/add",
-    component: AddFriendPage,
+    name: "AddFriend",
+    options: {
+      headerShown: false,
+    },
+    components: AddFriendPage,
   },
   {
-    name: "album/create",
-    component: AlbumCreatePage,
-  },
-  {
-    name: "profile",
-    component: ProfilePage,
-  },
-  {
-    name: "introduction",
-    component: IntroductionPage,
-  },
-  {
-    name: "introduction/keyword",
-    component: KeywordPage,
+    name: "SharedFriend",
+    options: {},
+    components: SharedFriendPage,
   },
   {
     name: "scanner",
-    component: ScannerPage,
+    components: ScannerPage,
+  },
+]
+
+// ProtectedRoutes definition
+export const ProtectedRoutes = [
+  {
+    name: "album",
+    options: {},
+    components: AlbumPage,
+  },
+  {
+    name: "AlbumDetail",
+    options: {},
+    components: AlbumDetailPage,
+  },
+  {
+    name: "SharedFriend",
+    options: {},
+    components: SharedFriendPage,
+  },
+  {
+    name: "AddFriend",
+    options: {},
+    components: AddFriendPage,
+  },
+  {
+    name: "album/create",
+    options: {},
+    components: AlbumCreatePage,
+  },
+  {
+    name: "profile",
+    options: {},
+    components: ProfilePage,
+  },
+  {
+    name: "introduction",
+    options: {},
+    components: IntroductionPage,
+  },
+  {
+    name: "introduction/keyword",
+    options: {},
+    components: KeywordPage,
+  },
+  {
+    name: "scanner",
+    options: {},
+    components: ScannerPage,
   },
   {
     name: "scanner/select-album",
-    component: ScannerSelectAlbumPage,
+    options: {},
+    components: ScannerSelectAlbumPage,
   },
   {
     name: "sumone",
-    component: SumonePage,
+    options: {},
+    components: SumonePage,
   },
 ]
