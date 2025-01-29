@@ -6558,6 +6558,11 @@ react-native-toast-message@^2.2.1:
   resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.2.1.tgz#f395321e9bc818ce63274c38a3d294ed997a4a27"
   integrity sha512-iXFMnlxPcgKKs4bZOIl06W16m6KXMh/bAYpWLyVXlISSCdcL2+FX5WPpRP3TGQeM/u9q+j5ex48DDY+72en+Sw==
 
+react-native-video@^6.10.0:
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.10.0.tgz#35ac89761c2ffde9234ca65456db9f62342ca930"
+  integrity sha512-NyDnpSBRJkj7TxMku2dEys54qKynW/l9kSPCVvayyqXWrc24cxHhLvAaxORdJDb6tS4FhUbR8tFIoOY65/XKZg==
+
 react-native-view-shot@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/react-native-view-shot/-/react-native-view-shot-4.0.3.tgz#9b98388fcc5228073cb66ac98ca339eda35767ac"
