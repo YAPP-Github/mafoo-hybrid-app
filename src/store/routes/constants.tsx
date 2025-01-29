@@ -11,56 +11,99 @@ import ScannerPage from "../../pages/ScannerPage"
 import ScannerSelectAlbumPage from "../../pages/ScannerSelectAlbumPage"
 import SumonePage from "../../pages/SumonePage"
 
+// TODO: 토큰 부착 후 Unprotected Screen 제거
 export const UnprotectedRoutes = [
   {
     name: "home",
+    options: {
+      headerShown: false,
+    },
     component: HomePage,
+  },
+  {
+    name: "album",
+    options: {},
+    component: AlbumPage,
+  },
+  {
+    name: "AlbumDetail",
+    options: {
+      // {/** Page 별 Custom Header */ */}
+      // headerTitle: (props: any) => <AlbumDetailHeader {...props} />,
+    },
+    component: AlbumDetailPage,
+  },
+  {
+    name: "AlbumCreate",
+
+    component: AlbumCreatePage,
+  },
+  {
+    name: "AddFriend",
+    options: {},
+    component: AddFriendPage,
+  },
+  {
+    name: "SharedFriend",
+    options: {},
+    component: SharedFriendPage,
   },
 ]
 
 export const ProtectedRoutes = [
   {
     name: "album",
+    options: {},
     component: AlbumPage,
   },
   {
-    name: "album/:id",
+    name: "AlbumDetail",
+    options: {},
     component: AlbumDetailPage,
   },
   {
-    name: "album/friend",
+    name: "SharedFriend",
+    options: {},
     component: SharedFriendPage,
   },
   {
-    name: "album/friend/add",
+    name: "AddFriend",
+    options: {},
     component: AddFriendPage,
   },
   {
     name: "album/create",
+    options: {},
     component: AlbumCreatePage,
   },
   {
     name: "profile",
+    options: {},
     component: ProfilePage,
   },
   {
     name: "introduction",
+    options: {},
     component: IntroductionPage,
   },
   {
     name: "introduction/keyword",
+    options: {},
     component: KeywordPage,
   },
   {
     name: "scanner",
+    options: {},
     component: ScannerPage,
   },
   {
     name: "scanner/select-album",
+    options: {},
     component: ScannerSelectAlbumPage,
   },
   {
     name: "sumone",
+    options: {},
     component: SumonePage,
   },
 ]

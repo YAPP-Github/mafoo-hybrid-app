@@ -1,4 +1,4 @@
-import React, { NavigationContainer } from "@react-navigation/native"
+import { NavigationContainer } from "@react-navigation/native"
 
 import { createStackNavigator } from "@react-navigation/stack"
 import { AuthProvider } from "../auth"
@@ -6,6 +6,8 @@ import { useAuth } from "../auth/AuthProvider"
 import { useEffect } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { ProtectedRoutes, UnprotectedRoutes } from "./constants"
+import Toast from "react-native-toast-message"
+import { toastConfig } from "@/styles/toastConfig"
 
 const MafooRouter = () => {
   const Stack = createStackNavigator()
@@ -41,10 +43,12 @@ const MafooRouter = () => {
               key={route.name}
               name={route.name}
               component={route.component}
+              options={{ ...route?.options, headerShown: false }}
             />
           ))}
         </Stack.Navigator>
       </NavigationContainer>
+      <Toast config={toastConfig} />
     </AuthProvider>
   )
 }

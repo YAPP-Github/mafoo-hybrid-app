@@ -6,6 +6,7 @@ export enum PermissionLevel {
   DOWNLOAD_ACCESS = "DOWNLOAD_ACCESS",
   VIEW_ACCESS = "VIEW_ACCESS",
   OWNER = "OWNER",
+  READ_ONLY = "READ_ONLY",
 }
 
 export enum ShareStatus {
