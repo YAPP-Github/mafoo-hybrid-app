@@ -35,6 +35,7 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^15.11.1",
     "react-native-toast-message": "^2.2.1",
+    "react-native-video": "^6.10.0",
     "react-native-view-shot": "^4.0.3",
     "react-native-webview": "^13.10.4",
     "react-navigation": "^5.0.0",
