@@ -106,7 +106,7 @@ const LoginButton = ({
 
 const HomePage = ({ navigation }: any) => {
   const onSuccessLogin = () => {
-    navigation.navigate("album")
+    navigation.navigate("Album")
   }
 
   return (

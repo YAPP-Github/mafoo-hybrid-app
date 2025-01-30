@@ -118,7 +118,7 @@ const Profile = () => {
   return (
     <>
       <Button
-        onPress={() => navigation.navigate("album")}
+        onPress={() => navigation.navigate("Album")}
         className="rounded-lg">
         <View className={TAB_ITEM_CLASSNAME}>
           <Icon name="albumBold" size={28} color={colors.gray[400]} />
@@ -127,7 +127,7 @@ const Profile = () => {
       </Button>
 
       <Button
-        onPress={() => navigation.navigate("profile")}
+        onPress={() => navigation.navigate("Profile")}
         className={TAB_ITEM_CLASSNAME}
         disabled>
         <Icon name="userCircleBold" size={28} color={colors.gray[800]} />
