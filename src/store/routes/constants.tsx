@@ -1,17 +1,15 @@
-import React from "react"
-
-import HomePage from "../../pages/Mainpage"
-import AlbumPage from "../../pages/AlbumsPage"
-import AlbumDetailPage from "../../pages/AlbumDetailPage"
-import SharedFriendPage from "../../pages/SharedFriendPage"
-import AddFriendPage from "../../pages/AddFriendPage"
-import AlbumCreatePage from "../../pages/AlbumCreatePage"
-import ProfilePage from "../../pages/ProfilePage"
-import IntroductionPage from "../../pages/IntroductionPage"
-import KeywordPage from "../../pages/KeywordPage"
-import ScannerPage from "../../pages/ScannerPage"
-import ScannerSelectAlbumPage from "../../pages/ScannerSelectAlbumPage"
-import SumonePage from "../../pages/SumonePage"
+import HomePage from "@/pages/Mainpage"
+import AlbumPage from "@/pages/AlbumsPage"
+import AlbumDetailPage from "@/pages/AlbumDetailPage"
+import SharedFriendPage from "@/pages/SharedFriendPage"
+import AddFriendPage from "@/pages/AddFriendPage"
+import AlbumCreatePage from "@/pages/AlbumCreatePage"
+import ProfilePage from "@/pages/ProfilePage"
+import IntroductionPage from "@/pages/IntroductionPage"
+import KeywordPage from "@/pages/KeywordPage"
+import ScannerPage from "@/pages/ScannerPage"
+import ScannerSelectAlbumPage from "@/pages/ScannerSelectAlbumPage"
+import SumonePage from "@/pages/SumonePage"
 import RecapPage from "@/pages/RecapPage"
 import FramePage from "@/pages/FramePage"
 
@@ -22,42 +20,42 @@ export const UnprotectedRoutes = [
     options: {
       headerShown: false,
     },
-    components: HomePage,
+    component: HomePage,
   },
   {
-    name: "album",
+    name: "Album",
     options: {
       headerShown: false,
     },
-    components: AlbumPage,
+    component: AlbumPage,
   },
   {
     name: "AlbumDetail",
     options: {
       headerShown: false,
     },
-    components: AlbumDetailPage,
+    component: AlbumDetailPage,
   },
   {
     name: "AlbumCreate",
     options: {},
-    components: AlbumCreatePage,
+    component: AlbumCreatePage,
   },
   {
     name: "AddFriend",
     options: {
       headerShown: false,
     },
-    components: AddFriendPage,
+    component: AddFriendPage,
   },
   {
     name: "SharedFriend",
     options: {},
-    components: SharedFriendPage,
+    component: SharedFriendPage,
   },
   {
     name: "scanner",
-    components: ScannerPage,
+    component: ScannerPage,
   },
   {
     name: "Recap",
@@ -69,6 +67,11 @@ export const UnprotectedRoutes = [
     options: {},
     component: FramePage,
   },
+  {
+    name: "Profile",
+    options: {},
+    component: ProfilePage,
+  },
 ]
 
 // ProtectedRoutes definition
@@ -76,63 +79,63 @@ export const ProtectedRoutes = [
   {
     name: "album",
     options: {},
-    components: AlbumPage,
+    component: AlbumPage,
   },
   {
     name: "AlbumDetail",
     options: {},
-    components: AlbumDetailPage,
+    component: AlbumDetailPage,
   },
   {
     name: "SharedFriend",
     options: {},
-    components: SharedFriendPage,
+    component: SharedFriendPage,
   },
   {
     name: "AddFriend",
     options: {},
-    components: AddFriendPage,
+    component: AddFriendPage,
   },
   {
     name: "album/create",
     options: {},
-    components: AlbumCreatePage,
+    component: AlbumCreatePage,
   },
   {
-    name: "profile",
+    name: "Profile",
     options: {},
-    components: ProfilePage,
+    component: ProfilePage,
   },
   {
     name: "introduction",
     options: {},
-    components: IntroductionPage,
+    component: IntroductionPage,
   },
   {
     name: "introduction/keyword",
     options: {},
-    components: KeywordPage,
+    component: KeywordPage,
   },
   {
     name: "scanner",
     options: {},
-    components: ScannerPage,
+    component: ScannerPage,
   },
   {
     name: "scanner/select-album",
     options: {},
-    components: ScannerSelectAlbumPage,
+    component: ScannerSelectAlbumPage,
   },
   {
     name: "sumone",
     options: {},
-    components: SumonePage,
+    component: SumonePage,
   },
-  {
-    name: "Recap",
-    options: {},
-    component: RecapPage,
-  },
+  // {
+  //   name: "Recap",
+  //   options: {},
+  //   component: RecapPage,
+  // },
   {
     name: "Frame",
     options: {},

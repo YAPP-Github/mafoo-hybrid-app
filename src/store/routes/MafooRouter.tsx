@@ -42,12 +42,8 @@ const MafooRouter = () => {
             <Stack.Screen
               key={route.name}
               name={route.name}
-              options={{
-                ...route?.options,
-                title: route.name,
-                headerShown: false,
-              }}
-              component={route.components}
+              component={route.component}
+              options={{ ...route?.options, headerShown: false }}
             />
           ))}
         </Stack.Navigator>

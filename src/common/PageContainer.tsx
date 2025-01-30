@@ -1,5 +1,4 @@
 import { calculateContentStyle } from "@/utils/calculateContentStyle"
-import React from "react"
 
 import { PropsWithChildren } from "react"
 import { SafeAreaView, StatusBar } from "react-native"
@@ -15,7 +14,7 @@ interface HeaderProps {
 }
 
 type PageWithHeader = PageBasicProps & {
-  isCustomHeader: true
+  isCustomHeader?: true
   headerProps: HeaderProps
 }
 

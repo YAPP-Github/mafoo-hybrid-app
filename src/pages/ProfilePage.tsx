@@ -1,19 +1,21 @@
-import React from "react"
-import { View, Button, Text } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import { Button, View } from "react-native"
+import MFText from "@/common/MFText"
+import BottomBar from "@/common/BottomBar"
+import PageContainer from "@/common/PageContainer"
 
-const ProfilePage = ({ navigation }: any) => {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>ProfilePage</Text>
+const ProfilePage = ({ navigation }: any) => (
+  <PageContainer headerProps={{ title: "Profile" }}>
+    <View className="flex-1 justify-center items-center">
+      <MFText weight="SemiBold">ProfilePage</MFText>
       <Button
-        title="Go to Home"
+        title="홈으로 이동"
         onPress={() => {
-          navigation.navigate("HomeScreens")
+          navigation.navigate("Album")
         }}
       />
     </View>
-  )
-}
+    <BottomBar variant="album" />
+  </PageContainer>
+)
 
 export default ProfilePage
