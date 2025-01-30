@@ -5,21 +5,28 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Icon from "@/common/Icon"
 import MFText from "@/common/MFText"
 import { photo } from "@/dummy"
 import { recapColorLinearGradient } from "@/styles/variants"
 import LinearGradient from "react-native-linear-gradient"
-import RedSvgFrame from "@/assets/frame/redFrame.svg"
+import HEART from "@/assets/frame/HEART.svg"
+import BUILDING from "@/assets/frame/BUILDING.svg"
+import FIRE from "@/assets/frame/FIRE.svg"
+import SMILE_FACE from "@/assets/frame/SMILE_FACE.svg"
+import BASKETBALL from "@/assets/frame/BASKETBALL.svg"
+import STARFALL from "@/assets/frame/STARFALL.svg"
+
 import ViewShot, { captureRef } from "react-native-view-shot"
 import { useNavigation } from "@react-navigation/native"
 import VideoLoading from "@/album/_component/VideoLoading"
+import { AlbumType } from "@/album/types"
 
 const nativeProp = Platform.OS === "ios" ? "source" : "src"
 
 export type FramePageProps = {
-  route: {
+  route?: {
     params: {
       albumInfo: any
     }
@@ -27,12 +34,15 @@ export type FramePageProps = {
 }
 
 const FramePage = ({ route }: FramePageProps) => {
-  const { albumInfo } = route.params
-
+  const { albumInfo } = route?.params || {}
   const [isRecapOpen, setIsRecapOpen] = useState(false)
-
+  const [frame, setFrame] = useState<AlbumType>("HEART")
   const viewRef = useRef<any>()
   const imageRef = useRef<any>()
+
+  useEffect(() => {
+    setFrame(albumInfo.type)
+  }, [])
 
   const onCapture = useCallback(async () => {
     for (let index = 0; index < photo.length; index++) {
@@ -54,6 +64,21 @@ const FramePage = ({ route }: FramePageProps) => {
     setIsRecapOpen(false)
   }
 
+  // useEffect(() => {
+  //   if (isRecapOpen) {
+  //     // generateRecap(albumInfo.albumId).then(
+  //     //   (data) => {
+  //     //     console.log(data.recapUrl)
+  //     //     setVideoUrl(data.recapUrl)
+  //     //   },
+  //     //   (error) => {
+  //     //     console.error(error)
+  //     //     setIsRecapOpen(false)
+  //     //   }
+  //     // )
+  //   }
+  // }, [isRecapOpen])
+
   return (
     <SafeAreaView className="flex-1 bg-black">
       <Header />
@@ -67,9 +92,23 @@ const FramePage = ({ route }: FramePageProps) => {
           {/* 배경 Gradient */}
           <LinearGradient
             className="rounded-[24px] flex-1 items-center justify-center"
-            {...recapColorLinearGradient.HEART}>
+            {...recapColorLinearGradient[frame]}>
             {/* Frame */}
-            <RedSvgFrame className="absolute flex-1 z-10" />
+            {frame === "HEART" && <HEART className="absolute flex-1 z-10" />}
+            {frame === "BUILDING" && (
+              <BUILDING className="absolute flex-1 z-10" />
+            )}
+            {frame === "STARFALL" && (
+              <STARFALL className="absolute flex-1 z-10" />
+            )}
+            {frame === "FIRE" && <FIRE className="absolute flex-1 z-10" />}
+            {frame === "SMILE_FACE" && (
+              <SMILE_FACE className="absolute flex-1 z-10" />
+            )}
+            {frame === "BASKETBALL" && (
+              <BASKETBALL className="absolute flex-1 z-10" />
+            )}
+
             <View className="z-10 flex-col">
               <View className="flex-row items-center justify-center">
                 <MFText
@@ -86,7 +125,6 @@ const FramePage = ({ route }: FramePageProps) => {
               </View>
             </View>
             <Image
-              // TODO: resizeMode: 기존 크기 유지 OR 프레임 크기 유지
               ref={imageRef}
               resizeMode="center"
               key={photo[0].photoId}
@@ -97,6 +135,21 @@ const FramePage = ({ route }: FramePageProps) => {
             />
           </LinearGradient>
         </ViewShot>
+        <View className="flex-row justify-between p-[20px]">
+          {["HEART", "FIRE", "BASKETBALL", "BUILDING", "STARFALL"].map(
+            (item, index) => (
+              <TouchableOpacity
+                key={`${item}-${index}`}
+                onPress={() => setFrame(item as AlbumType)}>
+                <LinearGradient
+                  key={item}
+                  className="rounded-[24px] w-[45px] h-[45px]"
+                  {...recapColorLinearGradient[item as AlbumType]}
+                />
+              </TouchableOpacity>
+            )
+          )}
+        </View>
         <View className="w-full h-[108px] flex-row gap-[12px] mt-[12px] px-[24px]">
           <TouchableOpacity
             onPress={() => {

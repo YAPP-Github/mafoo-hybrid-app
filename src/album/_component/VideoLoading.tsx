@@ -15,7 +15,7 @@ interface VideoLoadingProps {
 }
 
 export type RootStackParams = {
-  Recap: undefined
+  Recap: {} | undefined
 }
 
 const VideoLoading = ({
@@ -54,7 +54,7 @@ const VideoLoading = ({
         }}>
         <LinearGradient
           className="rounded-[24px]"
-          {...recapColorLinearGradient.SMILE_FACE}>
+          {...recapColorLinearGradient[type]}>
           <View
             style={[
               styles.card,
@@ -70,7 +70,7 @@ const VideoLoading = ({
                 <Icon
                   name="closeCircleBold"
                   size={36}
-                  color="gray-300"
+                  color="text-gray-300"
                   // className="mix-blend-multiply"
                 />
               </TouchableOpacity>

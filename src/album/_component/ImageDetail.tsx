@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import {
   View,
   Text,
@@ -46,7 +46,7 @@ const ImageDetail = ({
   return (
     <>
       {visible && (
-        <Modal style={styles.container}>
+        <Modal style={styles.container} animationType="fade">
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity onPress={onClose}>

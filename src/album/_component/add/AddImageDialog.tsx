@@ -152,7 +152,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       {/* isVisible: QR 코드 스캔 / 갤러리 선택 상태 */}
       <Modal
         transparent
-        visible={backDropShow && (isAddDialogShow || isUploading || isError)}>
+        visible={backDropShow && (isAddDialogShow || isUploading || isError)}
+        animationType="fade">
         <TouchableOpacity
           onPress={() => {
             if (isAddDialogShow) {
@@ -165,7 +166,6 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
           style={{ opacity: 0.45, paddingHorizontal: 21 }}
           className="flex-1 bg-gray-700"
         />
-
         {isAddDialogShow && (
           <View
             style={{ transform: [{ translateX: 20 }] }}
