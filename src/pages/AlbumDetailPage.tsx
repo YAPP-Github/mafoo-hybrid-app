@@ -1,22 +1,7 @@
-"use client"
+import { useEffect, useState } from "react"
+import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native"
 
 import { useQueryClient } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
-import {
-  Image,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native"
-
-// import {
-//   AlbumMenuAction,
-//   AlbumMenuDialog,
-// } from "@/app/album/[id]/_component/AlbumMenuDialog"
-// import { Dialog } from "@/app/album/[id]/_component/Dialog"
 import {
   deleteAlbum,
   deleteSharedMember,
@@ -26,28 +11,32 @@ import {
   SharedMember,
 } from "../api/photo"
 // import { useGetProfile } from "@/app/profile/hooks/useProfile"
-//import Icon from "@/common/Icon"
+import Icon from "@/common/Icon"
 import {
   albumDetailStickyHeaderVariants as headerVariants,
+  recapColorLinearGradient,
   recapColorVariants,
 } from "../styles/variants"
 import { cn } from "../utils"
 import { AlbumPhotos } from "../album/_component/AlbumPhotos"
 import AlbumDetailHeader from "../album/_component/AlbumDetailHeader"
 import {
-  albumInfo as albumInfoDummy,
+  albumList,
   sharedMembersPreview as sharedMembersPreviewDummy,
+  albumInfo as albumInfoDummy,
 } from "../dummy"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import React from "react"
 import MFText from "../common/MFText"
-import Icon from "../common/Icon"
+import LinearGradient from "react-native-linear-gradient"
+import { Dialog } from "@/album/_component/Dialog"
+import AlbumMenuDialog from "@/album/_component/AlbumMenuDialog"
 
 export type RootStackParamList = {
   AddFriend: { albumId: string } | undefined
   SharedFriend: { albumId: string } | undefined
-  Recap?: undefined
+  // Recap?: { albumId: string } | undefined
   Frame?: { albumInfo: any } // TODO: albumInfo 타입 추가
 }
 
@@ -67,7 +56,6 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
-  const [isRecapOpen, setIsRecapOpen] = useState(false)
   const [videoUrl, setVideoUrl] = useState<string | null>()
 
   const queryClient = useQueryClient()
@@ -79,25 +67,13 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
       // if (data) {
       //   setAlbumInfo(data)
       // }
-      setAlbumInfo(albumInfoDummy)
+      /* albumList 에서 id로 필터링 */
+      setAlbumInfo(
+        albumList.find((album) => album.albumId == id) ?? albumInfoDummy
+      )
     }
     initAlbum()
   }, [id])
-
-  useEffect(() => {
-    if (isRecapOpen) {
-      // generateRecap(albumInfo.albumId).then(
-      //   (data) => {
-      //     console.log(data.recapUrl)
-      //     setVideoUrl(data.recapUrl)
-      //   },
-      //   (error) => {
-      //     console.error(error)
-      //     setIsRecapOpen(false)
-      //   }
-      // )
-    }
-  }, [isRecapOpen])
 
   if (!albumInfo) return
 
@@ -137,10 +113,6 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     //   }
   }
 
-  const closeRecapModal = () => {
-    setIsRecapOpen(false)
-  }
-
   const deleteDialogProps = {
     title: "앨범을 삭제할까요?", //`'${albumInfo.name}' 앨범을 삭제할까요?`,
     desc: "모든 사진도 함께 삭제되며, 복구할 수 없어요",
@@ -175,10 +147,6 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     // }
   }
 
-  const moveToRecap = () => {
-    navigation.navigate("Recap")
-  }
-
   const typeToBackgroundColor: Record<string, string> = {
     HEART: "bg-red-200",
     FIRE: "bg-butter-200",
@@ -202,16 +170,19 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
           onTapMenu={() => setIsMenuVisible(true)}
         />
       </SafeAreaView>
-      {/* {isDeleteModalShown && <Dialog {...deleteDialogProps} />}
-        {isQuitModalShown && <Dialog {...quitDialogProps} />}
-        {myPermission && (
-          <AlbumMenuDialog
-            isVisible={isMenuVisible}
-            myPermission={myPermission}
-            onTapBackdrop={() => setIsMenuVisible(false)}
-            onTapAction={onTapMenuAction}
-          />
-        )} */}
+      {isDeleteModalShown && <Dialog {...deleteDialogProps} />}
+      {isQuitModalShown && <Dialog {...quitDialogProps} />}
+      {myPermission && (
+        <AlbumMenuDialog
+          isVisible={isMenuVisible}
+          myPermission="OWNER" //{myPermission}
+          onTapBackdrop={() => {
+            console.log("배경 클릭 ")
+            setIsMenuVisible(false)
+          }}
+          onTapAction={onTapMenuAction}
+        />
+      )}
       {/* <div
           className={cn(
             headerVariants({ type: albumInfo.type }),
@@ -254,39 +225,29 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
             </MFText>
             {/* 리캡 만들기 */}
             {/* {photos.length >= 232323 && ( */}
-            <TouchableOpacity
-              className={cn(
-                recapColorVariants({ type: albumInfo.type }),
-                "rounded-[100px] px-[16px] py-[8px] bg-red-400"
-              )}
-              onPress={() =>
-                navigation.navigate("Frame", { albumInfo: albumInfo })
-              }>
-              <View className="flex-row gap-1 items-center">
-                <Icon name="clapperBoardPlay" size={20} color="white" />
-                <MFText
-                  weight="SemiBold"
-                  className="text-body2 text-sumone-white">
-                  리캡 만들기
-                </MFText>
-              </View>
-            </TouchableOpacity>
+            <LinearGradient
+              className="rounded-[100px]"
+              {...recapColorLinearGradient[albumInfo?.type ?? "HEART"]}>
+              <TouchableOpacity
+                className={"rounded-[100px] px-[16px] py-[8px]"}
+                onPress={() =>
+                  navigation.navigate("Frame", { albumInfo: albumInfo })
+                }>
+                <View className="flex-row gap-1 items-center">
+                  <Icon name="clapperBoardPlay" size={20} color="white" />
+                  <MFText
+                    weight="SemiBold"
+                    className="text-body2 text-sumone-white">
+                    리캡 만들기
+                  </MFText>
+                </View>
+              </TouchableOpacity>
+            </LinearGradient>
           </View>
         </View>
       </View>
       {/*myPermission*/}
       <AlbumPhotos albumInfo={albumInfo} myPermission={undefined} />
-
-      {/* // (videoUrl ? (
-        //   <VideoRecap url={videoUrl} closeModal={handleCloseRecap} />
-        // ) : (
-        //   <VideoLoading type={albumInfo.type} />
-        // ))} */}
-      {/* <VideoLoading
-        visible={isRecapOpen}
-        type={albumInfo.type}
-        closeRecapModal={closeRecapModal}
-      /> */}
     </View>
   )
 }

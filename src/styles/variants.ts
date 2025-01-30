@@ -1,3 +1,4 @@
+import { AlbumIconType } from "@/api/photo"
 import { cva } from "class-variance-authority"
 
 export const albumDetailHeaderVariants = cva(
@@ -202,7 +203,16 @@ export const recapColorVariants = cva("", {
   },
 })
 
-export const recapColorLinearGradient = {
+export type LinearGradientSpec = {
+  colors: string[]
+  start: { x: number; y: number }
+  end: { x: number; y: number }
+}
+
+export const recapColorLinearGradient: Record<
+  AlbumIconType & "INSTA",
+  LinearGradientSpec
+> = {
   HEART: {
     colors: ["#FF9B9C", "#F89AFF"],
     start: { x: 0, y: 0 },

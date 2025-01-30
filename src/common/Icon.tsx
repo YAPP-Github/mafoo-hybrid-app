@@ -44,6 +44,7 @@ export type IconTypes =
   | "checkCircleBold"
   | "clapperBoardPlay"
   | "mafooLogo2025"
+  | "albumEditPencil"
 
 export interface IconProps extends SvgProps {
   name: IconTypes
@@ -59,6 +60,7 @@ const Icon = ({
   height,
   color = "#000",
   className,
+  style,
   ...props
 }: IconProps) => {
   const SvgIcon = iconMap[name].default
@@ -69,7 +71,7 @@ const Icon = ({
       height={size}
       color={color}
       className={cn(className, color ? `text-${color}` : "text-gray-600")}
-    />
+      style={style}></SvgIcon>
   )
 }
 

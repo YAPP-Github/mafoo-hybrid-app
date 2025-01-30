@@ -39,6 +39,8 @@ const iconMap: Record<IconTypes, any> = {
   userCircleBold: require("../assets/userCircleBold.svg"),
   userCircleOutline: require("../assets/userCircleOutline.svg"),
   widgetAddOutline: require("../assets/widgetAddOutline.svg"),
+  clapperBoardPlay: require("../assets/clapperBoardPlay.svg"),
+  albumEditPencil: require("../assets/albumEditPencil.svg"),
 }
 
 export default iconMap
