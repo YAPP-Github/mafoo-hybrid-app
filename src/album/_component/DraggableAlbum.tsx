@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useNavigation } from "@react-navigation/native"
 
 import { deleteSharedMember, updateSharedMemberStatus } from "@/api/photo"
-import { usePatchAlbumMove } from "../hooks/useAlbum"
+import { usePatchAlbumMove } from "@/hooks/useAlbum"
 import AlbumItem from "./AlbumItem"
 import WaitingAlbumItem from "./WaitingAlbumItem"
 import { StackNavigationProp } from "@react-navigation/stack"
