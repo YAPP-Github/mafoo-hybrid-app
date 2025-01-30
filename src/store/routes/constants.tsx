@@ -131,11 +131,11 @@ export const ProtectedRoutes = [
     options: {},
     component: SumonePage,
   },
-  // {
-  //   name: "Recap",
-  //   options: {},
-  //   component: RecapPage,
-  // },
+  {
+    name: "Recap",
+    options: {},
+    component: RecapPage,
+  },
   {
     name: "Frame",
     options: {},

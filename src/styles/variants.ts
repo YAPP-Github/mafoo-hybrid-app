@@ -218,7 +218,6 @@ export const recapColorLinearGradient = {
   },
   FIRE: {
     colors: ["#FFB864", "#F8E47A"],
-    //locations: [6.38, 99.32],
     start: { x: 0, y: 0 },
     end: { x: 0, y: 1 },
   },

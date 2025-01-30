@@ -137,6 +137,7 @@
 				3C6EF72293A74906BCE5DF68 /* Pretendard-Regular.otf */,
 				1B9A1074E6CD48CD88658C34 /* Pretendard-SemiBold.otf */,
 				A103F0A201884D3EAC5B1984 /* Pretendard-Thin.otf */,
+				4D1323DEBFE349EC9DBAC58F /* SBAggroOTF-Medium.otf */,
 			);
 			name = Resources;
 			path = "";
