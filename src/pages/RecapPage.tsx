@@ -26,25 +26,25 @@ const RecapPage = () => {
           }}>
           <View className="z-10 flex-col">
             <Video
-              source={
-                {
-                  // uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-                }
-              }
-              ref={videoRef}
+              source={{
+                uri: "", // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+              }}
+              // ref={videoRef}
               onBuffer={onBuffer} // callback when remote video is buffering
               onError={onError} // callback when video cannot be loaded
+              resizeMode="cover"
+              style={{ flex: 1 }}
             />
           </View>
         </View>
         <View className="w-full h-[108px] flex-row gap-[12px] mt-[12px] px-[24px]">
           <TouchableOpacity
             onPress={() => {}}
-            className="flex-row h-14 flex-1 items-center justify-center gap-[6px] rounded-[100px] bg-gray-800 px-6 text-white">
+            className="flex-row h-14 flex-1 items-center justify-center rounded-[100px] bg-gray-800 text-white">
             <Icon name="downloadBold" size={28} color="white" />
             <MFText
               weight="SemiBold"
-              className="text-body1 mr-[6px] text-sumone-white">
+              className="text-body1 text-sumone-white ml-[6px]">
               다운로드
             </MFText>
           </TouchableOpacity>
