@@ -1,4 +1,3 @@
-import React from "react"
 import { View, Text, Image, Button, Pressable } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import MainpageImgSrc from "./_assets/MainpageImage.png"
@@ -11,9 +10,16 @@ import { setRefreshToken } from "@/store/auth/util"
 import appleAuth from "@invertase/react-native-apple-authentication"
 import { mafooAppleLogin } from "@/api/signIn"
 import { Platform } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { StackNavigationProp } from "@react-navigation/stack"
 
+export type RootStackParamList = {
+  Album: {} | undefined
+}
 const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
   const { signIn } = useAuth()
+
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
   const kakaoLogin = () => {
     console.log("kakao login")
@@ -53,6 +59,7 @@ const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
       signIn(token.accessToken)
       setRefreshToken(token.refreshToken)
       console.log(token)
+      navigation.navigate("Album")
     } catch (err) {
       console.error("login err", err)
     }

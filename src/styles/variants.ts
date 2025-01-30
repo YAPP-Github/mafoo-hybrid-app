@@ -207,12 +207,10 @@ export type LinearGradientSpec = {
   colors: string[]
   start: { x: number; y: number }
   end: { x: number; y: number }
+  locations?: number[]
 }
 
-export const recapColorLinearGradient: Record<
-  AlbumIconType & "INSTA",
-  LinearGradientSpec
-> = {
+export const recapColorLinearGradient = {
   HEART: {
     colors: ["#FF9B9C", "#F89AFF"],
     start: { x: 0, y: 0 },
@@ -220,6 +218,7 @@ export const recapColorLinearGradient: Record<
   },
   FIRE: {
     colors: ["#FFB864", "#F8E47A"],
+    //locations: [6.38, 99.32],
     start: { x: 0, y: 0 },
     end: { x: 0, y: 1 },
   },
