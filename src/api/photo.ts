@@ -1,5 +1,5 @@
 import { AlbumInfo, AlbumType, PhotoInfo } from "../album/types"
-import { myFetch } from "./myfetch"
+import { createFetcher, createUnauthorizedFetcher } from "./myfetch"
 
 export enum PermissionLevel {
   FULL_ACCESS = "FULL_ACCESS",
@@ -37,16 +37,29 @@ export interface SharedMember {
   serialNumber: string
 }
 
+const authorizedFetcher = createFetcher("photo/v1")
+const unAuthorizedFetcher = createUnauthorizedFetcher("photo/v1")
+
 export const postQrCode = async (
   qrUrl: string
 ): Promise<PostQrCodeResponse> => {
-  const data = await myFetch("photo/v1/photos", {
-    method: "POST",
-    body: JSON.stringify({ qrUrl }),
+  console.log("postQR")
+  const data = unAuthorizedFetcher.post("photos", {
+    qrUrl,
   })
-
   return data
 }
+
+// export const postQrCode = async (
+//   qrUrl: string
+// ): Promise<PostQrCodeResponse> => {
+//   const data = await myFetch("photo/v1/photos", {
+//     method: "POST",
+//     body: JSON.stringify({ qrUrl }),
+//   })
+
+//   return data
+// }
 
 type GetPhotosResponse = PhotoInfo[]
 

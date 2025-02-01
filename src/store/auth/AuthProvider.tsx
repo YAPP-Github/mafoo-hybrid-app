@@ -8,7 +8,7 @@ import React, {
   useReducer,
 } from "react"
 
-import { getToken, removeToken, setToken } from "./util"
+import { getAccessToken, removeAccessToken, setAccessToken } from "./util"
 
 export interface AuthState {
   accessToken: string | undefined | null
@@ -53,7 +53,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const initialState = async () => {
       try {
-        const token = await getToken()
+        const token = await getAccessToken()
         if (token !== null) {
           dispatch({ type: "SIGN_IN", token })
         } else {
@@ -71,10 +71,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     () => ({
       signIn: async (token: string) => {
         dispatch({ type: "SIGN_IN", token })
-        await setToken(token)
+        await setAccessToken(token)
       },
       signOut: async () => {
-        await removeToken()
+        await removeAccessToken()
         dispatch({ type: "SIGN_OUT" })
       },
     }),

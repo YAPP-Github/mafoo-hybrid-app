@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react"
-import { SafeAreaView } from "react-native"
+import { View } from "react-native"
 
 import SplashScreen from "react-native-splash-screen"
 import MafooRouter from "./src/store/routes/MafooRouter"

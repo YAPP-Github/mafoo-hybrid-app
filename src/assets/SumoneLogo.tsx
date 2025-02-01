@@ -5,7 +5,7 @@ const SumoneLogo = ({ width, height, fill }: IconProps) => (
     width={width || "120"}
     height={height || "32"}
     viewBox="0 0 120 32"
-    fill="none"
+    fill="currentColor"
     xmlns="http://www.w3.org/2000/svg">
     <path
       opacity="0.907"

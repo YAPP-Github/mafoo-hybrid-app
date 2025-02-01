@@ -5,7 +5,7 @@ const DoubleHeartIcon = ({ width, height }: IconProps) => (
     width={width || "25"}
     height={height || width || "24"}
     viewBox="0 0 25 24"
-    fill="none"
+    fill="currentColor"
     xmlns="http://www.w3.org/2000/svg">
     <g clipPath="url(#clip0_3371_16317)">
       <path
