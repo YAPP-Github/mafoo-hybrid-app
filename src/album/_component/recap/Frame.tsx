@@ -19,8 +19,6 @@ import { ObjectedParams } from "@/types/user"
 import { usePhotoStore } from "@/store/photo"
 import { authorizedFetcher, getPresignedUrls } from "@/api/presignedUrl"
 
-const nativeProp = Platform.OS === "ios" ? "source" : "src"
-
 export interface FrameType {
   type: AlbumType
   userData: ObjectedParams
@@ -124,12 +122,11 @@ const Frame = ({ type, userData, setUpload }: FrameType) => {
   }
 
   const onCaptureBackground = async () => {
-    const dataUrls: string[] = [] // base64
+    const dataUrls: string[] = []
 
     for (let index = 0; index < photo.length; index++) {
-      // 이미지 변경
       imageRef.current?.setNativeProps({
-        [nativeProp]: [photo[index].photoUrl],
+        source: [photo[index].photoUrl],
       })
 
       await new Promise((resolve) => setTimeout(resolve, 100))
@@ -139,7 +136,6 @@ const Frame = ({ type, userData, setUpload }: FrameType) => {
         quality: 0.8,
         result: "base64", // base64 인코딩
       })
-      console.log(`data:image/jpeg;base64,${uri}`)
       dataUrls.push(`data:image/jpeg;base64,${uri}`)
     }
 
@@ -149,8 +145,7 @@ const Frame = ({ type, userData, setUpload }: FrameType) => {
     onCaptureBackground()
   }, [])
 
-  const FRAME_LAYOUT =
-    "absolute top-0 left-0 flex-1 z-[-40] w-[393px] h-[680px]"
+  const FRAME_LAYOUT = "absolute top-0 left-0 flex-1 w-[393px] h-[680px]"
 
   return (
     <ViewShot
@@ -160,7 +155,7 @@ const Frame = ({ type, userData, setUpload }: FrameType) => {
         position: "absolute",
         width: 393,
         height: 680,
-        zIndex: 50,
+        zIndex: -50,
         top: 0,
         left: 0,
       }}>
@@ -173,7 +168,7 @@ const Frame = ({ type, userData, setUpload }: FrameType) => {
         {type === "FIRE" && <FIRE className={FRAME_LAYOUT} />}
         {type === "SMILE_FACE" && <SMILE_FACE className={FRAME_LAYOUT} />}
         {type === "BASKETBALL" && <BASKETBALL className={FRAME_LAYOUT} />}
-        <View className="z-[-40] flex-col">
+        <View className="flex-col">
           <View className="flex-row items-center justify-center">
             <MFText
               style={{
