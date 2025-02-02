@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useState } from "react"
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native"
+import React, { useCallback, useState } from "react"
+import { View, TouchableOpacity, Modal } from "react-native"
 import { launchImageLibrary } from "react-native-image-picker"
 import Toast from "react-native-toast-message"
 import { generatePreSignedUrls, uploadPhotosWithUrls } from "@/api/photo"
@@ -147,6 +147,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
     // }
   }, [currentAlbumId, onImageUploaded])
 
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+
   return (
     <>
       {/* isVisible: QR 코드 스캔 / 갤러리 선택 상태 */}
@@ -168,8 +170,14 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
         />
         {isAddDialogShow && (
           <View
-            style={{ transform: [{ translateX: 20 }] }}
-            className="absolute z-30 w-[calc(100%-40px)] bottom-[24px] bg-sumone-white rounded-[16px]">
+            onLayout={(event) => {
+              const { width, height } = event.nativeEvent.layout
+              setOffset({ x: -width / 2, y: -height / 2 })
+            }}
+            style={{
+              transform: [{ translateX: offset.x }],
+            }}
+            className="absolute z-30 left-[50%] bottom-[24px] w-[calc(100%-40px)] bg-sumone-white rounded-[16px]">
             <View className="p-[12px] flex-row justify-center gap-[6px]">
               <TouchableOpacity onPress={onTapQrScan}>
                 <View className="px-[24px] py-[16px] items-center gap-[8px]">
@@ -229,7 +237,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                     {currentUploaded} / {totalFiles}장
                   </MFText>
                 </View>
-                <View className="flex w-full mt-[20px]">
+                <View className="flex w-full">
                   <SquareButton
                     onPress={onTapCancel}
                     className="flex-1 mt-[20px]"
