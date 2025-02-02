@@ -11,7 +11,6 @@ import ScannerPage from "@/pages/ScannerPage"
 import ScannerSelectAlbumPage from "@/pages/ScannerSelectAlbumPage"
 import SumonePage from "@/pages/SumonePage"
 import RecapPage from "@/pages/RecapPage"
-import FramePage from "@/pages/FramePage"
 
 // TODO: 토큰 부착 후 Unprotected Screen 제거
 export const UnprotectedRoutes = [
@@ -61,11 +60,6 @@ export const UnprotectedRoutes = [
     name: "Recap",
     options: {},
     component: RecapPage,
-  },
-  {
-    name: "Frame",
-    options: {},
-    component: FramePage,
   },
   {
     name: "Profile",
@@ -135,10 +129,5 @@ export const ProtectedRoutes = [
     name: "Recap",
     options: {},
     component: RecapPage,
-  },
-  {
-    name: "Frame",
-    options: {},
-    component: FramePage,
   },
 ]
