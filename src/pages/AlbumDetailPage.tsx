@@ -2,21 +2,10 @@ import { useEffect, useState } from "react"
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native"
 
 import { useQueryClient } from "@tanstack/react-query"
-import {
-  deleteAlbum,
-  deleteSharedMember,
-  getAlbum,
-  GetSharedAlbumResponse,
-  PermissionLevel,
-  SharedMember,
-} from "../api/photo"
+import { PermissionLevel, SharedMember } from "../api/photo"
 // import { useGetProfile } from "@/app/profile/hooks/useProfile"
 import Icon from "@/common/Icon"
-import {
-  albumDetailStickyHeaderVariants as headerVariants,
-  recapColorLinearGradient,
-  recapColorVariants,
-} from "../styles/variants"
+import { albumDetailStickyHeaderVariants as headerVariants } from "../styles/variants"
 import { cn } from "../utils"
 import { AlbumPhotos } from "../album/_component/AlbumPhotos"
 import AlbumDetailHeader from "../album/_component/AlbumDetailHeader"
@@ -28,10 +17,13 @@ import {
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import React from "react"
-import MFText from "../common/MFText"
-import LinearGradient from "react-native-linear-gradient"
+import MFText from "@/common/MFText"
 import { Dialog } from "@/album/_component/Dialog"
 import AlbumMenuDialog from "@/album/_component/AlbumMenuDialog"
+import { CreateRecapButton } from "@/album/_component/recap/CreateRecap"
+import Frame from "@/album/_component/recap/Frame"
+import VideoLoading from "@/album/_component/VideoLoading"
+import { sampleUserData } from "@/types/user"
 
 export type RootStackParamList = {
   AddFriend: { albumId: string } | undefined
@@ -57,9 +49,12 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
   const [videoUrl, setVideoUrl] = useState<string | null>()
+  const [isRecapOpen, setIsRecapOpen] = useState(false)
 
   const queryClient = useQueryClient()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
+
+  const [isCapture, setIsCapture] = useState(false)
 
   useEffect(() => {
     const initAlbum = async () => {
@@ -225,28 +220,30 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
             </MFText>
             {/* 리캡 만들기 */}
             {/* {photos.length >= 232323 && ( */}
-            <LinearGradient
-              className="rounded-[100px]"
-              {...recapColorLinearGradient[albumInfo?.type ?? "HEART"]}>
-              <TouchableOpacity
-                className={"rounded-[100px] px-[16px] py-[8px]"}
-                onPress={() =>
-                  navigation.navigate("Frame", { albumInfo: albumInfo })
-                }>
-                <View className="flex-row gap-1 items-center">
-                  <Icon name="clapperBoardPlay" size={20} color="white" />
-                  <MFText
-                    weight="SemiBold"
-                    className="text-body2 text-sumone-white">
-                    리캡 만들기
-                  </MFText>
-                </View>
-              </TouchableOpacity>
-            </LinearGradient>
+            <CreateRecapButton
+              type={albumInfo?.type || "HEART"}
+              onPress={() => {
+                setIsCapture(true)
+                setIsRecapOpen(true)
+              }}>
+              리캡 만들기
+            </CreateRecapButton>
           </View>
         </View>
       </View>
       {/*myPermission*/}
+      {isCapture && (
+        <Frame
+          userData={sampleUserData} // TODO: 데이터 변경
+          type={albumInfo?.type || "HEART"}
+          setUpload={setIsRecapOpen}
+        />
+      )}
+      <VideoLoading
+        visible={isRecapOpen}
+        type={albumInfo.type}
+        closeRecapModal={() => setIsRecapOpen(false)}
+      />
       <AlbumPhotos albumInfo={albumInfo} myPermission={undefined} />
     </View>
   )
