@@ -1,227 +1,205 @@
-import React, { memo, useEffect, useMemo, useRef, useState } from "react"
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native"
-import Canvas from "./Canvas" // React Native Canvas 구현
-import { useNavigation } from "@react-navigation/native"
-import { photo as photos } from "@/dummy"
-// import { usePhotoStore } from "../store/photoStore"
-// import SumoneButton from "../components/SumoneButton"
-// import { getPresignedUrls, postOriginalPhoto } from "../api"
-// import Carousel from "../components/Carousel"
-// import HeartIcon from "../assets/HeartIcon"
-import SumoneLoader from "../assets/SumoneLoader.gif"
-// import { fetchAd } from "../api"
-import MFText from "@/common/MFText"
+import { recapColorLinearGradient } from "@/styles/variants"
+import { Image, Platform, View } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
+import ViewShot, { captureRef } from "react-native-view-shot"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
-interface FrameProps {
-  locale: string
-  userData: {
-    top: number
-    bottom: number
-    partnerNickName: string
-  }
-  dict: Record<string, any>
-  loader: Record<string, any>
-  albumId: string
+import HEART from "@/assets/frame/HEART.svg"
+import BUILDING from "@/assets/frame/BUILDING.svg"
+import FIRE from "@/assets/frame/FIRE.svg"
+import SMILE_FACE from "@/assets/frame/SMILE_FACE.svg"
+import BASKETBALL from "@/assets/frame/BASKETBALL.svg"
+import STARFALL from "@/assets/frame/STARFALL.svg"
+import { useEffect, useRef } from "react"
+import MFText from "@/common/MFText"
+import { photo } from "@/dummy"
+import Icon from "@/common/Icon"
+import { AlbumType } from "@/album/types"
+import { ObjectedParams } from "@/types/user"
+import { usePhotoStore } from "@/store/photo"
+import { authorizedFetcher, getPresignedUrls } from "@/api/presignedUrl"
+
+const nativeProp = Platform.OS === "ios" ? "source" : "src"
+
+export interface FrameType {
+  type: AlbumType
+  userData: ObjectedParams
+  setUpload: (data: boolean) => void
 }
 
-const Frame: React.FC<FrameProps> = ({
-  locale,
-  userData,
-  dict,
-  loader,
-  albumId,
-}) => {
-  const navigation = useNavigation()
-  // const { photos } = usePhotoStore()
-  const canvasRef = useRef(null)
-  const [frameType, setFrameType] = useState<number>(1)
-  const [imageIdx, setImageIdx] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isAdLoaded, setIsAdLoaded] = useState(false)
+const Frame = ({ type, userData, setUpload }: FrameType) => {
+  const viewRef = useRef<any>()
+  const imageRef = useRef<any>()
+  const { photos } = usePhotoStore()
 
-  const uploadPhotosAndCreateAlbum = async () => {
-    try {
-      // await postOriginalPhoto(photos, albumId)
-    } catch (err) {
-      // console.error("Failed to upload photos or create album:", err)
-    }
-  }
-
-  useEffect(() => {
-    // if (photos.length === 0) {
-    //   navigation.navigate("PickPhoto", {})
-    // } else {
-    //   uploadPhotosAndCreateAlbum()
-    // }
-  }, [photos])
-
-  useEffect(() => {
-    if (locale !== "ko") {
-      //   fetchAd()
-      //     .then(() => setIsAdLoaded(true))
-      //     .catch((err) => console.error(err))
-    }
-  }, [locale])
-
-  const handleSelectFrame = async () => {
-    setIsLoading(true)
-    try {
-      // Generate framed images and upload them
-      const dataUrls = await generateFramedImages()
-      await handleRecapFramedPhoto(dataUrls)
-    } catch (err) {
-      console.error("Error during recap processing:", err)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const generateFramedImages = async () => {
-    // Placeholder: Generate framed images
-    return []
+  const getAlbumIdFromAsyncStorage = async () => {
+    const res = await AsyncStorage.getItem("albumId")
+    return res || ""
   }
 
   const handleRecapFramedPhoto = async (dataUrls: string[]) => {
-    // try {
-    //   const presignedResult = await getPresignedUrls(photos, albumId)
-    //   if (!presignedResult) {
-    //     console.error("Failed to get presigned URLs")
-    //     navigation.navigate("PickPhoto", {})
-    //     return
-    //   }
-    //   const [albumId, urls] = presignedResult
-    //   await Promise.all(
-    //     dataUrls.map(async (dataUrl, index) => {
-    //       const presignedUrl = urls[index]
-    //       // Upload image logic here
-    //     })
-    //   )
-    //   const recapUrl = "generated_recap_url_placeholder" // Placeholder
-    //   navigation.navigate("Result", { recapUrl })
-    // } catch (err) {
-    //   console.error("Error during recap processing:", err)
-    // }
+    // presigned URLs 가져오기
+    console.time("리캡 이미지 presigned url 발급")
+
+    const albumIdFromAsyncStorage = await getAlbumIdFromAsyncStorage()
+    if (!albumIdFromAsyncStorage)
+      return console.log("Fail to fetch albumId from AsyncStorage")
+
+    const presignedResult = await getPresignedUrls(
+      photos,
+      albumIdFromAsyncStorage
+    )
+    if (!presignedResult) {
+      console.error("Failed to get presigned URLs")
+      // navigation.push(`/pickphoto?${searchParams.toString()}`)
+      return
+    }
+    console.timeEnd("리캡 이미지 presigned url 발급")
+
+    const [albumId, urls] = presignedResult
+    console.log("Presigned URLs: ", urls)
+
+    // dataUrls (프레임된 이미지들) 업로드
+    try {
+      console.time("이미지 PUT")
+      const uploadPromises = dataUrls.map(async (dataUrl, index) => {
+        const blob = await fetch(dataUrl).then((res) => res.blob())
+
+        const file = new File([blob], `frame_${index + 1}.jpeg`, {
+          type: "image/jpeg",
+          lastModified: Date.now(),
+        })
+
+        const presignedUrl = urls[index]
+
+        return fetch(presignedUrl, {
+          method: "PUT",
+          body: file,
+        }).then((res) => {
+          if (!res.ok) {
+            throw new Error(`Failed to upload frame ${index + 1}`)
+          }
+          return res
+        })
+      })
+
+      await Promise.all(uploadPromises)
+
+      console.timeEnd("이미지 PUT")
+      // presigned URL에서 query string 제거 후 새 URL 생성
+      const newUrls = urls.map((url: string) => {
+        return url.split("?")[0]
+      })
+
+      console.time("리캡 생성 요청")
+      // recap API 호출
+      const { recapUrl } = await authorizedFetcher
+        .post(
+          `/${albumId}/recap`,
+          JSON.stringify({
+            userId: userData.coupleId + userData.nickName,
+            fileUrls: newUrls,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => res.json())
+        .catch((err) => {
+          console.error("Error calling recap API:", err)
+          throw err
+        })
+
+      console.log("recapUrl", recapUrl)
+      console.timeEnd("리캡 생성 요청")
+
+      // Recao page에 Url로 전달
+      // navigation.push(`result?${searchParams.toString()}&recapUrl=${recapUrl}`)
+    } catch (err) {
+      console.error("Error during recap processing:", err)
+      setUpload(false)
+    }
   }
 
-  const headerTitleComponent = useMemo(
-    () => (
-      <View style={styles.headerTitleContainer}>
-        <Text style={styles.headerTitle}>{dict.select_frame}</Text>
-      </View>
-    ),
-    [dict.select_frame]
-  )
+  const onCaptureBackground = async () => {
+    const dataUrls: string[] = [] // base64
+
+    for (let index = 0; index < photo.length; index++) {
+      // 이미지 변경
+      imageRef.current?.setNativeProps({
+        [nativeProp]: [photo[index].photoUrl],
+      })
+
+      await new Promise((resolve) => setTimeout(resolve, 100))
+
+      const uri = await captureRef(viewRef, {
+        format: "png",
+        quality: 0.8,
+        result: "base64", // base64 인코딩
+      })
+      console.log(`data:image/jpeg;base64,${uri}`)
+      dataUrls.push(`data:image/jpeg;base64,${uri}`)
+    }
+
+    // handleRecapFramedPhoto(dataUrls)
+  }
+  useEffect(() => {
+    onCaptureBackground()
+  }, [])
+
+  const FRAME_LAYOUT =
+    "absolute top-0 left-0 flex-1 z-[-40] w-[393px] h-[680px]"
 
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingTop: userData.top, paddingBottom: userData.bottom },
-      ]}>
-      <View style={styles.header}>{headerTitleComponent}</View>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View ref={canvasRef} style={styles.canvasWrapper}>
-          {photos.length > 0 && (
-            <Canvas
-              frameType={frameType}
-              images={photos}
-              imageIdx={imageIdx}
-              setImageIdx={setImageIdx}
-            />
-          )}
+    <ViewShot
+      ref={viewRef}
+      style={{
+        flex: 1,
+        position: "absolute",
+        width: 393,
+        height: 680,
+        zIndex: 50,
+        top: 0,
+        left: 0,
+      }}>
+      <LinearGradient
+        className="absolute top-0 left-0 items-center justify-center w-[393px] h-[680px]"
+        {...recapColorLinearGradient[type]}>
+        {type === "HEART" && <HEART className={FRAME_LAYOUT} />}
+        {type === "BUILDING" && <BUILDING className={FRAME_LAYOUT} />}
+        {type === "STARFALL" && <STARFALL className={FRAME_LAYOUT} />}
+        {type === "FIRE" && <FIRE className={FRAME_LAYOUT} />}
+        {type === "SMILE_FACE" && <SMILE_FACE className={FRAME_LAYOUT} />}
+        {type === "BASKETBALL" && <BASKETBALL className={FRAME_LAYOUT} />}
+        <View className="z-[-40] flex-col">
+          <View className="flex-row items-center justify-center">
+            <MFText
+              style={{
+                fontSize: 18,
+                fontWeight: 600,
+                lineHeight: 25,
+                letterSpacing: 0.36,
+              }}
+              className="text-sumone-white mr-[4px]">
+              @수연님의
+            </MFText>
+            <Icon name="mafooLogo" color="white" size={64} />
+          </View>
         </View>
-        <View style={styles.frameSelectorWrapper}>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => setFrameType(index + 1)}
-              style={[
-                styles.frameButton,
-                frameType === index + 1 && styles.selectedFrame,
-              ]}>
-              <Text>{`Frame ${index + 1}`}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-        {/* <SumoneButton
-          text={dict.make_with_this_frame}
-          onPress={handleSelectFrame}
-          isLoading={isLoading}
-        /> */}
-        <TouchableOpacity onPress={handleSelectFrame}>
-          <MFText>버튼</MFText>
-        </TouchableOpacity>
-      </ScrollView>
-      {isLoading && (
-        <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#ff9092" />
-          <Text>
-            {locale === "ko" ? "잠시만 기다려 주세요..." : "Please wait..."}
-          </Text>
-        </View>
-      )}
-    </View>
+        <Image
+          ref={imageRef}
+          resizeMode="center"
+          key={photo[0].photoId}
+          width={300}
+          height={500}
+          source={{ uri: photo[0].photoUrl }}
+          className=""
+        />
+      </LinearGradient>
+    </ViewShot>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-  },
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
-  headerTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  headerTitle: {
-    fontSize: 18,
-    color: "white",
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-    alignItems: "center",
-  },
-  canvasWrapper: {
-    width: "100%",
-    height: 300,
-    marginBottom: 16,
-  },
-  frameSelectorWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 16,
-  },
-  frameButton: {
-    padding: 8,
-    backgroundColor: "white",
-    borderRadius: 8,
-  },
-  selectedFrame: {
-    borderColor: "blue",
-    borderWidth: 2,
-  },
-  loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-})
-
-export default memo(Frame)
+export default Frame
