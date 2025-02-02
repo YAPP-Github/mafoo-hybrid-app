@@ -27,12 +27,14 @@ const VideoLoading = ({
   const navigation = useNavigation<StackNavigationProp<RootStackParams>>()
 
   // TODO: 3초 뒤 Recap 페이지로 이동 (테스트 후 삭제)
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     navigation.navigate("Recap")
-  //     closeRecapModal()
-  //   }, 3000)
-  // }, [])
+  useEffect(() => {
+    if (visible) {
+      setTimeout(() => {
+        navigation.navigate("Recap")
+        closeRecapModal()
+      }, 3000)
+    }
+  }, [visible])
 
   return (
     <Modal visible={visible} transparent>
