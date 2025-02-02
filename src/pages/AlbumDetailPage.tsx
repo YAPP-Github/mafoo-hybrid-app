@@ -209,25 +209,27 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
           previewMembers={sharedMembersPreviewDummy as any} // TODO: 데이터 변경
         />
       </View>
-      <View className="sticky z-10 flex w-full flex-row justify-between bg-sumone-white rounded-tl-3xl rounded-tr-3xl">
-        <View className="flex flex-col px-6 pb-2 pt-6 w-full">
-          <MFText className="text-body2 text-gray-500 pb-[8px]">
-            함께 찍은 추억
-          </MFText>
-          <View className="flex-row justify-between items-center">
-            <MFText weight="SemiBold" className="text-header1 text-gray-800">
-              {albumInfo.photoCount}장
+      <View className={headerVariants({ type: albumInfo.type })}>
+        <View className="sticky z-10 flex w-full flex-row justify-between bg-sumone-white rounded-tl-3xl rounded-tr-3xl">
+          <View className="flex flex-col px-6 pb-2 pt-6 w-full">
+            <MFText className="text-body2 text-gray-500 pb-[8px]">
+              함께 찍은 추억
             </MFText>
-            {/* 리캡 만들기 */}
-            {/* {photos.length >= 232323 && ( */}
-            <CreateRecapButton
-              type={albumInfo?.type || "HEART"}
-              onPress={() => {
-                setIsCapture(true)
-                setIsRecapOpen(true)
-              }}>
-              리캡 만들기
-            </CreateRecapButton>
+            <View className="flex-row justify-between items-center">
+              <MFText weight="SemiBold" className="text-header1 text-gray-800">
+                {albumInfo.photoCount}장
+              </MFText>
+              {/* 리캡 만들기 */}
+              {/* {photos.length >= 232323 && ( */}
+              <CreateRecapButton
+                type={albumInfo?.type || "HEART"}
+                onPress={() => {
+                  setIsCapture(true)
+                  setIsRecapOpen(true)
+                }}>
+                리캡 만들기
+              </CreateRecapButton>
+            </View>
           </View>
         </View>
       </View>
