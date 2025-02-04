@@ -47,12 +47,14 @@ export const createFetcher = (path: string) => {
   })
 
   instance.interceptors.request.use(
-    function (config: InternalAxiosRequestConfig) {
-      const accessToken = getAccessToken()
+    async function (config: InternalAxiosRequestConfig) {
+      const accessToken = await getAccessToken()
 
       if (accessToken) {
         config.headers!.Authorization = "Bearer " + accessToken
       }
+
+      console.log(config)
 
       return config
     },
@@ -69,8 +71,8 @@ export const createFetcher = (path: string) => {
       const _err = err as unknown as AxiosError
       const { response: res } = _err
 
-      const accessToken = getAccessToken()
-      const refreshToken = getRefreshToken()
+      const accessToken = await getAccessToken()
+      const refreshToken = await getRefreshToken()
 
       if (!res || res.status !== 401 || !accessToken || !refreshToken) {
         return Promise.reject(_err)

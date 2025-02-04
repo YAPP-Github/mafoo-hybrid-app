@@ -10,6 +10,7 @@ import { setRefreshToken } from "@/store/auth/util"
 import appleAuth from "@invertase/react-native-apple-authentication"
 import { mafooAppleLogin, mafooKakaoLogin } from "@/api/signIn"
 import { Platform } from "react-native"
+import { createFetcher } from "@/api/myfetch"
 
 const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
   const { signIn } = useAuth()
@@ -99,6 +100,12 @@ const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
 }
 
 const HomePage = ({ navigation }: any) => {
+  const testAPI = async () => {
+    const authorizedFetcher = createFetcher("user/v1")
+    await authorizedFetcher.get("/me").then((res) => {
+      console.log(res)
+    })
+  }
   return (
     <PageContainer statusBarColor="#fff" isCustomHeader={false}>
       <LinearGradient
@@ -119,10 +126,7 @@ const HomePage = ({ navigation }: any) => {
           <View style={{ gap: 16 }} className="flex flex-col w-full">
             <LoginButton type="kakao" />
             {Platform.OS === "ios" && <LoginButton type="apple" />}
-            <Button
-              title="test123"
-              onPress={() => navigation.navigate("album")}
-            />
+            <Button title="test123" onPress={testAPI} />
           </View>
         </View>
       </LinearGradient>
