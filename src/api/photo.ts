@@ -66,12 +66,7 @@ type GetPhotosResponse = PhotoInfo[]
 export const getPhotos = async (
   albumId: string
 ): Promise<GetPhotosResponse> => {
-  const data = await authorizedFetcher.get(
-    `photo/v1/photos?albumId=${albumId}`,
-    {
-      method: "GET",
-    }
-  )
+  const data = await authorizedFetcher.get(`/photos?albumId=${albumId}`)
 
   return data
 }
@@ -122,12 +117,12 @@ export interface GetSharedAlbumResponse {
 export const getAlbum = async (
   albumId: string
 ): Promise<GetSharedAlbumResponse> => {
-  const data = await authorizedFetcher.get(`/photo/v1/albums/${albumId}`)
+  const data = await authorizedFetcher.get(`/albums/${albumId}`)
   return data
 }
 
 export const getAlbums = async (): Promise<GetBulkAlbumResponse[]> => {
-  const data = await authorizedFetcher.get(`/photo/v1/albums`)
+  const data = await authorizedFetcher.get(`/albums`)
 
   console.log("getAlbums 데이터", data)
   return data
