@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 
-// import { getMyProfile } from "@/app/api/signIn"
+import { getMyProfile } from "@/api/signIn"
 
 export const useGetProfile = () => {
   const { data } = useQuery({

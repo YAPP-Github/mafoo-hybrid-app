@@ -2,18 +2,12 @@ import { useEffect, useState } from "react"
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native"
 
 import { useQueryClient } from "@tanstack/react-query"
-import { PermissionLevel, SharedMember } from "../api/photo"
-// import { useGetProfile } from "@/app/profile/hooks/useProfile"
+import { PermissionLevel, SharedMember, getAlbum } from "../api/photo"
 import Icon from "@/common/Icon"
 import { albumDetailStickyHeaderVariants as headerVariants } from "../styles/variants"
 import { cn } from "../utils"
 import { AlbumPhotos } from "../album/_component/AlbumPhotos"
 import AlbumDetailHeader from "../album/_component/AlbumDetailHeader"
-import {
-  albumList,
-  sharedMembersPreview as sharedMembersPreviewDummy,
-  albumInfo as albumInfoDummy,
-} from "../dummy"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import React from "react"
@@ -24,6 +18,7 @@ import { CreateRecapButton } from "@/album/_component/recap/CreateRecap"
 import Frame from "@/album/_component/recap/Frame"
 import VideoLoading from "@/album/_component/VideoLoading"
 import { sampleUserData } from "@/types/user"
+import { useGetProfile } from "@/profile/hooks/useProfile"
 
 export type RootStackParamList = {
   AddFriend: { albumId: string } | undefined
@@ -44,11 +39,10 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const { albumId: id } = route.params
 
   const [albumInfo, setAlbumInfo] = useState<any>() // GetSharedAlbumResponse
-  // const profile = useGetProfile()
+  const profile = useGetProfile()
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
-  const [videoUrl, setVideoUrl] = useState<string | null>()
   const [isRecapOpen, setIsRecapOpen] = useState(false)
 
   const queryClient = useQueryClient()
@@ -58,14 +52,10 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
 
   useEffect(() => {
     const initAlbum = async () => {
-      // const data = await getAlbum(id)
-      // if (data) {
-      //   setAlbumInfo(data)
-      // }
-      /* albumList 에서 id로 필터링 */
-      setAlbumInfo(
-        albumList.find((album) => album.albumId == id) ?? albumInfoDummy
-      )
+      const data = await getAlbum(id)
+      if (data) {
+        setAlbumInfo(data)
+      }
     }
     initAlbum()
   }, [id])
@@ -83,16 +73,14 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     name: albumInfo.ownerName ?? "",
     serialNumber: "0000",
   }
-  const isOwner = true
-  //albumInfo.ownerMemberId === profile.profile?.memberId
-  // const me = sharedMembers.find(
-  //   (member) => member.memberId === profile.profile?.memberId
-  // )
+  const isOwner = albumInfo.ownerMemberId === profile.profile?.memberId
+  const me = sharedMembers.find(
+    (member: any) => member.memberId === profile.profile?.memberId
+  )
 
-  // const myPermission = isOwner ? PermissionLevel.OWNER : me?.permissionLevel
-  const myPermission = "OWNER"
+  const myPermission = isOwner ? PermissionLevel.OWNER : me?.permissionLevel
 
-  // const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
+  const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
 
   const handleDeleteAlbum = async () => {
     //  await deleteAlbum(albumInfo.albumId)
@@ -170,26 +158,13 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
       {myPermission && (
         <AlbumMenuDialog
           isVisible={isMenuVisible}
-          myPermission="OWNER" //{myPermission}
+          myPermission={myPermission}
           onTapBackdrop={() => {
-            console.log("배경 클릭 ")
             setIsMenuVisible(false)
           }}
           onTapAction={onTapMenuAction}
         />
       )}
-      {/* <div
-          className={cn(
-            headerVariants({ type: albumInfo.type }),
-            "flex flex-row justify-center"
-          )}>
-          <span className="tp-title1-semibold text-gradient-purple my-3 bg-clip-text text-center">
-            함께 찍은 친구랑
-            <br />
-            앨범을 공유해보세요
-          </span>
-        </div> */}
-
       <View
         className={cn(
           headerVariants({ type: albumInfo.type }),
@@ -206,7 +181,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
           onTapViewFriend={() =>
             navigation.navigate("SharedFriend", { albumId: id })
           }
-          previewMembers={sharedMembersPreviewDummy as any} // TODO: 데이터 변경
+          previewMembers={sharedMembersPreview}
         />
       </View>
       <View className={headerVariants({ type: albumInfo.type })}>
@@ -246,7 +221,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
         type={albumInfo.type}
         closeRecapModal={() => setIsRecapOpen(false)}
       />
-      <AlbumPhotos albumInfo={albumInfo} myPermission={undefined} />
+      <AlbumPhotos albumInfo={albumInfo} myPermission={myPermission} />
     </View>
   )
 }
@@ -287,7 +262,6 @@ const ShareBar: React.FC<ShareBarProps> = ({
           </View>
         )}
       </View>
-      {/* {previewMembers.length > 1 && onTapViewFriend && ( */}
       <View className="flex-row space-x-2">
         {previewMembers.length > 1 && onTapViewFriend && (
           <TouchableOpacity
