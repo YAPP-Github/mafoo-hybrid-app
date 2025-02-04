@@ -1,23 +1,36 @@
-import React from "react"
 import { View, Text, Image, Button, Pressable } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import MainpageImgSrc from "./_assets/MainpageImage.png"
 import PageContainer from "@/common/PageContainer"
 // import Icon from "@/common/Icon"
-import { login, logout } from "@react-native-seoul/kakao-login"
+import { login } from "@react-native-seoul/kakao-login"
 import Icon from "@/common/Icon"
 import { useAuth } from "@/store/auth/AuthProvider"
 import { setRefreshToken } from "@/store/auth/util"
 import appleAuth from "@invertase/react-native-apple-authentication"
-import { mafooAppleLogin } from "@/api/signIn"
+import { mafooAppleLogin, mafooKakaoLogin } from "@/api/signIn"
 import { Platform } from "react-native"
 
 const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
   const { signIn } = useAuth()
 
-  const kakaoLogin = () => {
-    console.log("kakao login")
-    signInWithKakao()
+  const kakaoLogin = async () => {
+    try {
+      const token = await login()
+      if (token) {
+        console.log("kakao login success", token)
+        try {
+          const response = await mafooKakaoLogin(token.accessToken)
+          console.log(response)
+          signIn(response.accessToken)
+          setRefreshToken(response.refreshToken)
+        } catch (err) {
+          console.error("local kakao login err", err)
+        }
+      }
+    } catch (err) {
+      console.error("kakao login err", err)
+    }
   }
 
   const appleLogin = async () => {
@@ -40,30 +53,16 @@ const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
     ) {
       // user is authenticated
       console.log("apple login success", appleAuthRequestResponse)
-      const response = await mafooAppleLogin(
-        appleAuthRequestResponse.identityToken
-      )
-      console.log(response)
-    }
-  }
-
-  const signInWithKakao = async (): Promise<void> => {
-    try {
-      const token = await login()
-      signIn(token.accessToken)
-      setRefreshToken(token.refreshToken)
-      console.log(token)
-    } catch (err) {
-      console.error("login err", err)
-    }
-  }
-
-  const signOutWithKakao = async (): Promise<void> => {
-    try {
-      const message = await logout()
-      console.log(message)
-    } catch (err) {
-      console.error("signOut error", err)
+      try {
+        const response = await mafooAppleLogin(
+          appleAuthRequestResponse.identityToken
+        )
+        console.log(response)
+        signIn(response.accessToken)
+        setRefreshToken(response.refreshToken)
+      } catch (err) {
+        console.error("apple login error", err)
+      }
     }
   }
 
@@ -122,7 +121,7 @@ const HomePage = ({ navigation }: any) => {
             {Platform.OS === "ios" && <LoginButton type="apple" />}
             <Button
               title="test123"
-              onPress={() => navigation.navigate("scanner")}
+              onPress={() => navigation.navigate("album")}
             />
           </View>
         </View>

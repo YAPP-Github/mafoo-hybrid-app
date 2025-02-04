@@ -1,7 +1,3 @@
-import { ComponentProps } from "react"
-import Svg from "react-native-svg"
-import { cn } from "../utils"
-import React from "react"
 import iconMap from "./iconMap"
 
 export type IconTypes =
@@ -45,7 +41,7 @@ export type IconTypes =
   | "checkCircleBold"
   | "mafooLogo2025"
 
-export interface IconProps extends SvgProps {
+export interface IconProps {
   name: IconTypes
   size?: number
   height?: number
@@ -64,8 +60,9 @@ const Icon = ({
 
   return (
     <SvgIcon
+      {...props}
       width={size}
-      height={size}
+      height={height || size}
       color={color}
       //className={cn(className, color ? `fill-${color}` : "fill-gray-600")}
     />

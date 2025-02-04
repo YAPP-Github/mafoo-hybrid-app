@@ -98,7 +98,7 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
           isManageVisible={false}
           onTapShare={() => {}}
         />
-        <View className="h-4 w-full bg-gray-50 my-4" />
+        <View className="w-full h-4 my-4 bg-gray-50" />
         {sharedMembers.map((member) => (
           <SharedFriendElement
             key={member.memberId}

@@ -42,12 +42,12 @@ const MafooRouter = () => {
             <Stack.Screen
               key={route.name}
               name={route.name}
+              component={route.component}
               options={{
                 ...route?.options,
                 title: route.name,
                 headerShown: false,
               }}
-              component={route.components}
             />
           ))}
         </Stack.Navigator>
