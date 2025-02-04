@@ -7,14 +7,10 @@ import {
   getPhotos,
   PermissionLevel,
 } from "@/api/photo"
-// import Button from "@/common/Button"
-// import Icon from "@/common/Icon"
-import { recapColorVariants } from "@/styles/variants"
 import { AlbumInfo, PhotoInfo } from "../types"
 import ImageDetail from "./ImageDetail"
 import { Photo } from "./Photo"
 import { PhotoAddButton } from "./PhotoAddButton"
-import { photo as data } from "@/dummy"
 
 interface AlbumPhotosProps {
   albumInfo: AlbumInfo
@@ -45,13 +41,11 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
     setImageDetailShown(false)
   }
 
-  // TODO: API로 변경
   const fetchAlbums = async () => {
-    // const data = await getPhotos(albumInfo.albumId)
-    // if (data.length) {
-    //   setPhotos(data)
-    // }
-    setPhotos(data as any)
+    const data = await getPhotos(albumInfo.albumId)
+    if (data.length) {
+      setPhotos(data)
+    }
   }
 
   const handleDelete = async (photoIdx: number) => {
@@ -87,6 +81,10 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
     }
   }, [isRecapOpen])
 
+  const showPhotoAdd =
+    myPermission === PermissionLevel.OWNER ||
+    myPermission === PermissionLevel.FULL_ACCESS
+
   return (
     <>
       <View style={styles.container}>
@@ -95,10 +93,9 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
           numColumns={2}
           style={{ gap: 13 }}
           keyExtractor={(item) => item.photoId.toString()}
-          renderItem={({ item, i }) =>
-            // (myPermission === PermissionLevel.OWNER ||
-            //   myPermission === PermissionLevel.FULL_ACCESS) && (
-            i == 0 ? (
+          renderItem={({ item, i }) => {
+            const photo = item as PhotoInfo
+            return showPhotoAdd && i == 0 ? (
               <PhotoAddButton
                 albumId={albumInfo.albumId}
                 onImageUploaded={onImageUploaded}
@@ -107,10 +104,10 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
               <TouchableOpacity
                 style={styles.photoContainer}
                 onPress={() => onPhotoClick(i - 1)}>
-                <Photo photo={item} />
+                <Photo photo={photo} />
               </TouchableOpacity>
             )
-          }
+          }}
         />
         {imageDetailShown && (
           <ImageDetail
