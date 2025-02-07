@@ -1,4 +1,4 @@
-import { createUnauthorizedFetcher } from "./myfetch"
+import { createFetcher, createUnauthorizedFetcher } from "./myfetch"
 
 interface AuthLoginResponse {
   accessToken: string
@@ -14,6 +14,7 @@ export interface GetMyProfileResponse {
 }
 
 const unAuthorizedFetcher = createUnauthorizedFetcher("user/v1")
+const authorizedFetcher = createFetcher("user/v1")
 
 export const mafooKakaoLogin = async (
   accessToken: string
@@ -38,7 +39,6 @@ export const mafooAppleLogin = async (
     identityToken: identityToken,
   })
 
-  console.log(data)
   return data
 
   // const data = await myFetch("user/v1/auth/login/apple", {
@@ -47,6 +47,26 @@ export const mafooAppleLogin = async (
   // })
 
   // return data
+}
+
+export const getMyProfile = async (): Promise<GetMyProfileResponse> => {
+  const data = await authorizedFetcher.get("/me")
+
+  return data
+}
+
+export const updateName = async (
+  name: string
+): Promise<GetMyProfileResponse> => {
+  const data = await authorizedFetcher.post("/me/name", {
+    name: name,
+  })
+
+  return data
+}
+
+export const quit = async () => {
+  await authorizedFetcher.delete("/me")
 }
 
 // export const getMyProfile = async (): Promise<GetMyProfileResponse> => {

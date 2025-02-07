@@ -41,6 +41,7 @@ export const createUnauthorizedFetcher = (path: string) => {
 }
 
 export const createFetcher = (path: string) => {
+  console.log("baseURL", `${API_URL}${path}`)
   const instance = axios.create({
     baseURL: `${API_URL}${path}`,
     timeout: FETCHER_TIME_OUT,
@@ -53,8 +54,6 @@ export const createFetcher = (path: string) => {
       if (accessToken) {
         config.headers!.Authorization = "Bearer " + accessToken
       }
-
-      console.log(config)
 
       return config
     },
