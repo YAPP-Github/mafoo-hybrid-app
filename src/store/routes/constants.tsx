@@ -4,7 +4,7 @@ import AlbumDetailPage from "../../pages/AlbumDetailPage"
 import SharedFriendPage from "../../pages/SharedFriendPage"
 import AddFriendPage from "../../pages/AddFriendPage"
 import AlbumCreatePage from "../../pages/AlbumCreatePage"
-import ProfilePage from "../../pages/ProfilePage"
+import ProfilePage from "../../pages/Profile"
 import IntroductionPage from "../../pages/IntroductionPage"
 import KeywordPage from "../../pages/KeywordPage"
 import ScannerPage from "../../pages/ScannerPage"
@@ -49,6 +49,10 @@ export const UnprotectedRoutes = [
   {
     name: "scanner",
     component: ScannerPage,
+  },
+  {
+    name: "profile",
+    component: ProfilePage,
   },
 ]
 

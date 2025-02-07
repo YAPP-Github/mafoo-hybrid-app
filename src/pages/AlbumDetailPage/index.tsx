@@ -1,5 +1,3 @@
-"use client"
-
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import {
@@ -32,9 +30,9 @@ import { cn } from "../../utils"
 import { AlbumPhotos } from "../../album/_component/AlbumPhotos"
 import AlbumDetailHeader from "../../album/_component/AlbumDetailHeader"
 import {
-  albumInfo as albumInfoDummy,
+  // albumInfo as albumInfoDummy,
   multipleSharedMembersPreview,
-  sharedMembersPreview as sharedMembersPreviewDummy,
+  // sharedMembersPreview as sharedMembersPreviewDummy,
 } from "../../dummy"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
@@ -42,6 +40,7 @@ import React from "react"
 import MFText from "../../common/MFText"
 import Icon from "../../common/Icon"
 import { AlbumMenuDialog } from "./_components/AlbumDialog"
+import { useGetProfile } from "@/profile/hooks/useProfile"
 
 export type RootStackParamList = {
   AddFriend: { albumId: string } | undefined
@@ -58,9 +57,8 @@ export type AlbumDetailPageProps = {
 
 const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const { albumId: id } = route.params
-
-  const [albumInfo, setAlbumInfo] = useState<any>() // GetSharedAlbumResponse
-  // const profile = useGetProfile()
+  const [albumInfo, setAlbumInfo] = useState<GetSharedAlbumResponse>()
+  const profile = useGetProfile()
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
@@ -69,18 +67,23 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
 
   useEffect(() => {
     const initAlbum = async () => {
-      // const data = await getAlbum(id)
-      // if (data) {
-      //   setAlbumInfo(data)
-      // }
-      setAlbumInfo(albumInfoDummy)
+      await getAlbum(id)
+        .then((res) => {
+          setAlbumInfo(res)
+        })
+        .catch((err) => {
+          console.log("err", err)
+        })
+      // setAlbumInfo(albumInfoDummy)
     }
     initAlbum()
   }, [id])
 
-  if (!albumInfo) return
+  if (!albumInfo) {
+    return
+  }
 
-  const sharedMembers = albumInfo?.sharedMembers || []
+  const sharedMembers = albumInfo.sharedMembers || []
   const ownerShared: SharedMember = {
     sharedMemberId: albumInfo.ownerMemberId ?? "",
     memberId: albumInfo.ownerMemberId ?? "",
@@ -91,29 +94,28 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     name: albumInfo.ownerName ?? "",
     serialNumber: "0000",
   }
-  const isOwner = true
-  //albumInfo.ownerMemberId === profile.profile?.memberId
-  // const me = sharedMembers.find(
-  //   (member) => member.memberId === profile.profile?.memberId
-  // )
+  const isOwner = albumInfo.ownerMemberId === profile.profile?.memberId
+  const me = sharedMembers.find(
+    (member) => member.memberId === profile.profile?.memberId
+  )
 
-  // const myPermission = isOwner ? PermissionLevel.OWNER : me?.permissionLevel
-  const myPermission = PermissionLevel.OWNER
+  const myPermission = isOwner ? PermissionLevel.OWNER : me?.permissionLevel
+  // const myPermission = PermissionLevel.OWNER
 
-  // const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
+  const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
 
   const handleDeleteAlbum = async () => {
-    //  await deleteAlbum(albumInfo.albumId)
-    //  await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
+    await deleteAlbum(albumInfo.albumId)
+    await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
     // router.push("/album")
   }
 
   const handleQuitAlbum = async () => {
-    //   if (me) {
-    //     await deleteSharedMember(me.sharedMemberId)
-    //     await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
-    //  //   router.push("/album")
-    //   }
+    if (me) {
+      await deleteSharedMember(me.sharedMemberId)
+      await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
+      //   router.push("/album")
+    }
   }
 
   const deleteDialogProps = {
@@ -206,11 +208,11 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
             myPermission === PermissionLevel.OWNER ||
             myPermission === PermissionLevel.FULL_ACCESS
           }
-          onTapFindFriend={() =>
-            navigation.navigate("AddFriend", { albumId: id })
-          }
           onTapViewFriend={() =>
             navigation.navigate("SharedFriend", { albumId: id })
+          }
+          onTapFindFriend={() =>
+            navigation.navigate("AddFriend", { albumId: id })
           }
           previewMembers={multipleSharedMembersPreview as any} // TODO: 데이터 변경
         />
@@ -232,15 +234,15 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
 }
 
 interface ShareBarProps {
-  onTapFindFriend: () => void
   onTapViewFriend?: () => void
+  onTapFindFriend: () => void
   previewMembers: SharedMember[]
   canAddFriend: boolean
 }
 
 const ShareBar: React.FC<ShareBarProps> = ({
-  onTapFindFriend,
   onTapViewFriend,
+  onTapFindFriend,
   previewMembers,
   canAddFriend,
 }) => {

@@ -70,16 +70,22 @@ const Album = () => {
 // }
 
 const Profile = () => {
+  const navigation = useNavigation()
   return (
     <>
-      <Button className="rounded-lg">
+      <Button
+        onPress={() => navigation.navigate("album")}
+        className="rounded-lg">
         <View className={TAB_ITEM_CLASSNAME}>
           <Icon name="albumBold" size={28} color={colors.gray[400]} />
           <Text>내 앨범</Text>
         </View>
       </Button>
 
-      <Button className={TAB_ITEM_CLASSNAME} disabled>
+      <Button
+        onPress={() => navigation.navigate("profile")}
+        className={TAB_ITEM_CLASSNAME}
+        disabled>
         <Icon name="userCircleBold" size={28} color={colors.gray[800]} />
         <Text className="text-gray-800">마이</Text>
       </Button>

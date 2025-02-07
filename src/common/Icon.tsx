@@ -40,6 +40,7 @@ export type IconTypes =
   | "heartBold"
   | "checkCircleBold"
   | "mafooLogo2025"
+  | "mafooCharacter1"
 
 export interface IconProps {
   name: IconTypes

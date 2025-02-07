@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react"
-import { Pressable, Text, View, ViewStyle, TextStyle } from "react-native"
+import { Pressable, ViewStyle, TextStyle } from "react-native"
 import { VariantProps } from "class-variance-authority"
 import { styled } from "nativewind"
 
