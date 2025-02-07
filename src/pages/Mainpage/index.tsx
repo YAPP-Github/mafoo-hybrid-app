@@ -12,19 +12,24 @@ import { mafooAppleLogin, mafooKakaoLogin } from "@/api/signIn"
 import { Platform } from "react-native"
 import { createFetcher } from "@/api/myfetch"
 
-const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
+const LoginButton = ({
+  type,
+  onSuccess,
+}: {
+  type: "kakao" | "apple"
+  onSuccess: () => void
+}) => {
   const { signIn } = useAuth()
 
   const kakaoLogin = async () => {
     try {
       const token = await login()
       if (token) {
-        console.log("kakao login success", token)
         try {
           const response = await mafooKakaoLogin(token.accessToken)
-          console.log(response)
           signIn(response.accessToken)
           setRefreshToken(response.refreshToken)
+          onSuccess()
         } catch (err) {
           console.error("local kakao login err", err)
         }
@@ -53,14 +58,14 @@ const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
       appleAuthRequestResponse.identityToken
     ) {
       // user is authenticated
-      console.log("apple login success", appleAuthRequestResponse)
+      // console.log("apple login success", appleAuthRequestResponse)
       try {
         const response = await mafooAppleLogin(
           appleAuthRequestResponse.identityToken
         )
-        console.log(response)
-        signIn(response.accessToken)
         setRefreshToken(response.refreshToken)
+        signIn(response.accessToken)
+        onSuccess()
       } catch (err) {
         console.error("apple login error", err)
       }
@@ -100,12 +105,10 @@ const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
 }
 
 const HomePage = ({ navigation }: any) => {
-  const testAPI = async () => {
-    const authorizedFetcher = createFetcher("user/v1")
-    await authorizedFetcher.get("/me").then((res) => {
-      console.log(res)
-    })
+  const onSuccessLogin = () => {
+    navigation.navigate("album")
   }
+
   return (
     <PageContainer statusBarColor="#fff" isCustomHeader={false}>
       <LinearGradient
@@ -124,9 +127,10 @@ const HomePage = ({ navigation }: any) => {
           <Image source={MainpageImgSrc} className="fixed" />
 
           <View style={{ gap: 16 }} className="flex flex-col w-full">
-            <LoginButton type="kakao" />
-            {Platform.OS === "ios" && <LoginButton type="apple" />}
-            <Button title="test123" onPress={testAPI} />
+            <LoginButton type="kakao" onSuccess={onSuccessLogin} />
+            {Platform.OS === "ios" && (
+              <LoginButton type="apple" onSuccess={onSuccessLogin} />
+            )}
           </View>
         </View>
       </LinearGradient>
