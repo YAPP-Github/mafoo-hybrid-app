@@ -2,7 +2,12 @@ import { useEffect, useState } from "react"
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native"
 
 import { useQueryClient } from "@tanstack/react-query"
-import { PermissionLevel, SharedMember, getAlbum } from "../api/photo"
+import {
+  PermissionLevel,
+  SharedMember,
+  deleteAlbum,
+  getAlbum,
+} from "../api/photo"
 import Icon from "@/common/Icon"
 import { albumDetailStickyHeaderVariants as headerVariants } from "../styles/variants"
 import { cn } from "../utils"
@@ -13,7 +18,9 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import React from "react"
 import MFText from "@/common/MFText"
 import { Dialog } from "@/album/_component/Dialog"
-import AlbumMenuDialog from "@/album/_component/AlbumMenuDialog"
+import AlbumMenuDialog, {
+  AlbumMenuAction,
+} from "@/album/_component/AlbumMenuDialog"
 import { CreateRecapButton } from "@/album/_component/recap/CreateRecap"
 import Frame from "@/album/_component/recap/Frame"
 import VideoLoading from "@/album/_component/VideoLoading"
@@ -25,6 +32,7 @@ export type RootStackParamList = {
   SharedFriend: { albumId: string } | undefined
   // Recap?: { albumId: string } | undefined
   Frame?: { albumInfo: any } // TODO: albumInfo 타입 추가
+  Album: undefined
 }
 
 export type AlbumDetailPageProps = {
@@ -83,9 +91,10 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
 
   const handleDeleteAlbum = async () => {
-    //  await deleteAlbum(albumInfo.albumId)
-    //  await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
-    // router.push("/album")
+    await deleteAlbum(albumInfo.albumId)
+    await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
+    navigation.navigate("Album")
+    setIsDeleteModalShown(false)
   }
 
   const handleQuitAlbum = async () => {
@@ -97,13 +106,14 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   }
 
   const deleteDialogProps = {
-    title: "앨범을 삭제할까요?", //`'${albumInfo.name}' 앨범을 삭제할까요?`,
+    title: `${albumInfo.name} 앨범을 삭제할까요?`,
     desc: "모든 사진도 함께 삭제되며, 복구할 수 없어요",
     confirmBtnContext: "앨범 삭제",
     onClose: () => {
       setIsDeleteModalShown(false)
     },
     onConfirm: handleDeleteAlbum,
+    visible: isDeleteModalShown,
   }
 
   const quitDialogProps = {
@@ -116,18 +126,17 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     onConfirm: handleQuitAlbum,
   }
 
-  const onTapMenuAction = (action: any) => {
-    // AlbumMenuAction
-    // setIsMenuVisible(false)
-    // switch (action) {
-    //   case AlbumMenuAction.DELETE:
-    //     setIsDeleteModalShown(true)
-    //     break
-    //   case AlbumMenuAction.QUIT:
-    //     setIsQuitModalShown(true)
-    //     break
-    //   default:
-    // }
+  const onTapMenuAction = (action: AlbumMenuAction) => {
+    setIsMenuVisible(false)
+    switch (action) {
+      case AlbumMenuAction.DELETE:
+        setIsDeleteModalShown(true)
+        break
+      case AlbumMenuAction.QUIT:
+        setIsQuitModalShown(true)
+        break
+      default:
+    }
   }
 
   const typeToBackgroundColor: Record<string, string> = {
