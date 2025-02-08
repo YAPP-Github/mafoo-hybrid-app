@@ -129,7 +129,9 @@ const ImageDetail = ({
                       variant="solid"
                       size="large"
                       theme="red">
-                      <TouchableOpacity className="flex-1 items-center justify-center">
+                      <TouchableOpacity
+                        className="flex-1 items-center justify-center"
+                        onPress={handleDelete}>
                         <MFText
                           weight="SemiBold"
                           className="text-body1 text-white">
