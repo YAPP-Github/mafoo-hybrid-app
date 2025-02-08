@@ -71,7 +71,7 @@ export const UnprotectedRoutes = [
 // ProtectedRoutes definition
 export const ProtectedRoutes = [
   {
-    name: "album",
+    name: "Album",
     options: {},
     component: AlbumPage,
   },

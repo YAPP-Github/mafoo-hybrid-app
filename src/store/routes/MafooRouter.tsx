@@ -37,7 +37,7 @@ const MafooRouter = () => {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={isSignedIn ? "album" : "home"}>
+        <Stack.Navigator initialRouteName={isSignedIn ? "Album" : "home"}>
           {(isSignedIn ? ProtectedRoutes : UnprotectedRoutes).map((route) => (
             <Stack.Screen
               key={route.name}
