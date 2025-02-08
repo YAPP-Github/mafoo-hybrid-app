@@ -40,12 +40,19 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
   >([])
 
   const onTapCancel = () => {
-    //   tasks.forEach((task) => task.cancel())
+    tasks.forEach((task) => task.cancel())
     setUploading(false)
     Toast.show({
       type: "errorToast",
       text1: "업로드 진행이 취소됐어요",
     })
+  }
+
+  // 파일 URI를 Blob으로 변환
+  const uriToBlob = async (uri: string): Promise<Blob> => {
+    const response = await fetch(uri)
+    const blob = await response.blob()
+    return blob
   }
 
   const handleImageSelection = useCallback(async () => {
@@ -61,6 +68,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       setOverLimit(true)
       return
     }
+
+    console.log("assets", result.assets)
     const files = result.assets || []
     setProgress(0)
     setCurrentUploaded(0)
@@ -73,78 +82,48 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
     setTasks([])
 
     try {
-      function delay10Seconds() {
-        return new Promise((resolve, reject) => {
-          // 3초 후에 에러 발생
-          // const errorTimeout = setTimeout(() => {
-          //   reject(new Error("업로드 중 에러 발생"))
-          // }, 3000)
+      const preSignedResponse = await generatePreSignedUrls(
+        files.map((file) => file.fileName!)
+      )
+      const preSignedUrls = preSignedResponse.urls
+      setProgress(10)
+      const totalItems = files.length
+      let currentItems = 0
 
-          // 5초 후에 resolve
-          const resolveTimeout = setTimeout(() => {
-            //clearTimeout(errorTimeout)
-            resolve("5초 후 Resolve ")
-          }, 5000)
-        })
-      }
+      console.log("preSignedUrls", preSignedUrls)
 
-      delay10Seconds()
-        .then((message) => {
-          console.log(message)
-          onImageUploaded()
-          setUploading(false)
+      await Promise.all(
+        files.map(async (file, index) => {
+          const blob = await uriToBlob(file.uri!)
+
+          const task = buildCancelableTask(() =>
+            fetch(preSignedUrls[index], {
+              method: "PUT",
+              body: blob,
+              headers: {
+                "Content-Type": file.type || "application/octet-stream",
+              },
+            }).then(() => {
+              currentItems += 1
+              setProgress(Math.floor((currentItems / totalItems) * 80 + 10))
+              setCurrentUploaded(currentItems)
+            })
+          )
+          setTasks((prev) => [...prev, task])
+          return task.run()
         })
-        .catch((error) => {
-          console.log(error.message)
-          /* 에러 모달 띄운 후 업로드 모달 닫기, 모달이 닫히는 상태 방지 */
-          setError(true)
-          setUploading(false)
-        })
-    } catch (e) {
-      console.error("에러 발생")
+      )
+      const actualFileUrls = preSignedUrls.map((url) => url.split("?")[0])
+      await uploadPhotosWithUrls(actualFileUrls, currentAlbumId)
+      setProgress(100)
+      onImageUploaded()
+    } catch (error) {
+      if (error instanceof Error && error?.message === "CanceledError") return
       setError(true)
+      console.error("Upload failed:", error)
     } finally {
-      // setUploading(false)
+      setUploading(false)
     }
-
-    // try {
-    //   const preSignedResponse = await generatePreSignedUrls(
-    //     files.map((file) => file.fileName!)
-    //   )
-    //   const preSignedUrls = preSignedResponse.urls
-    //   setProgress(10)
-    //   const totalItems = files.length
-    //   let currentItems = 0
-    //   await Promise.all(
-    //     files.map((file, index) => {
-    //       const task = buildCancelableTask(() =>
-    //         fetch(preSignedUrls[index], {
-    //           method: "PUT",
-    //           body: file.uri,
-    //           headers: {
-    //             "Content-Type": file.type!,
-    //           },
-    //         }).then(() => {
-    //           currentItems += 1
-    //           setProgress(Math.floor((currentItems / totalItems) * 80 + 10))
-    //           setCurrentUploaded(currentItems)
-    //         })
-    //       )
-    //       // setTasks((prev) => [...prev, task])
-    //       // return task.run()
-    //     })
-    //   )
-    //   const actualFileUrls = preSignedUrls.map((url) => url.split("?")[0])
-    //   await uploadPhotosWithUrls(actualFileUrls, currentAlbumId)
-    //   setProgress(100)
-    //   onImageUploaded()
-    // } catch (error) {
-    //   if (error instanceof Error && error?.message === "CanceledError") return
-    //   setError(true)
-    //   console.error("Upload failed:", error)
-    // } finally {
-    //   setUploading(false)
-    // }
   }, [currentAlbumId, onImageUploaded])
 
   const [offset, setOffset] = useState({ x: 0, y: 0 })
