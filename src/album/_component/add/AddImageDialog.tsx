@@ -7,6 +7,8 @@ import Icon from "@/common/Icon"
 import SquareButton from "@/common/SquareButton"
 import { buildCancelableTask } from "@/utils"
 import MFText from "@/common/MFText"
+import { usePhotoAssetStore } from "@/store/photo"
+import { PhotoInfo } from "@/album/types"
 
 interface AddImageDialogProps {
   currentAlbumId: string
@@ -35,6 +37,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
   const [totalFiles, setTotalFiles] = useState(0)
   const [isError, setError] = useState(false)
   const [isOverLimit, setOverLimit] = useState(false)
+  const { setPhotos } = usePhotoAssetStore()
   const [tasks, setTasks] = useState<
     { run: () => Promise<unknown>; cancel: () => void }[]
   >([])
@@ -80,6 +83,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
     onCloseAddDialogOnly()
 
     setTasks([])
+    /** 파일 이름 저장 */
+    setPhotos(files)
 
     try {
       const preSignedResponse = await generatePreSignedUrls(
@@ -114,7 +119,10 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
         })
       )
       const actualFileUrls = preSignedUrls.map((url) => url.split("?")[0])
-      await uploadPhotosWithUrls(actualFileUrls, currentAlbumId)
+      const uploadPhotos = await uploadPhotosWithUrls(
+        actualFileUrls,
+        currentAlbumId
+      )
       setProgress(100)
       onImageUploaded()
     } catch (error) {
