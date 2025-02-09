@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { View, Text, ScrollView, TouchableOpacity } from "react-native"
-// import { useGetProfile } from "../profile/hooks/useProfile"
+
 import {
   deleteSharedMember,
   getAlbum,
@@ -13,16 +13,23 @@ import {
 import { Header } from "../album/_component/friend/Header"
 import SharedFriendElement from "../album/_component/friend/SharedFriendElement"
 import { FriendMenuDialog } from "../album/_component/friend/FriendMenuDialog"
-// import { SharePermissionDialog } from "../common/SharePermissionDialog"
+import PageContainer from "@/common/PageContainer"
+import { colors } from "@/constants/colors"
+import { useGetProfile } from "@/profile/hooks/useProfile"
+import SharePermissionDialog from "@/common/SharePermissionDialog"
+import Icon from "@/common/Icon"
 // import Icon from "../common/Icon"
 
-const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
-  const { id } = route.params
-  // const { albumId: id } = params
+const SharedFriendPage = ({
+  route,
+}: {
+  route: { params: { albumId: string } }
+}) => {
+  const { albumId: id } = route.params
   const [albumInfo, setAlbumInfo] = useState<GetSharedAlbumResponse | null>(
     null
   )
-  //   const profile = useGetProfile()
+  const profile = useGetProfile()
   const [isEditPermissionDialogVisible, setIsEditPermissionDialogVisible] =
     useState(false)
   const [isEditDialogVisible, setIsEditDialogVisible] = useState(false)
@@ -38,12 +45,14 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
   }
 
   useEffect(() => {
-    //  initAlbum()
+    initAlbum()
   }, [id])
 
-  const onTapKickFriend = () => {
+  const onTapKickFriend = async () => {
     if (selectedMember) {
-      //  deleteSharedMember(selectedMember.sharedMemberId).then(() => initAlbum())
+      await deleteSharedMember(selectedMember.sharedMemberId).then(() =>
+        initAlbum()
+      )
     }
   }
 
@@ -51,12 +60,12 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
     if (selectedMember) {
       setIsEditPermissionDialogVisible(false)
       if (permission === PermissionLevel.OWNER) {
-        // updateAlbumOwner(id, selectedMember.memberId).then(() => initAlbum())
+        updateAlbumOwner(id, selectedMember.memberId).then(() => initAlbum())
       } else {
-        // updateShareMemberPermissionLevel(
-        //   selectedMember.sharedMemberId,
-        //   permission
-        // ).then(() => initAlbum())
+        updateShareMemberPermissionLevel(
+          selectedMember.sharedMemberId,
+          permission
+        ).then(() => initAlbum())
       }
     }
   }
@@ -66,15 +75,17 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
     setIsEditPermissionDialogVisible(true)
   }
 
-  if (!albumInfo) return null
+  if (!albumInfo) {
+    return null
+  }
 
-  const isOwner = true // (albumInfo.ownerMemberId || "") === profile?.profile?.memberId
+  const isOwner = (albumInfo.ownerMemberId || "") === profile?.profile?.memberId
   const sharedMembers = albumInfo.sharedMembers || []
 
   return (
-    <View className="flex-1 bg-white">
+    <PageContainer isCustomHeader={false} statusBarColor={colors.white}>
       <Header friendCount={sharedMembers.length} />
-      {/* <SharePermissionDialog
+      <SharePermissionDialog
         isOwnerMigrateVisible={selectedMember?.shareStatus !== "PENDING"}
         defaultPermissionLevel={
           selectedMember?.permissionLevel || PermissionLevel.FULL_ACCESS
@@ -84,11 +95,11 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
         isVisible={isEditPermissionDialogVisible}
         onExit={() => setIsEditPermissionDialogVisible(false)}
         onTapSave={saveMemberPermission}
-      /> */}
+      />
       <ScrollView className="flex-1 px-6">
         <View className="flex-row items-center gap-2 py-2">
           <Text className="text-gray-500">앨범장</Text>
-          {/* <Icon name="info" size={16} /> */}
+          <Icon name="info" size={16} />
         </View>
         <SharedFriendElement
           imageUrl={albumInfo.ownerProfileImageUrl ?? ""}
@@ -98,7 +109,7 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
           isManageVisible={false}
           onTapShare={() => {}}
         />
-        <View className="h-4 w-full bg-gray-50 my-4" />
+        <View className="w-full h-4 my-4 bg-gray-50" />
         {sharedMembers.map((member) => (
           <SharedFriendElement
             key={member.memberId}
@@ -107,6 +118,7 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
             tag={`#${member.serialNumber}`}
             isOwner={false}
             isManageVisible={isOwner}
+            isPending={member.shareStatus === "PENDING"}
             onTapShare={() => {
               setSelectedMember(member)
               setIsEditDialogVisible(true)
@@ -120,7 +132,7 @@ const SharedFriendPage = ({ route }: { route: { params: { id: string } } }) => {
         onTapKick={onTapKickFriend}
         onTapPermission={onTapEditPermission}
       />
-    </View>
+    </PageContainer>
   )
 }
 

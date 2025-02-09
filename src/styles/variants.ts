@@ -62,7 +62,7 @@ export const colorIconVariants = cva(
 )
 
 export const albumItemVariants = cva(
-  "w-[164px] h-[150px] rounded-2xl relative p-4",
+  "w-[164px] h-[150px] rounded-2xl relative p-4 border-2 border-white",
   {
     variants: {
       type: {
@@ -77,6 +77,15 @@ export const albumItemVariants = cva(
       isEditable: {
         true: "w-60 h-[219.51px] rounded-[23.41px]",
       },
+
+      showNewRing: {
+        HEART: "border-red-600",
+        FIRE: "border-butter-600",
+        BASKETBALL: "border-green-600",
+        BUILDING: "border-blue-600",
+        STARFALL: "border-purple-600",
+        SMILE_FACE: "border-pink-600",
+      },
     },
     defaultVariants: {
       type: "HEART",
@@ -84,7 +93,7 @@ export const albumItemVariants = cva(
   }
 )
 
-export const photoCountVariants = cva("tp-caption1-regular", {
+export const photoCountVariants = cva("text-caption1", {
   variants: {
     type: {
       HEART: "text-red-500",
@@ -101,7 +110,7 @@ export const photoCountVariants = cva("tp-caption1-regular", {
 })
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-[6px] whitespace-nowrap rounded-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "flex items-center justify-center gap-[6px] whitespace-nowrap rounded-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {

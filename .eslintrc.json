@@ -8,6 +8,8 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "quotes": ["error", "double"],
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "react-native/no-inline-styles": "off",
+    "react/react-in-jsx-scope": "off"
   }
 }

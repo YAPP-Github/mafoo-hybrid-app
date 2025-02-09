@@ -1,10 +1,10 @@
-import HomePage from "../../pages/HomePage"
+import HomePage from "../../pages/Mainpage"
 import AlbumPage from "../../pages/AlbumsPage"
 import AlbumDetailPage from "../../pages/AlbumDetailPage"
 import SharedFriendPage from "../../pages/SharedFriendPage"
 import AddFriendPage from "../../pages/AddFriendPage"
 import AlbumCreatePage from "../../pages/AlbumCreatePage"
-import ProfilePage from "../../pages/ProfilePage"
+import ProfilePage from "../../pages/Profile"
 import IntroductionPage from "../../pages/IntroductionPage"
 import KeywordPage from "../../pages/KeywordPage"
 import ScannerPage from "../../pages/ScannerPage"
@@ -15,9 +15,7 @@ import SumonePage from "../../pages/SumonePage"
 export const UnprotectedRoutes = [
   {
     name: "home",
-    options: {
-      headerShown: false,
-    },
+    options: {},
     component: HomePage,
   },
   {
@@ -48,8 +46,17 @@ export const UnprotectedRoutes = [
     options: {},
     component: SharedFriendPage,
   },
+  {
+    name: "scanner",
+    component: ScannerPage,
+  },
+  {
+    name: "profile",
+    component: ProfilePage,
+  },
 ]
 
+// ProtectedRoutes definition
 export const ProtectedRoutes = [
   {
     name: "album",

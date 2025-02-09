@@ -40,7 +40,6 @@ const ColorIcon = ({
     </View>
   )
 }
-
 export default ColorIcon
 
 const styles = StyleSheet.create({

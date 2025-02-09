@@ -22,7 +22,7 @@ import { AlbumInfo, PhotoInfo } from "../types"
 import ImageDetail from "./ImageDetail"
 import { Photo } from "./Photo"
 import { PhotoAddButton } from "./PhotoAddButton"
-import { photo as data } from "../../dummy"
+// import { photo as data } from "../../dummy"
 
 interface AlbumPhotosProps {
   albumInfo: AlbumInfo
@@ -53,13 +53,16 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
     setImageDetailShown(false)
   }
 
-  // TODO: API로 변경
   const fetchAlbums = async () => {
-    // const data = await getPhotos(albumInfo.albumId)
-    // if (data.length) {
-    //   setPhotos(data)
-    // }
-    setPhotos(data as any)
+    console.log("fetchAlbums")
+    await getPhotos(albumInfo.albumId)
+      .then((res) => {
+        console.log("fetchAlbums", res)
+        setPhotos(res)
+      })
+      .catch((err) => {
+        throw err
+      })
   }
 
   const handleDelete = async (photoIdx: number) => {
@@ -82,6 +85,7 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   }
 
   useEffect(() => {
+    // console.log("albumInfo.albumId", albumInfo.albumId)
     fetchAlbums()
   }, [albumInfo.albumId])
 
@@ -109,7 +113,7 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
           renderItem={({ item, i }) =>
             // (myPermission === PermissionLevel.OWNER ||
             //   myPermission === PermissionLevel.FULL_ACCESS) && (
-            i == 0 ? (
+            i === 0 ? (
               <PhotoAddButton
                 albumId={albumInfo.albumId}
                 onImageUploaded={onImageUploaded}
@@ -118,7 +122,7 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
               <TouchableOpacity
                 style={styles.photoContainer}
                 onPress={() => onPhotoClick(i - 1)}>
-                <Photo photo={item} />
+                <Photo photo={item as PhotoInfo} />
               </TouchableOpacity>
             )
           }

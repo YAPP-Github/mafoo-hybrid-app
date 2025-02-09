@@ -9,7 +9,7 @@ const Highlighter = ({ width, height, fill, reversed }: HighlighterProps) => {
       width={width || "45"}
       height={height || "89"}
       viewBox="0 0 45 89"
-      fill="none"
+      fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       style={{
         transform: reversed ? "scaleX(-1)" : "none",

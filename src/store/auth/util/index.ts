@@ -20,10 +20,17 @@ export async function removeItem(key: string): Promise<void> {
   SInfo.deleteItem(key, keyChainOptions)
 }
 
-const TOKEN = "token"
-export const getToken = () => getItem<string>(TOKEN)
-export const removeToken = () => removeItem(TOKEN)
-export const setToken = (value: string) => setItem<string>(TOKEN, value)
+const ACCESSTOKEN = "accessToken"
+export const getAccessToken = () => getItem<string>(ACCESSTOKEN)
+export const removeAccessToken = () => removeItem(ACCESSTOKEN)
+export const setAccessToken = (value: string) =>
+  setItem<string>(ACCESSTOKEN, value)
+
+const REFRESHTOKEN = "refreshToken"
+export const getRefreshToken = () => getItem<string>(REFRESHTOKEN)
+export const removeRefreshToken = () => removeItem(REFRESHTOKEN)
+export const setRefreshToken = (value: string) =>
+  setItem<string>(REFRESHTOKEN, value)
 
 // 이후 userData 필요한 경우 아래와 같이 사용 가능
 // const USER_DATA = "userData"
