@@ -26,6 +26,7 @@ import Frame from "@/album/_component/recap/Frame"
 import VideoLoading from "@/album/_component/VideoLoading"
 import { sampleUserData } from "@/types/user"
 import { useGetProfile } from "@/profile/hooks/useProfile"
+import { useGetAlbum } from "@/hooks/usePhoto"
 
 export type RootStackParamList = {
   AddFriend: { albumId: string } | undefined
@@ -46,7 +47,6 @@ export type AlbumDetailPageProps = {
 const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const { albumId: id } = route.params
 
-  const [albumInfo, setAlbumInfo] = useState<any>() // GetSharedAlbumResponse
   const profile = useGetProfile()
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
@@ -58,15 +58,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
 
   const [isCapture, setIsCapture] = useState(false)
 
-  useEffect(() => {
-    const initAlbum = async () => {
-      const data = await getAlbum(id)
-      if (data) {
-        setAlbumInfo(data)
-      }
-    }
-    initAlbum()
-  }, [id])
+  const { albums: albumInfo } = useGetAlbum(id)
 
   if (!albumInfo) return
 
@@ -223,6 +215,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
           userData={sampleUserData} // TODO: 데이터 변경
           type={albumInfo?.type || "HEART"}
           setUpload={setIsRecapOpen}
+          albumId={id}
         />
       )}
       <VideoLoading

@@ -11,6 +11,8 @@ import { AlbumInfo, PhotoInfo } from "../types"
 import ImageDetail from "./ImageDetail"
 import { Photo } from "./Photo"
 import { PhotoAddButton } from "./PhotoAddButton"
+import { usePhotoAssetStore, usePhotoInfoStore } from "@/store/photo"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface AlbumPhotosProps {
   albumInfo: AlbumInfo
@@ -32,6 +34,11 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   const [isRecapOpen, setIsRecapOpen] = useState(false)
   const [videoUrl, setVideoUrl] = useState<string | null>(null)
 
+  /** file, info */
+  const { setPhotos: setIPhotosStore } = usePhotoInfoStore()
+
+  const queryClient = useQueryClient()
+
   const onPhotoClick = (startIdx: number) => {
     carouselStartIdx.current = startIdx
     setImageDetailShown(true)
@@ -43,8 +50,10 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
 
   const fetchAlbums = async () => {
     const data = await getPhotos(albumInfo.albumId)
+    console.log("이미지 업로드 끝나고 다시 fetch 요청", data)
     if (data.length) {
       setPhotos(data)
+      setIPhotosStore(data)
     }
   }
 
@@ -53,14 +62,20 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
 
     const nextPhotos = photos.filter((_, i) => i !== photoIdx)
     setPhotos(nextPhotos)
+    setIPhotosStore(nextPhotos)
 
     if (!nextPhotos.length) {
       setImageDetailShown(false)
     }
   }
 
-  const onImageUploaded = () => {
+  const onImageUploaded = async () => {
     fetchAlbums()
+
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["getAlbum"] }),
+      queryClient.invalidateQueries({ queryKey: ["getAlbums"] }),
+    ])
   }
 
   useEffect(() => {

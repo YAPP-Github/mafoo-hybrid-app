@@ -1,6 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 
-import { getAlbums, patchPhotoAlbum, postQrCode } from "@/api/photo"
+import {
+  GetSharedAlbumResponse,
+  getAlbum,
+  getAlbums,
+  patchPhotoAlbum,
+  postQrCode,
+} from "@/api/photo"
 // import { useAlertStore } from "@/store/alert"
 
 export const usePostQrCode = () => {
@@ -21,6 +27,19 @@ export const usePostQrCode = () => {
     scanInfo: data,
     postQrCodeQuery: mutate,
     isPending,
+  }
+}
+
+/** AlbumDetailPage: AlbumInfo 조회 */
+export const useGetAlbum = (id: string) => {
+  const { data } = useQuery({
+    queryKey: ["getAlbum", id], // id가 변경되면 새로운 데이터 요청
+    queryFn: () => getAlbum(id),
+    enabled: !!id, // id가 없으면 요청 X
+  })
+
+  return {
+    albums: data,
   }
 }
 
