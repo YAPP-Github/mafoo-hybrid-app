@@ -17,6 +17,7 @@
 		3DF3A2E5C3A84AA9959C5662 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B9A1074E6CD48CD88658C34 /* Pretendard-SemiBold.otf */; };
 		45997CE98EAFAA259D8953CF /* libPods-MafooApp-MafooAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 249412D19151524ADCA18C24 /* libPods-MafooApp-MafooAppTests.a */; };
 		6716686F16398083070E5D64 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B243118E960FF8263BEA4 /* PrivacyInfo.xcprivacy */; };
+		693EA36A74A844E4883D7E9C /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		69C7DFC651A44F59986FBC43 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 16C2F45ECAAD4E8F9D3DCC7B /* Pretendard-ExtraBold.otf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8960FD9F6E3745768648E025 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3986608E137F40678B443218 /* Pretendard-Bold.otf */; };
@@ -300,6 +301,7 @@
 				89D494B930564250B51CA12B /* Pretendard-Regular.otf in Resources */,
 				3DF3A2E5C3A84AA9959C5662 /* Pretendard-SemiBold.otf in Resources */,
 				8EBF51A7CF264EF29E22511C /* Pretendard-Thin.otf in Resources */,
+				693EA36A74A844E4883D7E9C /* BuildFile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

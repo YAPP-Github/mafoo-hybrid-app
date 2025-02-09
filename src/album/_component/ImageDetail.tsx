@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import {
   View,
   Text,
@@ -9,6 +9,9 @@ import {
   Image,
 } from "react-native"
 import { PhotoInfo } from "../types"
+import SquareButton from "@/common/SquareButton"
+import MFText from "@/common/MFText"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface ImageDetailProps {
   photos: PhotoInfo[]
@@ -29,9 +32,18 @@ const ImageDetail = ({
   const [deleteModalShown, setDeleteModalShown] = useState(false)
   const [isZoomed, setIsZoomed] = useState(false)
 
+  const queryClient = useQueryClient()
+
   const handleDelete = async () => {
     await onDelete(idx)
+
+    /** 사진 장수 업데이트 (앨범 상세 페이지) */
+    queryClient.invalidateQueries({ queryKey: ["getAlbum"] })
+    /* 사진 장수 업데이트 (앨범 목록 페이지) */
+    queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
+
     setDeleteModalShown(false)
+
     onClose()
   }
 
@@ -46,7 +58,7 @@ const ImageDetail = ({
   return (
     <>
       {visible && (
-        <Modal style={styles.container}>
+        <Modal style={styles.container} animationType="fade">
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity onPress={onClose}>
@@ -100,21 +112,43 @@ const ImageDetail = ({
             <Modal visible={deleteModalShown} transparent={true}>
               <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                  <Text style={styles.modalTitle}>해당 사진을 삭제할까요?</Text>
-                  <Text style={styles.modalDesc}>
+                  <MFText weight="SemiBold" className="text-title1">
+                    해당 사진을 삭제할까요?
+                  </MFText>
+                  <MFText className="text-gray-600 text-body1 mt-[12px]">
                     한 번 삭제하면 복구할 수 없어요.
-                  </Text>
+                  </MFText>
                   <View style={styles.modalActions}>
-                    <TouchableOpacity
-                      style={styles.modalButton}
-                      onPress={() => setDeleteModalShown(false)}>
-                      <Text>닫기</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.modalButton, { backgroundColor: "red" }]}
-                      onPress={handleDelete}>
-                      <Text style={{ color: "white" }}>사진 삭제</Text>
-                    </TouchableOpacity>
+                    <SquareButton
+                      className="flex-1"
+                      variant="solid"
+                      size="large"
+                      theme="gray">
+                      <TouchableOpacity
+                        className="flex-1 items-center justify-center"
+                        onPress={() => setDeleteModalShown(false)}>
+                        <MFText
+                          weight="SemiBold"
+                          className="text-body1 text-gray-600">
+                          닫기
+                        </MFText>
+                      </TouchableOpacity>
+                    </SquareButton>
+                    <SquareButton
+                      className="flex-1"
+                      variant="solid"
+                      size="large"
+                      theme="red">
+                      <TouchableOpacity
+                        className="flex-1 items-center justify-center"
+                        onPress={handleDelete}>
+                        <MFText
+                          weight="SemiBold"
+                          className="text-body1 text-white">
+                          사진 삭제
+                        </MFText>
+                      </TouchableOpacity>
+                    </SquareButton>
                   </View>
                 </View>
               </View>
@@ -151,7 +185,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-
     justifyContent: "center",
     alignItems: "center",
   },
@@ -200,8 +233,18 @@ const styles = StyleSheet.create({
   modalContent: {
     width: "80%",
     backgroundColor: "white",
-    borderRadius: 8,
+    borderRadius: 24,
     padding: 16,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 20,
+    // iOS shadow
+    shadowColor: "rgba(101, 125, 159, 1)",
+    shadowOffset: { width: 0, height: 16 },
+    shadowOpacity: 0.12,
+    shadowRadius: 20,
+    // android shadow
+    elevation: 8,
   },
   modalTitle: {
     fontSize: 18,
@@ -214,7 +257,9 @@ const styles = StyleSheet.create({
   },
   modalActions: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
+    gap: 12,
+    marginTop: 24,
   },
   modalButton: {
     padding: 16,

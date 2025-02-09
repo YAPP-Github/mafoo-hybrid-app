@@ -1,14 +1,14 @@
-import React from "react"
 import { View, StyleSheet, SafeAreaView } from "react-native"
-import Albums from "../album/_component/Albums"
-import NewAlbumButton from "../album/_component/NewAlbumButton"
+import Albums from "@/album/_component/Albums"
+import NewAlbumButton from "@/album/_component/NewAlbumButton"
+import BottomBar from "@/common/BottomBar"
 import MafooLogo from "@/assets/mafooNewLogo.svg"
 import HeaderBell from "@/assets/headerBell.svg"
-import BottomBar from "@/common/BottomBar"
+import PageContainer from "@/common/PageContainer"
 
 const AlbumsPage = () => {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <PageContainer headerProps={{ title: "Albums" }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <MafooLogo width={112} height={36} color="#2D3541" />
@@ -19,7 +19,7 @@ const AlbumsPage = () => {
         <NewAlbumButton />
         <BottomBar variant="album" />
       </View>
-    </SafeAreaView>
+    </PageContainer>
   )
 }
 

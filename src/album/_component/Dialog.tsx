@@ -1,11 +1,12 @@
-import React from "react"
-import { View, Text, Modal, StyleSheet, TouchableOpacity } from "react-native"
+import { View, Text, Modal, StyleSheet } from "react-native"
 import SquareButton from "@/common/SquareButton"
+import MFText from "@/common/MFText"
 
 interface DeleteDialogProps {
   title: string
   desc: string
   confirmBtnContext: string
+  visible: boolean
   onClose: () => void
   onConfirm: () => void
 }
@@ -14,6 +15,7 @@ export const Dialog = ({
   title,
   desc,
   confirmBtnContext,
+  visible,
   onClose,
   onConfirm,
 }: DeleteDialogProps) => {
@@ -21,29 +23,29 @@ export const Dialog = ({
     <Modal
       transparent
       animationType="fade"
-      visible={true}
+      visible={visible}
       onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.dialog}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{desc}</Text>
           <View style={styles.buttonContainer}>
-            {/* <SquareButton
-              style={styles.button}
+            <SquareButton
+              className="flex-1"
               variant="solid"
               size="large"
               theme="gray"
               onPress={onClose}>
-              닫기
+              <MFText>닫기</MFText>
             </SquareButton>
             <SquareButton
-              style={styles.button}
+              className="flex-1"
               variant="solid"
               size="large"
               theme="red"
               onPress={onConfirm}>
-              {confirmBtnContext}
-            </SquareButton> */}
+              <MFText>{confirmBtnContext}</MFText>
+            </SquareButton>
           </View>
         </View>
       </View>
@@ -79,8 +81,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 8,
-  },
-  button: {
-    flex: 1,
   },
 })

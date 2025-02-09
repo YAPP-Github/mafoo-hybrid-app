@@ -52,7 +52,7 @@ const SharedFriendElement = ({
 const ManageButton = ({ onTapShare }: { onTapShare: () => void }) => {
   return (
     <TouchableOpacity
-      className="tp-body2-regular flex items-center justify-center rounded-full border border-gray-200 bg-white px-4 py-1.5 text-gray-500"
+      className="tp-body2-regular flex items-center justify-center rounded-full border border-gray-200 bg-sumone-white px-4 py-1.5 text-gray-500"
       onPress={onTapShare}>
       <Text>관리</Text>
     </TouchableOpacity>

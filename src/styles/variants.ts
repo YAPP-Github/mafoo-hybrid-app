@@ -1,3 +1,4 @@
+import { AlbumType } from "@/album/types"
 import { cva } from "class-variance-authority"
 
 export const albumDetailHeaderVariants = cva(
@@ -183,9 +184,9 @@ export const bottomBarVariants = cva(
   {
     variants: {
       variant: {
-        album: "bg-white text-gray-400",
+        album: "bg-sumone-white text-gray-400",
         scanner: "bg-gray-900 text-gray-600",
-        profile: "bg-white text-gray-400",
+        profile: "bg-sumone-white text-gray-400",
       },
     },
     defaultVariants: {
@@ -210,3 +211,84 @@ export const recapColorVariants = cva("", {
     type: false,
   },
 })
+
+export type WithAngle = {
+  angle: number
+  useAngle: boolean
+}
+
+export type LinearGradientSpec = WithAngle & {
+  colors: string[]
+  start: { x: number; y: number }
+  end: { x: number; y: number }
+  locations?: number[]
+}
+
+export type LinearGradientTypeKey = AlbumType | "INSTA"
+
+export const recapColorLinearGradient: Record<
+  LinearGradientTypeKey,
+  LinearGradientSpec
+> = {
+  HEART: {
+    colors: ["#FF9B9C", "#F89AFF"],
+    start: { x: 0.04, y: 0.0226 },
+    end: { x: 0, y: 1.0083 },
+    angle: 110,
+    useAngle: true,
+    //locations: [0.0226, 1.0083],
+  },
+  FIRE: {
+    colors: ["#FFB864", "#F8E47A"],
+    start: { x: 0.95, y: 0.0638 },
+    end: { x: 0, y: 0.9932 },
+    angle: 163,
+    useAngle: true,
+    // locations: [0.0638, 0.9932],
+  },
+  BASKETBALL: {
+    colors: ["#6DE694", "#F7F286"],
+    start: { x: 0.95, y: 0.0638 },
+    end: { x: 0, y: 0.9932 },
+    angle: 163,
+    useAngle: true,
+    //locations: [0.0638, 0.9932],
+  },
+  BUILDING: {
+    colors: ["#92AAFF", "#9FE7FC"],
+    start: { x: 0.96, y: 0.037 },
+    end: { x: 0, y: 0.9484 },
+    angle: 161,
+    useAngle: true,
+    // locations: [0.0037, 0.9484],
+  },
+  STARFALL: {
+    colors: ["#DF9AFF", "#BAC5FF"],
+    start: { x: 0.96, y: 0.037 },
+    end: { x: 0, y: 0.9484 },
+    angle: 161,
+    useAngle: true,
+    //locations: [0.0037, 0.9484],
+  },
+  SMILE_FACE: {
+    colors: ["#FF9DC7", "#FCE4A4"],
+    start: { x: 0.91, y: 0.037 },
+    end: { x: 0, y: 0.9484 },
+    angle: 161,
+    useAngle: true,
+  },
+  INSTA: {
+    colors: ["#FFD735", "#FF6C5A", "#E848C8", "#4A8CF0"],
+    start: { x: 1, y: 0 },
+    end: { x: 0, y: 0 },
+    useAngle: false,
+    angle: 0,
+  },
+  // false: {
+  //   colors: ["#C680FF", "#FF82C6"],
+  //   start: { x: 0, y: 0 },
+  //   end: { x: 1, y: 0 },
+  //   useAngle: false,
+  //   angle: 0,
+  // },
+}

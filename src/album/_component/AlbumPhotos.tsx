@@ -1,28 +1,18 @@
-import React, { useEffect, useRef, useState } from "react"
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native"
+import { useEffect, useRef, useState } from "react"
+import { View, TouchableOpacity, StyleSheet } from "react-native"
 import MasonryList from "@react-native-seoul/masonry-list"
-// import VideoLoading from "../_component/VideoLoading"
-// import VideoRecap from "../_component/VideoRecap"
 import {
   deletePhoto,
   generateRecap,
   getPhotos,
   PermissionLevel,
-} from "../../api/photo"
-// import Button from "@/common/Button"
-// import Icon from "@/common/Icon"
-import { recapColorVariants } from "@/styles/variants"
+} from "@/api/photo"
 import { AlbumInfo, PhotoInfo } from "../types"
 import ImageDetail from "./ImageDetail"
 import { Photo } from "./Photo"
 import { PhotoAddButton } from "./PhotoAddButton"
-// import { photo as data } from "../../dummy"
+import { usePhotoAssetStore, usePhotoInfoStore } from "@/store/photo"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface AlbumPhotosProps {
   albumInfo: AlbumInfo
@@ -44,6 +34,11 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   const [isRecapOpen, setIsRecapOpen] = useState(false)
   const [videoUrl, setVideoUrl] = useState<string | null>(null)
 
+  /** file, info */
+  const { setPhotos: setIPhotosStore } = usePhotoInfoStore()
+
+  const queryClient = useQueryClient()
+
   const onPhotoClick = (startIdx: number) => {
     carouselStartIdx.current = startIdx
     setImageDetailShown(true)
@@ -54,15 +49,12 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   }
 
   const fetchAlbums = async () => {
-    console.log("fetchAlbums")
-    await getPhotos(albumInfo.albumId)
-      .then((res) => {
-        console.log("fetchAlbums", res)
-        setPhotos(res)
-      })
-      .catch((err) => {
-        throw err
-      })
+    const data = await getPhotos(albumInfo.albumId)
+    console.log("이미지 업로드 끝나고 다시 fetch 요청", data)
+    if (data.length) {
+      setPhotos(data)
+      setIPhotosStore(data)
+    }
   }
 
   const handleDelete = async (photoIdx: number) => {
@@ -70,18 +62,20 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
 
     const nextPhotos = photos.filter((_, i) => i !== photoIdx)
     setPhotos(nextPhotos)
+    setIPhotosStore(nextPhotos)
 
     if (!nextPhotos.length) {
       setImageDetailShown(false)
     }
   }
 
-  const onImageUploaded = () => {
+  const onImageUploaded = async () => {
     fetchAlbums()
-  }
 
-  const handleCloseRecap = () => {
-    setIsRecapOpen(false)
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["getAlbum"] }),
+      queryClient.invalidateQueries({ queryKey: ["getAlbums"] }),
+    ])
   }
 
   useEffect(() => {
@@ -103,17 +97,21 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
     }
   }, [isRecapOpen])
 
+  const showPhotoAdd =
+    myPermission === PermissionLevel.OWNER ||
+    myPermission === PermissionLevel.FULL_ACCESS
+
   return (
     <>
       <View style={styles.container}>
         <MasonryList
           data={[headerInfo, ...photos]}
           numColumns={2}
+          style={{ gap: 13 }}
           keyExtractor={(item) => item.photoId.toString()}
-          renderItem={({ item, i }) =>
-            // (myPermission === PermissionLevel.OWNER ||
-            //   myPermission === PermissionLevel.FULL_ACCESS) && (
-            i === 0 ? (
+          renderItem={({ item, i }) => {
+            const photo = item as PhotoInfo
+            return showPhotoAdd && i == 0 ? (
               <PhotoAddButton
                 albumId={albumInfo.albumId}
                 onImageUploaded={onImageUploaded}
@@ -122,11 +120,10 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
               <TouchableOpacity
                 style={styles.photoContainer}
                 onPress={() => onPhotoClick(i - 1)}>
-                <Photo photo={item as PhotoInfo} />
+                <Photo photo={photo} />
               </TouchableOpacity>
             )
-          }
-          contentContainerStyle={styles.masonryContent}
+          }}
         />
         {imageDetailShown && (
           <ImageDetail
@@ -137,31 +134,7 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
             onDelete={handleDelete}
           />
         )}
-
-        {photos.length >= 232323 && (
-          <View style={styles.recapButtonContainer}>
-            {/* <Button
-            style={[
-              styles.recapButton,
-              recapColorVariants({ type: albumInfo.type }),
-            ]}
-            onPress={() => setIsRecapOpen(true)}>
-            >
-              <View style={styles.recapButtonContent}>
-                <Text style={styles.recapText}>리캡 만들기</Text>
-                <Icon name="reelOutline" size={24} color="white" />
-              </View>
-            </Button> */}
-          </View>
-        )}
       </View>
-
-      {/* {isRecapOpen &&
-        (videoUrl ? (
-          <VideoRecap url={videoUrl} closeModal={handleCloseRecap} />
-        ) : (
-          <VideoLoading type={albumInfo.type} />
-        ))} */}
     </>
   )
 }
@@ -172,20 +145,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 24,
   },
-  masonryContent: {
-    paddingBottom: 16,
-    // paddingRight: 12,
-    padding: 2,
-  },
   photoContainer: {
-    marginBottom: 12,
-    marginLeft: 20,
-  },
-  recapButtonContainer: {
-    // position: "absolute",
-    // bottom: 32,
-    // left: "50%",
-    // transform: [{ translateX: -50 }],
+    width: "100%",
   },
   recapButton: {
     borderRadius: 50,

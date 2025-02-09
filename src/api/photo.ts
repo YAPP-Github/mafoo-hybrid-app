@@ -53,19 +53,23 @@ type GetPhotosResponse = PhotoInfo[]
 export const getPhotos = async (
   albumId: string
 ): Promise<GetPhotosResponse> => {
-  console.log("albumId", albumId)
-  try {
-    return await authorizedFetcher.get(`/photos?albumId=${albumId}`)
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
+  const data = await authorizedFetcher.get(`/photos?albumId=${albumId}`)
+
+  return data
 }
+
+export type AlbumIconType =
+  | "HEART"
+  | "FIRE"
+  | "BASKETBALL"
+  | "BUILDING"
+  | "STARFALL"
+  | "SMILE_FACE"
 
 export interface GetBulkAlbumResponse {
   albumId: string
   name: string
-  type: "HEART" | "FIRE" | "BASKETBALL" | "BUILDING" | "STARFALL" | "SMILE_FACE"
+  type: AlbumIconType
   photoCount: string
   shareStatus?: string
   permissionLevel?: string
@@ -76,10 +80,18 @@ export interface GetBulkAlbumResponse {
   sharedMemberId?: string
 }
 
+export interface GetAlbumResponse {
+  albumId: string
+  name: string
+  type: AlbumIconType
+  photoCount: string
+  shareStatus?: string
+}
+
 export interface GetSharedAlbumResponse {
   albumId: string
   name: string
-  type: "HEART" | "FIRE" | "BASKETBALL" | "BUILDING" | "STARFALL" | "SMILE_FACE"
+  type: AlbumIconType
   ownerProfileImageUrl?: string
   ownerSerialNumber?: string
   ownerMemberId?: string
@@ -91,20 +103,16 @@ export interface GetSharedAlbumResponse {
 
 export const getAlbum = async (
   albumId: string
-): Promise<GetBulkAlbumResponse> => {
-  return await albumInstance
-    .get(`/${albumId}`)
-    .then((res) => {
-      return res
-    })
-    .catch((err) => {
-      console.log(err.response.data)
-      throw err
-    })
+): Promise<GetSharedAlbumResponse> => {
+  const data = await authorizedFetcher.get(`/albums/${albumId}`)
+  return data
 }
 
 export const getAlbums = async (): Promise<GetBulkAlbumResponse[]> => {
-  return await albumInstance.get("")
+  const data = await authorizedFetcher.get(`/albums`)
+
+  console.log("getAlbums 데이터", data)
+  return data
 }
 
 export const getSharedAlbum = async (
@@ -118,15 +126,22 @@ export const postAlbum = async (
   type: AlbumType,
   sumoneInviteCode?: string
 ): Promise<AlbumInfo> => {
-  return await albumInstance.post("", { name, type, sumoneInviteCode })
+  const data = await authorizedFetcher.post(`/albums`, {
+    name,
+    type,
+    sumoneInviteCode,
+  })
+  console.log("post data", data)
+  return data
 }
 
 export const deleteAlbum = async (albumId: string): Promise<AlbumInfo> => {
-  return await albumInstance.delete(`/${albumId}`)
+  const data = await authorizedFetcher.delete(`/albums/${albumId}`)
+  return data
 }
 
 export const deletePhoto = async (photoId: string): Promise<null> => {
-  await authorizedFetcher.delete(`photos/${photoId}`)
+  await authorizedFetcher.delete(`/photos/${photoId}`)
   return null
 }
 
@@ -149,14 +164,22 @@ export const patchAlbumMove = async (
 export const generatePreSignedUrls = async (
   fileNames: string[]
 ): Promise<{ urls: string[] }> => {
-  return await authorizedFetcher.post("/object-storage", { fileNames })
+  const data = await authorizedFetcher.post(`/object-storage`, {
+    fileNames: fileNames,
+  })
+  return data
 }
 
 export const uploadPhotosWithUrls = async (
   fileUrls: string[],
   albumId: string
 ): Promise<GetPhotosResponse> => {
-  return await authorizedFetcher.post("photos/file-urls", { fileUrls, albumId })
+  const data = await authorizedFetcher.post(`/photos/file-urls`, {
+    fileUrls: fileUrls,
+    albumId: albumId,
+  })
+
+  return data
 }
 
 export const updatePhotoAlbumBulk = async (

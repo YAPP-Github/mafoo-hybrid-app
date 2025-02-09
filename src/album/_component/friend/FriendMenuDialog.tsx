@@ -26,7 +26,7 @@ export const FriendMenuDialog: React.FC<FriendMenuDialogProps> = ({
         activeOpacity={1}
         onPress={onTapBackdrop}
       />
-      <View className="absolute bottom-0 w-full rounded-t-2xl bg-white p-5">
+      <View className="absolute bottom-0 w-full rounded-t-2xl bg-sumone-white p-5">
         <View className="flex-row">
           <TouchableOpacity
             className="flex-1 items-center justify-center gap-2 py-4"

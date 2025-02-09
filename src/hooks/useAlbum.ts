@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 
-import { patchAlbumMove } from "../../api/photo"
+import { patchAlbumMove } from "../api/photo"
 
 export const usePatchAlbumMove = () => {
   const { mutate } = useMutation({

@@ -95,6 +95,7 @@ const SharedFriendPage = ({
         isVisible={isEditPermissionDialogVisible}
         onExit={() => setIsEditPermissionDialogVisible(false)}
         onTapSave={saveMemberPermission}
+        radioColor={colors.purple[600]}
       />
       <ScrollView className="flex-1 px-6">
         <View className="flex-row items-center gap-2 py-2">
@@ -108,6 +109,7 @@ const SharedFriendPage = ({
           isOwner
           isManageVisible={false}
           onTapShare={() => {}}
+          isPending={false}
         />
         <View className="w-full h-4 my-4 bg-gray-50" />
         {sharedMembers.map((member) => (

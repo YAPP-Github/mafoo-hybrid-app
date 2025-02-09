@@ -44,20 +44,29 @@ export function fullDateStr() {
 // }
 
 export const buildCancelableTask = <T>(asyncFn: () => Promise<T>) => {
-  //   let rejected = false
-  //   const { promise, resolve, reject } = Promise.withResolvers<T>()
-  //   return {
-  //     run: () => {
-  //       if (!rejected) {
-  //         asyncFn().then(resolve, reject)
-  //       }
-  //       return promise
-  //     },
-  //     cancel: () => {
-  //       rejected = true
-  //       reject(new Error("CanceledError"))
-  //     },
-  //   }
+  let rejected = false
+
+  //  const { promise, resolve, reject } = Promise.withResolvers<T>()
+  let resolve!: (value: T | PromiseLike<T>) => void
+  let reject!: (reason?: any) => void
+
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+
+  return {
+    run: () => {
+      if (!rejected) {
+        asyncFn().then(resolve, reject)
+      }
+      return promise
+    },
+    cancel: () => {
+      rejected = true
+      reject(new Error("CanceledError"))
+    },
+  }
 }
 
 export const debounce = <T extends (...args: any[]) => any>(

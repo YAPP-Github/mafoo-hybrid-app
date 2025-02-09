@@ -9,7 +9,7 @@ import AlbumTypeSelectTab from "./AlbumTypeSelectTab"
 import { AlbumType, AlbumValue } from "../../types"
 import MFText from "../../../common/MFText"
 
-// import { usePostAlbum } from "../hooks/useAlbum"
+import { usePostAlbum } from "@/hooks/usePostAlbum"
 
 interface AlbumEditSectionProps {
   albumValue?: AlbumValue
@@ -29,7 +29,7 @@ export function AlbumEditSection({
 }: AlbumEditSectionProps) {
   const [value, setValue] = useState(albumValueInit)
   const { type } = value
-  //const { postAlbum } = usePostAlbum()
+  const { postAlbum } = usePostAlbum()
 
   const handleType = (type: AlbumType) => {
     const nextValue = { ...value, type }
@@ -42,7 +42,8 @@ export function AlbumEditSection({
 
   const handleSubmit = async () => {
     const { name, type } = value
-    // postAlbum({ name, type, photoId: null }) // Replace `photoId` with appropriate value
+    console.log(name, type)
+    postAlbum({ name, type, photoId: null })
   }
 
   return (

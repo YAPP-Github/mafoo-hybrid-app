@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useState } from "react"
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native"
+import React, { useCallback, useState } from "react"
+import { View, TouchableOpacity, Modal } from "react-native"
 import { launchImageLibrary } from "react-native-image-picker"
 import Toast from "react-native-toast-message"
 import { generatePreSignedUrls, uploadPhotosWithUrls } from "@/api/photo"
@@ -7,6 +7,8 @@ import Icon from "@/common/Icon"
 import SquareButton from "@/common/SquareButton"
 import { buildCancelableTask } from "@/utils"
 import MFText from "@/common/MFText"
+import { usePhotoAssetStore } from "@/store/photo"
+import { PhotoInfo } from "@/album/types"
 
 interface AddImageDialogProps {
   currentAlbumId: string
@@ -35,17 +37,25 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
   const [totalFiles, setTotalFiles] = useState(0)
   const [isError, setError] = useState(false)
   const [isOverLimit, setOverLimit] = useState(false)
+  const { setPhotos } = usePhotoAssetStore()
   const [tasks, setTasks] = useState<
     { run: () => Promise<unknown>; cancel: () => void }[]
   >([])
 
   const onTapCancel = () => {
-    //   tasks.forEach((task) => task.cancel())
+    tasks.forEach((task) => task.cancel())
     setUploading(false)
     Toast.show({
       type: "errorToast",
       text1: "업로드 진행이 취소됐어요",
     })
+  }
+
+  // 파일 URI를 Blob으로 변환
+  const uriToBlob = async (uri: string): Promise<Blob> => {
+    const response = await fetch(uri)
+    const blob = await response.blob()
+    return blob
   }
 
   const handleImageSelection = useCallback(async () => {
@@ -61,6 +71,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       setOverLimit(true)
       return
     }
+
+    console.log("assets", result.assets)
     const files = result.assets || []
     setProgress(0)
     setCurrentUploaded(0)
@@ -71,88 +83,66 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
     onCloseAddDialogOnly()
 
     setTasks([])
+    /** 파일 이름 저장 */
+    setPhotos(files)
 
     try {
-      function delay10Seconds() {
-        return new Promise((resolve, reject) => {
-          // 3초 후에 에러 발생
-          // const errorTimeout = setTimeout(() => {
-          //   reject(new Error("업로드 중 에러 발생"))
-          // }, 3000)
+      const preSignedResponse = await generatePreSignedUrls(
+        files.map((file) => file.fileName!)
+      )
+      const preSignedUrls = preSignedResponse.urls
+      setProgress(10)
+      const totalItems = files.length
+      let currentItems = 0
 
-          // 5초 후에 resolve
-          const resolveTimeout = setTimeout(() => {
-            //clearTimeout(errorTimeout)
-            resolve("5초 후 Resolve ")
-          }, 5000)
-        })
-      }
+      console.log("preSignedUrls", preSignedUrls)
 
-      delay10Seconds()
-        .then((message) => {
-          console.log(message)
-          onImageUploaded()
-          setUploading(false)
+      await Promise.all(
+        files.map(async (file, index) => {
+          const blob = await uriToBlob(file.uri!)
+
+          const task = buildCancelableTask(() =>
+            fetch(preSignedUrls[index], {
+              method: "PUT",
+              body: blob,
+              headers: {
+                "Content-Type": file.type || "application/octet-stream",
+              },
+            }).then(() => {
+              currentItems += 1
+              setProgress(Math.floor((currentItems / totalItems) * 80 + 10))
+              setCurrentUploaded(currentItems)
+            })
+          )
+          setTasks((prev) => [...prev, task])
+          return task.run()
         })
-        .catch((error) => {
-          console.log(error.message)
-          /* 에러 모달 띄운 후 업로드 모달 닫기, 모달이 닫히는 상태 방지 */
-          setError(true)
-          setUploading(false)
-        })
-    } catch (e) {
-      console.error("에러 발생")
+      )
+      const actualFileUrls = preSignedUrls.map((url) => url.split("?")[0])
+      const uploadPhotos = await uploadPhotosWithUrls(
+        actualFileUrls,
+        currentAlbumId
+      )
+      setProgress(100)
+      onImageUploaded()
+    } catch (error) {
+      if (error instanceof Error && error?.message === "CanceledError") return
       setError(true)
+      console.error("Upload failed:", error)
     } finally {
-      // setUploading(false)
+      setUploading(false)
     }
-
-    // try {
-    //   const preSignedResponse = await generatePreSignedUrls(
-    //     files.map((file) => file.fileName!)
-    //   )
-    //   const preSignedUrls = preSignedResponse.urls
-    //   setProgress(10)
-    //   const totalItems = files.length
-    //   let currentItems = 0
-    //   await Promise.all(
-    //     files.map((file, index) => {
-    //       const task = buildCancelableTask(() =>
-    //         fetch(preSignedUrls[index], {
-    //           method: "PUT",
-    //           body: file.uri,
-    //           headers: {
-    //             "Content-Type": file.type!,
-    //           },
-    //         }).then(() => {
-    //           currentItems += 1
-    //           setProgress(Math.floor((currentItems / totalItems) * 80 + 10))
-    //           setCurrentUploaded(currentItems)
-    //         })
-    //       )
-    //       // setTasks((prev) => [...prev, task])
-    //       // return task.run()
-    //     })
-    //   )
-    //   const actualFileUrls = preSignedUrls.map((url) => url.split("?")[0])
-    //   await uploadPhotosWithUrls(actualFileUrls, currentAlbumId)
-    //   setProgress(100)
-    //   onImageUploaded()
-    // } catch (error) {
-    //   if (error instanceof Error && error?.message === "CanceledError") return
-    //   setError(true)
-    //   console.error("Upload failed:", error)
-    // } finally {
-    //   setUploading(false)
-    // }
   }, [currentAlbumId, onImageUploaded])
+
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
 
   return (
     <>
       {/* isVisible: QR 코드 스캔 / 갤러리 선택 상태 */}
       <Modal
         transparent
-        visible={backDropShow && (isAddDialogShow || isUploading || isError)}>
+        visible={backDropShow && (isAddDialogShow || isUploading || isError)}
+        animationType="fade">
         <TouchableOpacity
           onPress={() => {
             if (isAddDialogShow) {
@@ -165,11 +155,16 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
           style={{ opacity: 0.45, paddingHorizontal: 21 }}
           className="flex-1 bg-gray-700"
         />
-
         {isAddDialogShow && (
           <View
-            style={{ transform: [{ translateX: 20 }] }}
-            className="absolute z-30 w-[calc(100%-40px)] bottom-[24px] bg-white rounded-[16px]">
+            onLayout={(event) => {
+              const { width, height } = event.nativeEvent.layout
+              setOffset({ x: -width / 2, y: -height / 2 })
+            }}
+            style={{
+              transform: [{ translateX: offset.x }],
+            }}
+            className="absolute z-30 left-[50%] bottom-[24px] w-[calc(100%-40px)] bg-sumone-white rounded-[16px]">
             <View className="p-[12px] flex-row justify-center gap-[6px]">
               <TouchableOpacity onPress={onTapQrScan}>
                 <View className="px-[24px] py-[16px] items-center gap-[8px]">
@@ -199,8 +194,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
         {isUploading && (
           <View
             style={{ transform: [{ translateX: 25 }, { translateY: 300 }] }}
-            className="absolute z-30 w-[350px] bg-white rounded-[16px] px-[20px]">
-            <View className="w-full rounded-2xl bg-white p-6 px-8">
+            className="absolute z-30 w-[350px] bg-sumone-white rounded-[16px] px-[20px]">
+            <View className="w-full rounded-2xl bg-sumone-white p-6 px-8">
               <View className="flex flex-col items-center gap-1">
                 {/* 업로드 %, 텍스트 */}
                 <View className="flex flex-col items-center gap-1">
@@ -229,7 +224,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                     {currentUploaded} / {totalFiles}장
                   </MFText>
                 </View>
-                <View className="flex w-full mt-[20px]">
+                <View className="flex w-full">
                   <SquareButton
                     onPress={onTapCancel}
                     className="flex-1 mt-[20px]"
@@ -250,8 +245,8 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
         {isError && (
           <View
             style={{ transform: [{ translateX: 25 }, { translateY: 300 }] }}
-            className="absolute z-30 w-[350px] bg-white rounded-[16px]">
-            <View className="w-full rounded-2xl bg-white p-6 px-8">
+            className="absolute z-30 w-[350px] bg-sumone-white rounded-[16px]">
+            <View className="w-full rounded-2xl bg-sumone-white p-6 px-8">
               <View className="flex flex-col items-center gap-1">
                 <View className="flex flex-col items-center gap-1">
                   <MFText

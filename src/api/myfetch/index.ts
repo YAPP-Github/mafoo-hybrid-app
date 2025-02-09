@@ -1,6 +1,5 @@
 import { API_URL } from "@env"
-import axios from "axios"
-import { AxiosError } from "axios"
+import axios, { AxiosError } from "axios"
 import { StatusCodes } from "http-status-codes"
 import type { AxiosResponse, InternalAxiosRequestConfig } from "axios"
 import {
