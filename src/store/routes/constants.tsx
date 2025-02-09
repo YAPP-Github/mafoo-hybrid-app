@@ -4,7 +4,7 @@ import AlbumDetailPage from "@/pages/AlbumDetailPage"
 import SharedFriendPage from "@/pages/SharedFriendPage"
 import AddFriendPage from "@/pages/AddFriendPage"
 import AlbumCreatePage from "@/pages/AlbumCreatePage"
-import ProfilePage from "@/pages/ProfilePage"
+import ProfilePage from "@/pages/Profile"
 import ScannerPage from "@/pages/ScannerPage"
 import RecapPage from "@/pages/RecapPage"
 
@@ -52,12 +52,12 @@ export const ProtectedRoutes = [
   // {
   //   name: "Introduction",
   //   options: {},
-  component: IntroductionPage,
+  //   component: IntroductionPage,
   // },
   // {
   //   name: "introduction/keyword",
   //   options: {},
-  component: KeywordPage,
+  //   component: KeywordPage,
   // },
   {
     name: "Scanner",
@@ -67,12 +67,12 @@ export const ProtectedRoutes = [
   // {
   //   name: "SelectAlbum",
   //   options: {},
-  component: ScannerSelectAlbumPage,
+  //   component: ScannerSelectAlbumPage,
   // },
   // {
   //   name: "Sumone",
   //   options: {},
-  component: SumonePage,
+  //   component: SumonePage,
   // },
   {
     name: "Recap",
