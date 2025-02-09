@@ -3,27 +3,40 @@ import LinearGradient from "react-native-linear-gradient"
 import MainpageImgSrc from "./_assets/MainpageImage.png"
 import PageContainer from "@/common/PageContainer"
 // import Icon from "@/common/Icon"
-import { login, logout } from "@react-native-seoul/kakao-login"
+import { login } from "@react-native-seoul/kakao-login"
 import Icon from "@/common/Icon"
 import { useAuth } from "@/store/auth/AuthProvider"
 import { setRefreshToken } from "@/store/auth/util"
 import appleAuth from "@invertase/react-native-apple-authentication"
-import { mafooAppleLogin } from "@/api/signIn"
+import { mafooAppleLogin, mafooKakaoLogin } from "@/api/signIn"
 import { Platform } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-import { StackNavigationProp } from "@react-navigation/stack"
+import { createFetcher } from "@/api/myfetch"
 
-export type RootStackParamList = {
-  Album: {} | undefined
-}
-const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
+const LoginButton = ({
+  type,
+  onSuccess,
+}: {
+  type: "kakao" | "apple"
+  onSuccess: () => void
+}) => {
   const { signIn } = useAuth()
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
-
-  const kakaoLogin = () => {
-    console.log("kakao login")
-    signInWithKakao()
+  const kakaoLogin = async () => {
+    try {
+      const token = await login()
+      if (token) {
+        try {
+          const response = await mafooKakaoLogin(token.accessToken)
+          signIn(response.accessToken)
+          setRefreshToken(response.refreshToken)
+          onSuccess()
+        } catch (err) {
+          console.error("local kakao login err", err)
+        }
+      }
+    } catch (err) {
+      console.error("kakao login err", err)
+    }
   }
 
   const appleLogin = async () => {
@@ -45,32 +58,17 @@ const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
       appleAuthRequestResponse.identityToken
     ) {
       // user is authenticated
-      console.log("apple login success", appleAuthRequestResponse)
-      const response = await mafooAppleLogin(
-        appleAuthRequestResponse.identityToken
-      )
-      console.log(response)
-    }
-  }
-
-  const signInWithKakao = async (): Promise<void> => {
-    try {
-      const token = await login()
-      signIn(token.accessToken)
-      setRefreshToken(token.refreshToken)
-      console.log(token)
-      navigation.navigate("Album")
-    } catch (err) {
-      console.error("login err", err)
-    }
-  }
-
-  const signOutWithKakao = async (): Promise<void> => {
-    try {
-      const message = await logout()
-      console.log(message)
-    } catch (err) {
-      console.error("signOut error", err)
+      // console.log("apple login success", appleAuthRequestResponse)
+      try {
+        const response = await mafooAppleLogin(
+          appleAuthRequestResponse.identityToken
+        )
+        setRefreshToken(response.refreshToken)
+        signIn(response.accessToken)
+        onSuccess()
+      } catch (err) {
+        console.error("apple login error", err)
+      }
     }
   }
 
@@ -107,6 +105,10 @@ const LoginButton = ({ type }: { type: "kakao" | "apple" }) => {
 }
 
 const HomePage = ({ navigation }: any) => {
+  const onSuccessLogin = () => {
+    navigation.navigate("album")
+  }
+
   return (
     <PageContainer statusBarColor="#fff" isCustomHeader={false}>
       <LinearGradient
@@ -125,12 +127,10 @@ const HomePage = ({ navigation }: any) => {
           <Image source={MainpageImgSrc} className="fixed" />
 
           <View style={{ gap: 16 }} className="flex flex-col w-full">
-            <LoginButton type="kakao" />
-            {Platform.OS === "ios" && <LoginButton type="apple" />}
-            <Button
-              title="test123"
-              onPress={() => navigation.navigate("scanner")}
-            />
+            <LoginButton type="kakao" onSuccess={onSuccessLogin} />
+            {Platform.OS === "ios" && (
+              <LoginButton type="apple" onSuccess={onSuccessLogin} />
+            )}
           </View>
         </View>
       </LinearGradient>

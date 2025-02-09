@@ -39,27 +39,14 @@ export interface SharedMember {
 
 const authorizedFetcher = createFetcher("photo/v1")
 const unAuthorizedFetcher = createUnauthorizedFetcher("photo/v1")
+const albumInstance = createFetcher("photo/v1/albums")
+const sharedMemberInstance = createFetcher("photo/v1/shared-members")
 
 export const postQrCode = async (
   qrUrl: string
 ): Promise<PostQrCodeResponse> => {
-  console.log("postQR")
-  const data = unAuthorizedFetcher.post("photos", {
-    qrUrl,
-  })
-  return data
+  return await unAuthorizedFetcher.post("photos", { qrUrl })
 }
-
-// export const postQrCode = async (
-//   qrUrl: string
-// ): Promise<PostQrCodeResponse> => {
-//   const data = await myFetch("photo/v1/photos", {
-//     method: "POST",
-//     body: JSON.stringify({ qrUrl }),
-//   })
-
-//   return data
-// }
 
 type GetPhotosResponse = PhotoInfo[]
 
@@ -130,11 +117,8 @@ export const getAlbums = async (): Promise<GetBulkAlbumResponse[]> => {
 
 export const getSharedAlbum = async (
   albumId: string
-): Promise<GetSharedAlbumResponse> => {
-  const data = await authorizedFetcher.get(`/shared-albums/${albumId}`, {
-    method: "GET",
-  })
-  return data
+): Promise<GetBulkAlbumResponse> => {
+  return await albumInstance.get(`/shared-albums/${albumId}`)
 }
 
 export const postAlbum = async (
@@ -165,29 +149,16 @@ export const patchPhotoAlbum = async (
   photoId: string,
   albumId: string
 ): Promise<PostQrCodeResponse> => {
-  const data = await authorizedFetcher.patch(`/photos/${photoId}/album`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      albumId,
-    }),
-  })
-  return data
+  return await authorizedFetcher.patch(`photos/${photoId}/album`, { albumId })
 }
 
 export const patchAlbumMove = async (
   albumId: string,
   newDisplayIndex: number
 ) => {
-  const data = await authorizedFetcher.patch(
-    `/albums/${albumId}/display-index`,
-    {
-      method: "PATCH",
-      body: JSON.stringify({
-        newDisplayIndex,
-      }),
-    }
-  )
-  return data
+  return await albumInstance.patch(`/${albumId}/display-index`, {
+    newDisplayIndex,
+  })
 }
 
 export const generatePreSignedUrls = async (
@@ -215,26 +186,16 @@ export const updatePhotoAlbumBulk = async (
   albumId: string,
   photoIds: string[]
 ) => {
-  const data = await authorizedFetcher.patch(`/photos/bulk/album`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      albumId,
-      photoIds,
-    }),
+  return await authorizedFetcher.patch("photos/bulk/album", {
+    albumId,
+    photoIds,
   })
-  return data
 }
 
 export const generateRecap = async (
   albumId: string
 ): Promise<GenerateRecapResponse> => {
-  const data = await authorizedFetcher.post(`/recaps`, {
-    method: "POST",
-    body: JSON.stringify({
-      albumId,
-    }),
-  })
-  return data
+  return await authorizedFetcher.post("/recaps", { albumId })
 }
 
 export const createSharedMember = async (
@@ -242,52 +203,31 @@ export const createSharedMember = async (
   memberId: string,
   permissionLevel: PermissionLevel
 ) => {
-  await authorizedFetcher.post(`/shared-members`, {
-    method: "POST",
-    body: JSON.stringify({
-      albumId,
-      memberId,
-      permissionLevel,
-    }),
-  })
+  await sharedMemberInstance.post("", { albumId, memberId, permissionLevel })
 }
 
 export const deleteSharedMember = async (sharedMemberId: string) => {
-  await authorizedFetcher.delete(`/shared-members/${sharedMemberId}`)
+  await sharedMemberInstance.delete(`/${sharedMemberId}`)
 }
 
 export const updateSharedMemberStatus = async (
   sharedMemberId: string,
   shareStatus: ShareStatus
 ) => {
-  await authorizedFetcher.patch(`/shared-members/${sharedMemberId}/status`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      shareStatus,
-    }),
-  })
+  await sharedMemberInstance.patch(`/${sharedMemberId}/status`, { shareStatus })
 }
 
 export const updateShareMemberPermissionLevel = async (
   sharedMemberId: string,
   permissionLevel: PermissionLevel
 ) => {
-  await authorizedFetcher.patch(
-    `/shared-members/${sharedMemberId}/permission`,
-    {
-      method: "PATCH",
-      body: JSON.stringify({
-        permissionLevel,
-      }),
-    }
-  )
+  await sharedMemberInstance.patch(`/${sharedMemberId}/permission`, {
+    permissionLevel,
+  })
 }
 
 export const updateAlbumOwner = async (albumId: string, memberId: string) => {
-  await authorizedFetcher.patch(`/albums/${albumId}/ownership`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      newOwnerMemberId: memberId,
-    }),
+  await albumInstance.patch(`/${albumId}/ownership`, {
+    newOwnerMemberId: memberId,
   })
 }

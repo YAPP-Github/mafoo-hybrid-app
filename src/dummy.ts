@@ -36,6 +36,52 @@ export const sharedMembersPreview = [
   },
 ]
 
+export const multipleSharedMembersPreview = [
+  {
+    memberId: "01JGBX0P0W6ZSDB2PW9YHCDFH5",
+    name: "장효신",
+    isDefaultName: false,
+    profileImageUrl:
+      "https://kr.object.ncloudstorage.com/mafoo/src/mafoo_profile_pink.png",
+    serialNumber: "1353",
+  },
+  {
+    memberId: "01JGBX0P0W6ZSDB2PW9YHCDFH6",
+    name: "test",
+    isDefaultName: false,
+    profileImageUrl:
+      "https://kr.object.ncloudstorage.com/mafoo/src/mafoo_profile_yellow.png",
+    serialNumber: "1354",
+  },
+  {
+    memberId: "01JGBX0P0W6ZSDB2PW9YHCDFH6",
+    name: "test2",
+    isDefaultName: false,
+    profileImageUrl:
+      "https://kr.object.ncloudstorage.com/mafoo/src/mafoo_profile_blue.png",
+    serialNumber: "1354",
+    shareStatus: "PENDING",
+  },
+  {
+    memberId: "01JGBX0P0W6ZSDB2PW9YHCDFH6",
+    name: "test2",
+    isDefaultName: false,
+    profileImageUrl:
+      "https://kr.object.ncloudstorage.com/mafoo/src/mafoo_profile_purple.png",
+    serialNumber: "1354",
+    shareStatus: "PENDING",
+  },
+  {
+    memberId: "01JGBX0P0W6ZSDB2PW9YHCDFH6",
+    name: "test2",
+    isDefaultName: false,
+    profileImageUrl:
+      "https://kr.object.ncloudstorage.com/mafoo/src/mafoo_profile_purple.png",
+    serialNumber: "1354",
+    shareStatus: "PENDING",
+  },
+]
+
 export const albumInfo = {
   albumId: "01JGD6M3JNPQ0WHDX04AK4T4ED",
   name: "24 Recap",

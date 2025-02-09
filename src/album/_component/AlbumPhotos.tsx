@@ -79,6 +79,7 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   }
 
   useEffect(() => {
+    // console.log("albumInfo.albumId", albumInfo.albumId)
     fetchAlbums()
   }, [albumInfo.albumId])
 

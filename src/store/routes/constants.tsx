@@ -5,35 +5,39 @@ import SharedFriendPage from "@/pages/SharedFriendPage"
 import AddFriendPage from "@/pages/AddFriendPage"
 import AlbumCreatePage from "@/pages/AlbumCreatePage"
 import ProfilePage from "@/pages/ProfilePage"
-import IntroductionPage from "@/pages/IntroductionPage"
-import KeywordPage from "@/pages/KeywordPage"
 import ScannerPage from "@/pages/ScannerPage"
-import ScannerSelectAlbumPage from "@/pages/ScannerSelectAlbumPage"
-import SumonePage from "@/pages/SumonePage"
 import RecapPage from "@/pages/RecapPage"
 
-// TODO: 토큰 부착 후 Unprotected Screen 제거
 export const UnprotectedRoutes = [
   {
-    name: "home",
-    options: {
-      headerShown: false,
-    },
+    name: "Home",
+    options: {},
     component: HomePage,
   },
+]
+
+// ProtectedRoutes definition
+export const ProtectedRoutes = [
+  ...UnprotectedRoutes,
   {
     name: "Album",
-    options: {
-      headerShown: false,
-    },
+    options: {},
     component: AlbumPage,
   },
   {
     name: "AlbumDetail",
-    options: {
-      headerShown: false,
-    },
+    options: {},
     component: AlbumDetailPage,
+  },
+  {
+    name: "SharedFriend",
+    options: {},
+    component: SharedFriendPage,
+  },
+  {
+    name: "AddFriend",
+    options: {},
+    component: AddFriendPage,
   },
   {
     name: "AlbumCreate",
@@ -41,90 +45,35 @@ export const UnprotectedRoutes = [
     component: AlbumCreatePage,
   },
   {
-    name: "AddFriend",
-    options: {
-      headerShown: false,
-    },
-    component: AddFriendPage,
-  },
-  {
-    name: "SharedFriend",
-    options: {},
-    component: SharedFriendPage,
-  },
-  {
-    name: "scanner",
-    component: ScannerPage,
-  },
-  {
-    name: "Recap",
-    options: {},
-    component: RecapPage,
-  },
-  {
     name: "Profile",
     options: {},
     component: ProfilePage,
   },
-]
-
-// ProtectedRoutes definition
-export const ProtectedRoutes = [
+  // {
+  //   name: "Introduction",
+  //   options: {},
+  component: IntroductionPage,
+  // },
+  // {
+  //   name: "introduction/keyword",
+  //   options: {},
+  component: KeywordPage,
+  // },
   {
-    name: "Album",
-    options: {},
-    component: AlbumPage,
-  },
-  {
-    name: "AlbumDetail",
-    options: {},
-    component: AlbumDetailPage,
-  },
-  {
-    name: "SharedFriend",
-    options: {},
-    component: SharedFriendPage,
-  },
-  {
-    name: "AddFriend",
-    options: {},
-    component: AddFriendPage,
-  },
-  {
-    name: "album/create",
-    options: {},
-    component: AlbumCreatePage,
-  },
-  {
-    name: "Profile",
-    options: {},
-    component: ProfilePage,
-  },
-  {
-    name: "introduction",
-    options: {},
-    component: IntroductionPage,
-  },
-  {
-    name: "introduction/keyword",
-    options: {},
-    component: KeywordPage,
-  },
-  {
-    name: "scanner",
+    name: "Scanner",
     options: {},
     component: ScannerPage,
   },
-  {
-    name: "scanner/select-album",
-    options: {},
-    component: ScannerSelectAlbumPage,
-  },
-  {
-    name: "sumone",
-    options: {},
-    component: SumonePage,
-  },
+  // {
+  //   name: "SelectAlbum",
+  //   options: {},
+  component: ScannerSelectAlbumPage,
+  // },
+  // {
+  //   name: "Sumone",
+  //   options: {},
+  component: SumonePage,
+  // },
   {
     name: "Recap",
     options: {},

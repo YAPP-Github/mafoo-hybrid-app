@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import MFText from "@/common/MFText"
 import NewAlbum from "@/assets/newAlbum.svg"
+import { colors } from "@/constants/colors"
 
 export type RootStackParamList = {
   AlbumCreate: undefined
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: "#2D3541", // TODO: gray 800
+    backgroundColor: colors.gray[800],
     paddingVertical: 15,
     paddingHorizontal: 22,
     borderRadius: 9999,

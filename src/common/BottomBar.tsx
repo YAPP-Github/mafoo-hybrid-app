@@ -7,6 +7,7 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native"
+import { colors } from "@/constants/colors"
 
 interface BottomBarProps {
   variant: "album" | "scanner" | "profile"
@@ -21,8 +22,8 @@ const BottomBar = ({ variant }: BottomBarProps) => {
   return (
     <View className={bottomBarVariants({ variant })}>
       {variant === "album" && <Album />}
-      {/* {variant === "scanner" && <Scanner />}
-      {variant === "profile" && <Profile />} */}
+      {/* {variant === "scanner" && <Scanner />}*/}
+      {variant === "profile" && <Profile />}
     </View>
   )
 }
@@ -57,7 +58,7 @@ const Album = () => {
             <Icon
               name="albumBold"
               size={28}
-              color={`${isActive("Album") ? "gray-800" : "gray-400"}`}
+              color={`${isActive("Album") ? "gray-800" : "gray-400"}`} // TODO: 분기처리 제거, colors constants 변경
             />
             <Text
               className={`${
@@ -112,22 +113,28 @@ const Album = () => {
 //   )
 // }
 
-// const Profile = () => {
-//   return (
-//     <>
-//       <Button className="rounded-lg">
-//         <View className={TAB_ITEM_CLASSNAME}>
-//           <Icon name="albumOutline" size={28} color="gray-400" />
-//           <Text>내 앨범</Text>
-//         </View>
-//       </Button>
+const Profile = () => {
+  const navigation = useNavigation()
+  return (
+    <>
+      <Button
+        onPress={() => navigation.navigate("album")}
+        className="rounded-lg">
+        <View className={TAB_ITEM_CLASSNAME}>
+          <Icon name="albumBold" size={28} color={colors.gray[400]} />
+          <Text>내 앨범</Text>
+        </View>
+      </Button>
 
-//       <Button className={TAB_ITEM_CLASSNAME} disabled>
-//         <Icon name="userCircleBold" size={28} color="gray-800" />
-//         <Text className="text-gray-800">마이</Text>
-//       </Button>
-//     </>
-//   )
-// }
+      <Button
+        onPress={() => navigation.navigate("profile")}
+        className={TAB_ITEM_CLASSNAME}
+        disabled>
+        <Icon name="userCircleBold" size={28} color={colors.gray[800]} />
+        <Text className="text-gray-800">마이</Text>
+      </Button>
+    </>
+  )
+}
 
 export default BottomBar

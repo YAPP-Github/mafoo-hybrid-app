@@ -15,11 +15,9 @@ function App(): React.JSX.Element {
   return (
     <Fragment>
       <QueryProviders>
-        <View className="flex-1">
-          <MafooRouter />
-          {/* 기존 Webview deprecated */}
-          {/* <DeprecatedWebView /> */}
-        </View>
+        <MafooRouter />
+        {/* 기존 Webview deprecated */}
+        {/* <DeprecatedWebView /> */}
       </QueryProviders>
     </Fragment>
   )

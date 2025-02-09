@@ -40,6 +40,7 @@ export const createUnauthorizedFetcher = (path: string) => {
 }
 
 export const createFetcher = (path: string) => {
+  console.log("baseURL", `${API_URL}${path}`)
   const instance = axios.create({
     baseURL: `${API_URL}${path}`,
     timeout: FETCHER_TIME_OUT,
@@ -68,8 +69,8 @@ export const createFetcher = (path: string) => {
       const _err = err as unknown as AxiosError
       const { response: res } = _err
 
-      const accessToken = getAccessToken()
-      const refreshToken = getRefreshToken()
+      const accessToken = await getAccessToken()
+      const refreshToken = await getRefreshToken()
 
       if (!res || res.status !== 401 || !accessToken || !refreshToken) {
         return Promise.reject(_err)

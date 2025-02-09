@@ -20,7 +20,7 @@ module.exports = {
       },
       green: {
         100: "#F3FAF6",
-        200: "#E5F5ED ",
+        200: "#E5F5ED",
         300: "#C8EBD8",
         400: "#A7E1C2",
         500: "#7CD6A9",
@@ -32,7 +32,7 @@ module.exports = {
       },
       butter: {
         100: "#FFF7E2",
-        200: "#FFF4D6 ",
+        200: "#FFF4D6",
         300: "#FFECBB",
         400: "#FFDE8A",
         500: "#FFCF55",
@@ -44,7 +44,7 @@ module.exports = {
       },
       "sky-blue": {
         100: "#EBF5FF",
-        200: "#DEEEFF ",
+        200: "#DEEEFF",
         300: "#BCD9F5",
         400: "#8EC6FA",
         500: "#65B5FF",

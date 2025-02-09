@@ -2,6 +2,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import "RNSplashScreen.h"
+#import <RNKakaoLogins.h>  // 카카오 로그인 추가
 
 @implementation AppDelegate
 
@@ -16,6 +17,17 @@
   [RNSplashScreen show];
 
   return YES;
+}
+
+// 카카오 로그인 URL 핸들링 추가
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  if ([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
+    return [RNKakaoLogins handleOpenUrl:url];
+  }
+  
+  return NO;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

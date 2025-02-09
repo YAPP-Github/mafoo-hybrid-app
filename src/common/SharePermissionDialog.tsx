@@ -1,10 +1,13 @@
-import Image from "next/image"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
+import { View, Text, Image, Modal, TouchableOpacity } from "react-native"
+import RadioGroup from "react-native-radio-buttons-group"
+import { PermissionLevel } from "@/api/photo"
+import { styled } from "nativewind"
+import MFText from "./MFText"
 
-import { PermissionLevel } from "@/app/api/photo"
-import SquareButton from "@/common/SquareButton"
+const StyledTouchableOpacity = styled(TouchableOpacity)
 
-export const SharePermissionDialog = ({
+const SharePermissionDialog = ({
   imageUrl,
   name,
   isVisible,
@@ -12,6 +15,7 @@ export const SharePermissionDialog = ({
   onExit,
   onTapSave,
   defaultPermissionLevel = PermissionLevel.FULL_ACCESS,
+  radioColor,
 }: {
   imageUrl: string
   name: string
@@ -20,108 +24,97 @@ export const SharePermissionDialog = ({
   onExit: () => void
   onTapSave: (level: PermissionLevel) => void
   defaultPermissionLevel: PermissionLevel
+  radioColor: string
 }) => {
   const [permissionLevel, setPermissionLevel] = useState<PermissionLevel>(
     defaultPermissionLevel
   )
+
   useEffect(() => {
     setPermissionLevel(defaultPermissionLevel)
   }, [defaultPermissionLevel])
-  return (
-    <>
-      {isVisible && (
-        <div className="fixed top-0 z-10 flex h-dvh w-dvw items-center justify-center bg-gray-800/50 px-5 pb-5 transition-all duration-500">
-          <div className="w-full rounded-2xl bg-sumone-white p-3 px-5 pt-6">
-            <div className="flex flex-col items-center gap-2">
-              <Image
-                crossOrigin="anonymous"
-                src={imageUrl}
-                className="h-[96px] w-[96px] rounded-[50%]"
-                width={96}
-                height={96}
-                alt="friend"
-              />
-              <div className="tp-title1-semibold text-gray-800">
-                {name}님의 편집 권한
-              </div>
-            </div>
-            <div className="my-4 h-[1.5px] w-full bg-gray-100" />
 
-            <div className="tp-title2-regular flex flex-col text-gray-700">
-              <div className="flex flex-row gap-2 py-1">
-                <input
-                  className="w-[20px]"
-                  type="radio"
-                  name="perm"
-                  id="full"
-                  onChange={(e) => {
-                    if (e.target.value)
-                      setPermissionLevel(PermissionLevel.FULL_ACCESS)
-                  }}
-                  checked={permissionLevel === PermissionLevel.FULL_ACCESS}
-                />
-                <label htmlFor="full">전체 편집</label>
-              </div>
-              <div className="flex flex-row gap-2 py-1">
-                <input
-                  className="w-[20px]"
-                  type="radio"
-                  name="perm"
-                  id="download"
-                  onChange={(e) => {
-                    if (e.target.value)
-                      setPermissionLevel(PermissionLevel.DOWNLOAD_ACCESS)
-                  }}
-                  checked={permissionLevel === PermissionLevel.DOWNLOAD_ACCESS}
-                />
-                <label htmlFor="download">다운로드만</label>
-              </div>
-              <div className="flex flex-row gap-2 py-1">
-                <input
-                  className="w-[20px]"
-                  type="radio"
-                  name="perm"
-                  id="view"
-                  onChange={(e) => {
-                    if (e.target.value)
-                      setPermissionLevel(PermissionLevel.VIEW_ACCESS)
-                  }}
-                  checked={permissionLevel === PermissionLevel.VIEW_ACCESS}
-                />
-                <label htmlFor="view">보기만</label>
-              </div>
-              {isOwnerMigrateVisible && (
-                <div className="flex flex-row gap-2 py-1">
-                  <input
-                    className="w-[20px]"
-                    type="radio"
-                    name="perm"
-                    id="owner"
-                    onChange={(e) => {
-                      if (e.target.value)
-                        setPermissionLevel(PermissionLevel.OWNER)
-                    }}
-                    checked={permissionLevel === PermissionLevel.OWNER}
-                  />
-                  <label htmlFor="owner">앨범장 넘기기</label>
-                </div>
-              )}
-            </div>
-            <div className="mt-[20px] flex flex-row justify-between gap-3">
-              <SquareButton
-                className="grow basis-1 bg-gray-100 text-gray-600 active:bg-gray-200"
-                onClick={onExit}>
-                닫기
-              </SquareButton>
-              <SquareButton
-                className="grow basis-1 bg-gray-600 text-white active:bg-gray-700"
-                onClick={() => onTapSave(permissionLevel)}>
-                공유하기
-              </SquareButton>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+  const permissions = [
+    {
+      id: PermissionLevel.FULL_ACCESS,
+      label: "전체 편집",
+      value: PermissionLevel.FULL_ACCESS,
+    },
+    {
+      id: PermissionLevel.DOWNLOAD_ACCESS,
+      label: "다운로드만",
+      value: PermissionLevel.DOWNLOAD_ACCESS,
+    },
+    {
+      id: PermissionLevel.VIEW_ACCESS,
+      label: "보기만",
+      value: PermissionLevel.VIEW_ACCESS,
+    },
+  ]
+
+  if (isOwnerMigrateVisible) {
+    permissions.push({
+      id: PermissionLevel.OWNER,
+      label: "앨범장 넘기기",
+      value: PermissionLevel.OWNER,
+    })
+  }
+
+  const permissionsWithBorderColor = permissions.map((permission) => ({
+    ...permission,
+    color: radioColor,
+    borderColor:
+      permission.value === permissionLevel ? radioColor : "lightgray",
+  }))
+
+  return (
+    <Modal visible={isVisible} transparent animationType="fade">
+      <View className="items-center justify-center flex-1 px-5 bg-gray-800/50">
+        <View className="w-full p-5 bg-white rounded-2xl">
+          {/* 이미지 및 타이틀 */}
+          <View className="flex flex-col items-center gap-3">
+            <Image
+              source={{ uri: imageUrl }}
+              className="w-24 h-24 rounded-full"
+              resizeMode="cover"
+            />
+            <MFText weight="SemiBold" className="text-gray-800 text-title1">
+              {name}님의 편집 권한
+            </MFText>
+          </View>
+
+          <View className="my-4 h-[1.5px] w-full bg-gray-50" />
+
+          {/* 권한 선택 */}
+          <View className="flex flex-col">
+            <RadioGroup
+              radioButtons={permissionsWithBorderColor}
+              onPress={(value) => setPermissionLevel(value as PermissionLevel)}
+              selectedId={permissionLevel}
+              containerStyle={{ alignItems: "flex-start" }}
+            />
+          </View>
+
+          {/* 버튼 영역 */}
+          <View className="flex-row justify-between gap-3 mt-5">
+            <StyledTouchableOpacity
+              className="items-center py-3 bg-gray-100 rounded-lg grow basis-1 active:bg-gray-200"
+              onPress={onExit}>
+              <MFText className="font-semibold text-gray-600">닫기</MFText>
+            </StyledTouchableOpacity>
+            <StyledTouchableOpacity
+              style={{
+                backgroundColor: radioColor,
+              }}
+              className="items-center py-3 rounded-lg grow basis-1 active:bg-gray-700"
+              onPress={() => onTapSave(permissionLevel)}>
+              <MFText className="font-semibold text-white">공유하기</MFText>
+            </StyledTouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
   )
 }
+
+export default SharePermissionDialog

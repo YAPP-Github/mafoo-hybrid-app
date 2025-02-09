@@ -41,6 +41,7 @@ const iconMap: Record<IconTypes, any> = {
   widgetAddOutline: require("../assets/widgetAddOutline.svg"),
   clapperBoardPlay: require("../assets/clapperBoardPlay.svg"),
   albumEditPencil: require("../assets/albumEditPencil.svg"),
+  mafooCharacter1: require("../assets/mafooCharacter1.svg"),
 }
 
 export default iconMap
