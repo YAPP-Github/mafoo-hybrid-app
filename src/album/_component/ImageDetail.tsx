@@ -11,6 +11,7 @@ import {
 import { PhotoInfo } from "../types"
 import SquareButton from "@/common/SquareButton"
 import MFText from "@/common/MFText"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface ImageDetailProps {
   photos: PhotoInfo[]
@@ -31,9 +32,18 @@ const ImageDetail = ({
   const [deleteModalShown, setDeleteModalShown] = useState(false)
   const [isZoomed, setIsZoomed] = useState(false)
 
+  const queryClient = useQueryClient()
+
   const handleDelete = async () => {
     await onDelete(idx)
+
+    /** 사진 장수 업데이트 (앨범 상세 페이지) */
+    queryClient.invalidateQueries({ queryKey: ["getAlbum"] })
+    /* 사진 장수 업데이트 (앨범 목록 페이지) */
+    queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
+
     setDeleteModalShown(false)
+
     onClose()
   }
 
