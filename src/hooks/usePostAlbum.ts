@@ -41,8 +41,8 @@ export const usePostAlbum = () => {
       if (photoId) {
         patchPhotoAlbum({ photoId, defaultAlbumId: albumId })
       }
-
-      navigation.navigate("AlbumDetail", { albumId: albumId })
+      /** 새로운 화면으로 교체 */
+      navigation.replace("AlbumDetail", { albumId: albumId })
     },
     throwOnError: true,
   })
