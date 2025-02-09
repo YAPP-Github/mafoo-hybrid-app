@@ -1,3 +1,4 @@
+import { Asset } from "react-native-image-picker"
 import { createFetcher } from "./myfetch"
 
 export const authorizedFetcher = createFetcher("sumone/albums")
@@ -78,19 +79,21 @@ export const postOriginalPhoto = async (
   }
 }
 
-export const getPresignedUrls = async (photos: File[], albumId: string) => {
+export const getPresignedUrls = async (photos: Asset[], albumId: string) => {
   if (!albumId.length) return
 
   const formatedFileNames = photos.map((photo) => {
-    return photo.name.split(".")[0] + ".jpeg"
+    return photo.fileName!.split(".")[0] + ".jpeg"
   })
+
+  console.log("formatedFileNames", albumId, formatedFileNames)
 
   const { urls } = await authorizedFetcher
     .post(
-      `/${albumId}/presigned-urls`,
-      JSON.stringify({
+      `/sumone/albums/${albumId}/presigned-urls`,
+      {
         fileNames: formatedFileNames,
-      }),
+      },
       {
         headers: {
           "Content-Type": "application/json",
