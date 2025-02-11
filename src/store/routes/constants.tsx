@@ -7,6 +7,7 @@ import AlbumCreatePage from "@/pages/AlbumCreatePage"
 import ProfilePage from "@/pages/Profile"
 import ScannerPage from "@/pages/ScannerPage"
 import RecapPage from "@/pages/RecapPage"
+import NotificationPage from "@/pages/NotificationPage"
 
 export const UnprotectedRoutes = [
   {
@@ -78,5 +79,10 @@ export const ProtectedRoutes = [
     name: "Recap",
     options: {},
     component: RecapPage,
+  },
+  {
+    name: "Notification",
+    options: {},
+    component: NotificationPage,
   },
 ]
