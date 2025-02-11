@@ -1,23 +1,22 @@
 import { StyleSheet, View } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import { albumList } from "@/dummy"
 import DraggableAlbum from "./DraggableAlbum"
-// import { useGetAlbums } from "@/hooks/usePhoto"
+import { useGetAlbums } from "@/hooks/usePhoto"
 
 const Albums = () => {
-  //const { albums } = useGetAlbums()
+  const { albums } = useGetAlbums()
 
   return (
     <View style={styles.container}>
-      {/* FlatList: 화면에 보이는 데이터만 렌더링 */}
       <FlatList
-        data={albumList}
+        data={albums}
         keyExtractor={(item, index) => item.albumId + index}
         renderItem={({ item, index }) => (
           <DraggableAlbum
             key={item.albumId + index}
             index={index}
             album={item}
+            showNewRing={true}
             // moveAlbum={moveAlbum}
           />
         )}
