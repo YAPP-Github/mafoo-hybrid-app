@@ -5,14 +5,22 @@ import BottomBar from "@/common/BottomBar"
 import MafooLogo from "@/assets/mafooNewLogo.svg"
 import HeaderBell from "@/assets/headerBell.svg"
 import PageContainer from "@/common/PageContainer"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import { NavigationProp } from "@react-navigation/native"
+import { colors } from "@/constants/colors"
 
-const AlbumsPage = () => {
+interface AlbumsPageProps {
+  navigation: NavigationProp<any>
+}
+const AlbumsPage = ({ navigation }: AlbumsPageProps) => {
   return (
     <PageContainer>
       <View style={styles.container}>
         <View style={styles.header}>
           <MafooLogo width={112} height={36} color="#2D3541" />
-          <HeaderBell width={32} height={32} color="#B1B7BE" />
+          <TouchableOpacity onPress={() => navigation.navigate("Notification")}>
+            <HeaderBell width={32} height={32} color={colors.gray[400]} />
+          </TouchableOpacity>
         </View>
         <Albums />
         {/* TODO: draggable 추가 */}
