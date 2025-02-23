@@ -27,14 +27,7 @@ import VideoLoading from "@/album/_component/VideoLoading"
 import { sampleUserData } from "@/types/user"
 import { useGetProfile } from "@/profile/hooks/useProfile"
 import { useGetAlbum } from "@/hooks/usePhoto"
-
-export type RootStackParamList = {
-  AddFriend: { albumId: string } | undefined
-  SharedFriend: { albumId: string } | undefined
-  // Recap?: { albumId: string } | undefined
-  Frame?: { albumInfo: any } // TODO: albumInfo 타입 추가
-  Album: undefined
-}
+import { RootStackParamList } from "@/types/routeParams"
 
 export type AlbumDetailPageProps = {
   route: {
