@@ -47,6 +47,9 @@ export type IconTypes =
   | "albumEditPencil"
   | "mafooLogo2025"
   | "mafooCharacter1"
+  | "mafooSantaCharacter"
+  | "securityEye"
+  | "emptyAlarmBell"
 
 export interface IconProps {
   name: IconTypes

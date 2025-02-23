@@ -43,6 +43,9 @@ const iconMap: Record<IconTypes, any> = {
   albumEditPencil: require("../assets/albumEditPencil.svg"),
   mafooCharacter1: require("../assets/mafooCharacter1.svg"),
   checkCircleBold: require("../assets/checkCircleBold.svg"),
+  mafooSantaCharacter: require("../assets/mafooSantaCharacter.svg"),
+  securityEye: require("../assets/securityEye.svg"),
+  emptyAlarmBell: require("../assets/emptyAlarmBell.svg"),
 }
 
 export default iconMap

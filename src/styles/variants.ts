@@ -224,7 +224,7 @@ export type LinearGradientSpec = WithAngle & {
   locations?: number[]
 }
 
-export type LinearGradientTypeKey = AlbumType | "INSTA"
+export type LinearGradientTypeKey = AlbumType | "INSTA" | "ALARM"
 
 export const recapColorLinearGradient: Record<
   LinearGradientTypeKey,
@@ -281,6 +281,13 @@ export const recapColorLinearGradient: Record<
     colors: ["#FFD735", "#FF6C5A", "#E848C8", "#4A8CF0"],
     start: { x: 1, y: 0 },
     end: { x: 0, y: 0 },
+    useAngle: false,
+    angle: 0,
+  },
+  ALARM: {
+    colors: ["#FFF", "#E9F6FE"],
+    start: { x: 0.5, y: 0 },
+    end: { x: 0.5, y: 1 },
     useAngle: false,
     angle: 0,
   },

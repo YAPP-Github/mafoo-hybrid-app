@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native"
+import { useState } from "react"
+import { View, StyleSheet } from "react-native"
 
 import AlbumItem from "../AlbumItem"
 import SquareButton from "@/common/SquareButton"
