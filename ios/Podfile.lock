@@ -1413,6 +1413,11 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNNotifee (9.1.8):
+    - React-Core
+    - RNNotifee/NotifeeCore (= 9.1.8)
+  - RNNotifee/NotifeeCore (9.1.8):
+    - React-Core
   - RNReanimated (3.16.6):
     - DoubleConversion
     - glog
@@ -1600,6 +1605,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -1765,6 +1771,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNNotifee:
+    :path: "../node_modules/@notifee/react-native"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1859,6 +1867,7 @@ SPEC CHECKSUMS:
   RNFBApp: 2de7307ecad62fc52f962814167664881c2bc2a6
   RNFBMessaging: ea24ddce213146d12381ac110e500f9ef44a1883
   RNGestureHandler: 2c810056e5fd19bdb77db3a1523ad7927867b854
+  RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNReanimated: 6482f6a0f729b2589a2a1b2edbff168d2406c84b
   RNScreens: e9e27421c4a75b537ca40886e5736d4fcf04c715
   RNSVG: 63ef964b8397204ff70b78de6c93858320816671
