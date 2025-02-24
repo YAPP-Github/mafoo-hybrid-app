@@ -9,3 +9,10 @@ export enum NOTIFICATIONS {
 
 /** 전체 알림 key */
 export type NotificationsType = keyof typeof NOTIFICATIONS
+
+/** 알림 redirect params (알림함 / 시스템) 둘 다 사용 */
+export interface fcmNotificationParams {
+  route: string
+  key: unknown
+  hasButton: boolean
+}

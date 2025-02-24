@@ -12,6 +12,7 @@ import { toastConfig } from "@/styles/toastConfig"
 import { getAccessToken } from "../auth/util"
 
 const navigationRef = createRef<NavigationContainerRef<any>>()
+import ForegroundEvent from "@/providers/ForegroundEvent"
 
 const MafooRouter = () => {
   const Stack = createStackNavigator()
@@ -53,6 +54,7 @@ const MafooRouter = () => {
   return (
     <>
       <NavigationContainer ref={navigationRef}>
+        <ForegroundEvent />
         <Stack.Navigator initialRouteName={isSignedIn ? "Album" : "Home"}>
           {(isSignedIn ? ProtectedRoutes : UnprotectedRoutes).map((route) => (
             <Stack.Screen
