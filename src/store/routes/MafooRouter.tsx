@@ -5,9 +5,10 @@ import { AuthProvider } from "../auth"
 import { useAuth } from "../auth/AuthProvider"
 import { useEffect } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { ProtectedRoutes, UnprotectedRoutes } from "./constants"
+import { ProtectedRoutes } from "./constants"
 import Toast from "react-native-toast-message"
 import { toastConfig } from "@/styles/toastConfig"
+import ForegroundEvent from "@/providers/ForegroundEvent"
 
 const MafooRouter = () => {
   const Stack = createStackNavigator()
@@ -37,6 +38,7 @@ const MafooRouter = () => {
   return (
     <AuthProvider>
       <NavigationContainer>
+        <ForegroundEvent />
         <Stack.Navigator initialRouteName={isSignedIn ? "Album" : "Home"}>
           {(isSignedIn ? ProtectedRoutes : ProtectedRoutes).map((route) => (
             <Stack.Screen
