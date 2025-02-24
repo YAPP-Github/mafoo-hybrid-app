@@ -1,9 +1,9 @@
-import React, { Fragment, useEffect } from "react"
+import { Fragment, useEffect } from "react"
 
 import SplashScreen from "react-native-splash-screen"
 import MafooRouter from "./src/store/routes/MafooRouter"
 import QueryProviders from "./src/common/QueryProviders"
-import { useForegroundMessage } from "@/hooks/useForegroundMessage"
+import ForegroundMessage from "@/providers/ForegroundMessage"
 
 // import DeprecatedWebView from "./src/store/routes/DeprecatedWebView"
 
@@ -12,11 +12,10 @@ function App(): React.JSX.Element {
     SplashScreen.hide()
   }, [])
 
-  useForegroundMessage()
-
   return (
     <Fragment>
       <QueryProviders>
+        <ForegroundMessage />
         <MafooRouter />
         {/* 기존 Webview deprecated */}
         {/* <DeprecatedWebView /> */}
