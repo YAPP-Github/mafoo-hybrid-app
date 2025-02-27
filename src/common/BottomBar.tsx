@@ -8,14 +8,10 @@ import {
   useRoute,
 } from "@react-navigation/native"
 import { colors } from "@/constants/colors"
+import { RootStackParamList } from "@/types/routeParams"
 
 interface BottomBarProps {
   variant: "album" | "scanner" | "profile"
-}
-
-export type RootStackParamList = {
-  Album: {} | undefined
-  Profile: {} | undefined
 }
 
 const BottomBar = ({ variant }: BottomBarProps) => {
@@ -114,7 +110,7 @@ const Album = () => {
 // }
 
 const Profile = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
   return (
     <>
       <Button
