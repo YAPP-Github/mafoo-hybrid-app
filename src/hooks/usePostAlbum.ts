@@ -7,10 +7,7 @@ import { usePatchPhotoAlbum } from "@/hooks/usePhoto"
 import type { AlbumType } from "@/album/types"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
-
-export type RootStackParamList = {
-  AlbumDetail: { albumId: string } | undefined
-}
+import { RootStackParamList } from "@/types/routeParams"
 
 export const usePostAlbum = () => {
   const { showAlert } = useAlertStore()
