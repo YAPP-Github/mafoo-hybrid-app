@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import messaging from "@react-native-firebase/messaging"
-import notifee from "@notifee/react-native"
+import notifee, { AndroidImportance } from "@notifee/react-native"
 import { useQueryClient } from "@tanstack/react-query"
 import { NOTIFICATIONS } from "@/constants/queryString"
 
@@ -36,8 +36,9 @@ export const useForegroundMessage = () => {
 
     // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
-      id: "default",
-      name: "Default Channel",
+      id: "chat",
+      name: "chat",
+      importance: AndroidImportance.HIGH,
     })
 
     // Display a notification
@@ -47,7 +48,7 @@ export const useForegroundMessage = () => {
       data: remoteMessage.data, // send custom data
       android: {
         channelId,
-        smallIcon: "name-of-a-small-icon", // optional, defaults to 'ic_launcher'.
+        // smallIcon: "name-of-a-small-icon", // optional, defaults to 'ic_launcher'.
         // pressAction is needed if you want the notification to open the app when pressed
         pressAction: {
           id: "open_detail", // android 클릭 이벤트 처리

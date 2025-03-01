@@ -1,10 +1,11 @@
+import { useEffect } from "react"
 import notifee, { EventType } from "@notifee/react-native"
 import { NavigationProp, useNavigation } from "@react-navigation/native"
-import { useEffect } from "react"
 import { useGetProfile } from "@/profile/hooks/useProfile"
 import { useReadNotification } from "./useReadNotification"
 import { fcmNotificationParams } from "@/types/notifications"
 import { fcmNotification } from "./useForegroundMessage"
+import { useAuth } from "@/store/auth/AuthProvider"
 import { RootStackParamList } from "@/types/routeParams"
 
 /**
@@ -21,10 +22,18 @@ export interface fcmNotificationResponse {
 }
 
 export function getRouteParams(
-  data: { route: string; key: string | null } | undefined
+  data:
+    | {
+        route: keyof RootStackParamList
+        key: string | null
+        buttonType?: null | boolean
+      }
+    | undefined
 ) {
   let result = {}
   if (!data) return result
+
+  if (data?.buttonType) return "Notification"
 
   // `route`에 따라 `key` 값을 다르게 설정
   switch (data.route) {
@@ -47,26 +56,35 @@ export function getRouteParams(
 export function useForegroundEvent() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
 
-  const { profile } = useGetProfile()
-  const { mutate } = useReadNotification("", [], false, null)
+  const { status } = useAuth()
+
+  // const isSignedIn = status === "signIn"
+
+  // const { profile } = isSignedIn ? useGetProfile() : { profile: null }
+  // const { mutate } = isSignedIn
+  //   ? useReadNotification(profile?.memberId ?? "", [])
+  //   : { mutate: null }
 
   useEffect(() => {
-    const unsubscribe = notifee.onForegroundEvent(({ type, detail }) => {
+    // iOS, android
+
+    const unsubscribe = notifee.onForegroundEvent(async ({ type, detail }) => {
+      console.log("foreground event!!")
       if (
         type === EventType.PRESS &&
         (detail.pressAction?.id === "open_detail" || // android
           detail.notification?.ios?.categoryId === "open_detail_category") // ios
       ) {
-        //console.log("f 알림 읽음 API 호출", profile?.memberId)
-
         const data = detail?.notification?.data
 
-        //  mutate({ profile?.memberId, [data?.notificationId] }) TODO: api 확인
-        // console.log("f 알림 클릭됨 - 상세 페이지로 이동", detail)
-        navigation.navigate(
-          (data?.routes as any) ?? "AlbumCreate",
-          getRouteParams(data as any)
-        )
+        // if (isSignedIn && profile?.memberId && data?.notificationId && mutate) {
+        //   // mutate([data.notificationId] as any)
+
+        //   navigation.navigate(
+        //     (data?.route as any) ?? "AlbumCreate",
+        //     getRouteParams(data as any)
+        //   )
+        // }
       }
     })
 
