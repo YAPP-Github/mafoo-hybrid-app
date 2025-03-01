@@ -1,4 +1,4 @@
-import { ExportNoteType } from "@/api/album/export"
+import { ExportNoteType, getExportNote } from "@/api/album/export"
 import Icon from "@/common/Icon"
 import MFText from "@/common/MFText"
 import { GUEST_WRITE_BG_COLOR } from "@/pages/ExportAlbumGuestbookWritePage/_components/GuestWrite"
@@ -14,32 +14,14 @@ const GuestBooks = ({ exportId }: GuestBooksProps) => {
 
   const fetchGuestNotes = async () => {
     //TODO: fetch guest notes
-    // console.log("fetchGuestNotes")
-    setGuestNotes([
-      {
-        type: "HEART",
-        nickname: "현지1",
-        content: `둘이 예쁘게 
-사귀는게 
-너무 보기 좋아요~
-ㅎㅎ💕`,
-      },
-      {
-        type: "BUILDING",
-        nickname: "현지2",
-        content: "testContent2",
-      },
-      {
-        type: "STARFALL",
-        nickname: "현지3",
-        content: "testContent3",
-      },
-      {
-        type: "BASKETBALL",
-        nickname: "현지4",
-        content: "testContent4",
-      },
-    ])
+    await getExportNote(exportId)
+      .then((res) => {
+        console.log(res)
+        setGuestNotes(res)
+      })
+      .catch((err) => {
+        console.log("fetchGuestNotes error", err)
+      })
   }
 
   useEffect(() => {

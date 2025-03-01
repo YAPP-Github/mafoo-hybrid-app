@@ -1,5 +1,6 @@
 import { AlbumType } from "@/album/types"
 import MFText from "@/common/MFText"
+import { colors } from "@/constants/colors"
 import { TextInput, View } from "react-native"
 
 interface GuestWriteProps {
@@ -40,6 +41,7 @@ const GuestWrite = ({
       <TextInput
         multiline
         numberOfLines={7}
+        placeholderTextColor={colors.gray[300]}
         className="font-semibold break-words text-display2"
         placeholder="방명록을 작성해주세요"
         value={value}
@@ -52,6 +54,7 @@ const GuestWrite = ({
         <TextInput
           value={nickname}
           onChange={(e) => setNickname(e.nativeEvent.text)}
+          placeholderTextColor={colors.gray[300]}
           className="px-4 py-2 font-semibold bg-gray-100 rounded-lg text-title1"
           placeholder="내 별명"
         />

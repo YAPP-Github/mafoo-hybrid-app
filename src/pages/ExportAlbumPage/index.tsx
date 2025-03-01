@@ -9,7 +9,6 @@ import MFText from "@/common/MFText"
 import PageContainer from "@/common/PageContainer"
 import { useEffect, useState } from "react"
 import { Image, Pressable, View } from "react-native"
-import dummyData from "./dummy"
 import LinearGradient from "react-native-linear-gradient"
 import { COLOR_MAP } from "./constant"
 import ColorIcon from "@/common/ColorIcon"
@@ -31,14 +30,13 @@ const ExportAlbumPage = ({
   const { status } = useAuth()
 
   useEffect(() => {
-    // const fetchInitialData = async () => {
-    //   getExportAlbumData(exportId).then((res) => {
-    //     setExportAlbumData(res)
-    //   })
-    // }
-    // fetchInitialData()
-
-    setExportAlbumData(dummyData as ExportAlbumType) //TODO: change to fetchInitialData
+    const fetchInitialData = async () => {
+      getExportAlbumData(exportId).then((res) => {
+        setExportAlbumData(res)
+        console.log(res)
+      })
+    }
+    fetchInitialData()
   }, [exportId])
 
   if (!exportAlbumData) {
@@ -72,25 +70,6 @@ const ExportAlbumPage = ({
       })
     }
     if (exportAlbumData.isMeLiked) {
-      await likeExport(exportId)
-        .then(() => {
-          console.log("like success")
-        })
-        .catch(() => {
-          setExportAlbumData((prev) => {
-            if (!prev) {
-              return
-            }
-            return {
-              ...prev,
-              isMeLiked: !prev.isMeLiked,
-              likeCount: prev.isMeLiked
-                ? Number(prev.likeCount) - 1
-                : Number(prev.likeCount) + 1,
-            }
-          })
-        })
-    } else {
       await unlikeExport(exportId)
         .then(() => {
           console.log("unlike success")
@@ -109,8 +88,26 @@ const ExportAlbumPage = ({
             }
           })
         })
+    } else {
+      await likeExport(exportId)
+        .then(() => {
+          console.log("like success")
+        })
+        .catch(() => {
+          setExportAlbumData((prev) => {
+            if (!prev) {
+              return
+            }
+            return {
+              ...prev,
+              isMeLiked: !prev.isMeLiked,
+              likeCount: prev.isMeLiked
+                ? Number(prev.likeCount) - 1
+                : Number(prev.likeCount) + 1,
+            }
+          })
+        })
     }
-    // TODO: API call
   }
 
   return (
@@ -161,7 +158,7 @@ const ExportAlbumPage = ({
               <View style={{ gap: 4 }} className="flex flex-row items-center">
                 <Icon name="securityEye" size={24} />
                 <MFText weight="SemiBold" className="text-gray-600 text-body2">
-                  {Number(exportAlbumData.noteCount).toLocaleString()}
+                  {Number(exportAlbumData.viewCount).toLocaleString()}
                 </MFText>
               </View>
             </View>

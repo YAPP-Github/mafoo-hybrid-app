@@ -2,14 +2,19 @@ import MFText from "@/common/MFText"
 import { Pressable, SafeAreaView, StatusBar, View } from "react-native"
 import { COLOR_MAP } from "../ExportAlbumPage/constant"
 import { useEffect, useState } from "react"
-import { ExportAlbumType, getExportAlbumData } from "@/api/album/export"
-import dummyData from "../ExportAlbumPage/dummy"
+import {
+  ExportAlbumType,
+  getExportAlbumData,
+  likeExport,
+  unlikeExport,
+} from "@/api/album/export"
 import { calculateContentStyle } from "@/utils/calculateContentStyle"
 import Icon from "@/common/Icon"
 import { ICON_NAME } from "@/constants"
 import { colors } from "@/constants/colors"
 import { AlbumPhotos } from "./_components/AlbumPhotos"
 import GuestBooks from "./_components/GuestBooks"
+import { useAuth } from "@/store/auth/AuthProvider"
 
 const ExportAlbumDetailPage = ({
   navigation,
@@ -19,19 +24,18 @@ const ExportAlbumDetailPage = ({
   route: { params: { exportId: string } }
 }) => {
   const { exportId } = route.params
+  const { status } = useAuth()
   const [exportAlbumData, setExportAlbumData] = useState<ExportAlbumType>()
 
   const [currentTab, setCurrentTab] = useState<"photo" | "guestbook">("photo")
 
   useEffect(() => {
-    // const fetchInitialData = async () => {
-    //   getExportAlbumData(exportId).then((res) => {
-    //     setExportAlbumData(res)
-    //   })
-    // }
-    // fetchInitialData()
-
-    setExportAlbumData(dummyData as ExportAlbumType) //TODO: change to fetchInitialData
+    const fetchInitialData = async () => {
+      getExportAlbumData(exportId).then((res) => {
+        setExportAlbumData(res)
+      })
+    }
+    fetchInitialData()
   }, [exportId])
 
   if (!exportAlbumData) {
@@ -42,6 +46,71 @@ const ExportAlbumDetailPage = ({
 
   const handleClickGuestBookWrite = () => {
     navigation.navigate("ExportAlbumGuestbookWritePage", { exportId })
+  }
+
+  const handleClickShare = () => {
+    // TODO: Share Logic with deeplink
+    console.log("Share Logic")
+  }
+
+  const handleClickHeartClick = async () => {
+    if (status !== "signIn") {
+      // kick to login page
+      navigation.navigate("Home")
+      return
+    } else {
+      setExportAlbumData((prev) => {
+        if (!prev) {
+          return
+        }
+        return {
+          ...prev,
+          isMeLiked: !prev.isMeLiked,
+          likeCount: prev.isMeLiked
+            ? Number(prev.likeCount) - 1
+            : Number(prev.likeCount) + 1,
+        }
+      })
+    }
+    if (exportAlbumData.isMeLiked) {
+      await unlikeExport(exportId)
+        .then(() => {
+          console.log("unlike success")
+        })
+        .catch(() => {
+          setExportAlbumData((prev) => {
+            if (!prev) {
+              return
+            }
+            return {
+              ...prev,
+              isMeLiked: !prev.isMeLiked,
+              likeCount: prev.isMeLiked
+                ? Number(prev.likeCount) - 1
+                : Number(prev.likeCount) + 1,
+            }
+          })
+        })
+    } else {
+      await likeExport(exportId)
+        .then(() => {
+          console.log("like success")
+        })
+        .catch(() => {
+          setExportAlbumData((prev) => {
+            if (!prev) {
+              return
+            }
+            return {
+              ...prev,
+              isMeLiked: !prev.isMeLiked,
+              likeCount: prev.isMeLiked
+                ? Number(prev.likeCount) - 1
+                : Number(prev.likeCount) + 1,
+            }
+          })
+        })
+    }
   }
 
   return (
@@ -71,7 +140,9 @@ const ExportAlbumDetailPage = ({
               {exportAlbumData.name}
             </MFText>
           </View>
-          <Icon name="shareIcon" size={32} />
+          <Pressable onPress={handleClickShare}>
+            <Icon name="shareIcon" size={32} />
+          </Pressable>
         </View>
         <View
           style={{ gap: 8 }}
@@ -153,7 +224,8 @@ const ExportAlbumDetailPage = ({
             <View
               style={{ gap: 8 }}
               className="absolute flex flex-row w-full p-3 mx-6 bg-white rounded-lg shadow-lg bottom-5">
-              <View
+              <Pressable
+                onPress={handleClickHeartClick}
                 className="p-2.5 rounded-xl"
                 style={{
                   backgroundColor: exportAlbumData.isMeLiked
@@ -169,7 +241,7 @@ const ExportAlbumDetailPage = ({
                       : colors.gray[300]
                   }
                 />
-              </View>
+              </Pressable>
               <Pressable
                 onPress={handleClickGuestBookWrite}
                 className="flex flex-row items-center justify-between flex-1 px-4 py-2 bg-gray-100 rounded-xl">
