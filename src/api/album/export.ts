@@ -17,8 +17,12 @@ export const createExport = async (
       albumId,
     })
     return response
-  } catch (err) {
-    throw err.response.data
+  } catch (err: unknown) {
+    if (typeof err === "object" && err !== null && "response" in err) {
+      const errorWithResponse = err as { response?: { data?: any } }
+      throw errorWithResponse.response?.data
+    }
+    throw new Error("Unknown error occurred")
   }
 }
 
@@ -27,7 +31,11 @@ export const unlikeExport = async (exportId: string) => {
     const response = await authorizedFetcher.post(`/exports/${exportId}/unlike`)
     return response
   } catch (err) {
-    throw err
+    if (typeof err === "object" && err !== null && "response" in err) {
+      const errorWithResponse = err as { response?: { data?: any } }
+      throw errorWithResponse.response?.data
+    }
+    throw new Error("Unknown error occurred")
   }
 }
 
@@ -36,7 +44,11 @@ export const likeExport = async (exportId: string) => {
     const response = await authorizedFetcher.post(`/exports/${exportId}/like`)
     return response
   } catch (err) {
-    throw err
+    if (typeof err === "object" && err !== null && "response" in err) {
+      const errorWithResponse = err as { response?: { data?: any } }
+      throw errorWithResponse.response?.data
+    }
+    throw new Error("Unknown error occurred")
   }
 }
 
@@ -51,6 +63,21 @@ interface createExportNoteResponse extends ExportNoteType {
   exportId: string
 }
 
+export const getExportNote = async (
+  exportId: string
+): Promise<ExportNoteType[]> => {
+  try {
+    const response = await authorizedFetcher.get(`/exports/${exportId}/notes`)
+    return response
+  } catch (err) {
+    if (typeof err === "object" && err !== null && "response" in err) {
+      const errorWithResponse = err as { response?: { data?: any } }
+      throw errorWithResponse.response?.data
+    }
+    throw new Error("Unknown error occurred")
+  }
+}
+
 export const createExportNote = async (
   exportId: string,
   note: ExportNoteType
@@ -62,7 +89,11 @@ export const createExportNote = async (
     )
     return response
   } catch (err) {
-    throw err
+    if (typeof err === "object" && err !== null && "response" in err) {
+      const errorWithResponse = err as { response?: { data?: any } }
+      throw errorWithResponse.response?.data
+    }
+    throw new Error("Unknown error occurred")
   }
 }
 
@@ -77,6 +108,7 @@ export interface ExportAlbumType {
   ownerSerialNumber: string
   likeCount: number
   noteCount: number
+  viewCount: number
   isMeLiked: boolean
   sharedMembers: MemberSearchResult[]
 }
@@ -88,7 +120,11 @@ export const getExportAlbumData = async (
     const response = await authorizedFetcher.get(`/exports/${exportId}/album`)
     return response
   } catch (err) {
-    throw err
+    if (typeof err === "object" && err !== null && "response" in err) {
+      const errorWithResponse = err as { response?: { data?: any } }
+      throw errorWithResponse.response?.data
+    }
+    throw new Error("Unknown error occurred")
   }
 }
 
@@ -101,6 +137,10 @@ export const getExportAlbumPhotos = async (
     )
     return response
   } catch (err) {
-    throw err
+    if (typeof err === "object" && err !== null && "response" in err) {
+      const errorWithResponse = err as { response?: { data?: any } }
+      throw errorWithResponse.response?.data
+    }
+    throw new Error("Unknown error occurred")
   }
 }
