@@ -107,10 +107,11 @@ const LoginButton = ({
 const HomePage = ({ navigation }: any) => {
   const onSuccessLogin = () => {
     navigation.navigate("Album")
+    // navigation.navigate("ExportAlbum", { exportId: "test_album_id" })
   }
 
   return (
-    <PageContainer statusBarColor="#fff" isCustomHeader={false}>
+    <PageContainer statusBarColor="#fff">
       <LinearGradient
         colors={["#fff", "#FFF8DF", "#FFD1E9", "#fff"]}
         locations={[0.0692, 0.1577, 0.5672, 0.834]}

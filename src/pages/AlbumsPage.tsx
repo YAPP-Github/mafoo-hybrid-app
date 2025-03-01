@@ -1,4 +1,4 @@
-import { View, StyleSheet, SafeAreaView } from "react-native"
+import { View, StyleSheet } from "react-native"
 import Albums from "@/album/_component/Albums"
 import NewAlbumButton from "@/album/_component/NewAlbumButton"
 import BottomBar from "@/common/BottomBar"
@@ -8,7 +8,7 @@ import PageContainer from "@/common/PageContainer"
 
 const AlbumsPage = () => {
   return (
-    <PageContainer headerProps={{ title: "Albums" }}>
+    <PageContainer>
       <View style={styles.container}>
         <View style={styles.header}>
           <MafooLogo width={112} height={36} color="#2D3541" />

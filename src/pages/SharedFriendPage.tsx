@@ -83,7 +83,7 @@ const SharedFriendPage = ({
   const sharedMembers = albumInfo.sharedMembers || []
 
   return (
-    <PageContainer isCustomHeader={false} statusBarColor={colors.white}>
+    <PageContainer statusBarColor={colors.white}>
       <Header friendCount={sharedMembers.length} />
       <SharePermissionDialog
         isOwnerMigrateVisible={selectedMember?.shareStatus !== "PENDING"}

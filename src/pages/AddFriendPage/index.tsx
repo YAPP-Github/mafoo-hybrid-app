@@ -136,7 +136,7 @@ const AddFriendPage = ({
     : colors.gray[600]
 
   return (
-    <PageContainer isCustomHeader={false} statusBarColor={backgroundColorClass}>
+    <PageContainer statusBarColor={backgroundColorClass}>
       <Header />
 
       <SharePermissionDialog
