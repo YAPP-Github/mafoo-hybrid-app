@@ -38,7 +38,7 @@ const ImageDetail = ({
               <Text style={styles.headerButton}>←</Text>
             </TouchableOpacity>
             <Text style={styles.headerText}>
-              {/* {idx + 1} / {photos.length} */}
+              {idx + 1} / {photos.length}
             </Text>
           </SafeAreaView>
 
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: "white",
     fontSize: 16,
+    marginRight: 32,
   },
   imageContainer: {
     flex: 1,
