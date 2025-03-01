@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { useAuth } from "../auth/AuthProvider"
+import ForegroundEvent from "@/providers/ForegroundEvent"
 import { createRef, useEffect } from "react"
 import { View, ActivityIndicator } from "react-native"
 import { ProtectedRoutes, UnprotectedRoutes } from "./constants"
@@ -12,7 +13,6 @@ import { toastConfig } from "@/styles/toastConfig"
 import { getAccessToken } from "../auth/util"
 
 const navigationRef = createRef<NavigationContainerRef<any>>()
-import ForegroundEvent from "@/providers/ForegroundEvent"
 
 const MafooRouter = () => {
   const Stack = createStackNavigator()
