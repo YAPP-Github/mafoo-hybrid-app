@@ -52,6 +52,8 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
 
   const { albums: albumInfo } = useGetAlbum(id)
 
+  console.log("albumInfo", albumInfo)
+
   if (!albumInfo) {
     return
   }
@@ -189,18 +191,19 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
             </MFText>
             <View className="flex-row justify-between items-center">
               <MFText weight="SemiBold" className="text-header1 text-gray-800">
-                {albumInfo.photoCount}장
+                {albumInfo?.photoCount}장
               </MFText>
               {/* TODO: 리캡 만들기 버튼 보여지는 조건 문의 */}
-              {/* {photos.length >= 232323 && ( */}
-              <CreateRecapButton
-                type={albumInfo?.type || "HEART"}
-                onPress={() => {
-                  setIsCapture(true)
-                  setIsRecapOpen(true)
-                }}>
-                리캡 만들기
-              </CreateRecapButton>
+              {albumInfo?.photoCount?.length >= 2 && (
+                <CreateRecapButton
+                  type={albumInfo?.type || "HEART"}
+                  onPress={() => {
+                    setIsCapture(true)
+                    setIsRecapOpen(true)
+                  }}>
+                  리캡 만들기
+                </CreateRecapButton>
+              )}
             </View>
           </View>
         </View>

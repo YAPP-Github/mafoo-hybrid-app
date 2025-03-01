@@ -8,6 +8,8 @@ import { useGetProfile } from "@/profile/hooks/useProfile"
 import { requestUserPermission } from "@/utils/requestPermission"
 import { firebase } from "@react-native-firebase/messaging"
 import { usePostFcmToken } from "@/hooks/usePostFcmToken"
+import { useQueryClient } from "@tanstack/react-query"
+import { NOTIFICATIONS } from "@/constants/queryString"
 
 export interface ToggleSwitchProps {
   /** 비활성 여부 */
@@ -23,6 +25,7 @@ const ToggleSwitch = forwardRef<boolean, ToggleSwitchProps>(
   ({ disabled = false, defaultChecked }, ref) => {
     const [isEnabled, setIsEnabled] = useState(defaultChecked)
 
+    const queryClient = useQueryClient()
     const { profile } = useGetProfile()
     const { mutate: deleteMutate } = useDeleteFcmToken(profile?.memberId ?? "")
     const { mutate: postMutate } = usePostFcmToken()
@@ -50,6 +53,9 @@ const ToggleSwitch = forwardRef<boolean, ToggleSwitchProps>(
             postMutate({
               memberId: profile?.memberId!,
               fcmToken: fcmToken,
+            })
+            await queryClient.invalidateQueries({
+              queryKey: [...NOTIFICATIONS.GET_FCM_TOKEN],
             })
           }
         }

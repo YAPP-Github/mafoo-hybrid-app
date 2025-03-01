@@ -45,7 +45,7 @@ export const createFcmToken = async (
   return data
 }
 
-/** 토큰 삭제 */
+/** 토큰 삭제 - 마이페이지 알림 수신 거부 */
 export const deleteFcmToken = async (memberId: string | undefined) => {
   const data = await authorizedFetcher.delete(
     `/fcm-tokens?memberId=${memberId}`

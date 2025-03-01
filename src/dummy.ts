@@ -1,3 +1,4 @@
+import { NotificationProps } from "./album/_component/notification"
 import { GetBulkAlbumResponse } from "./api/photo"
 
 export const photo = [
@@ -193,5 +194,87 @@ export const albumList = [
     ownerProfileImageUrl: null,
     ownerSerialNumber: null,
     createdAt: "2024-12-30 14:02:37",
+  },
+]
+
+// /* props 제외 response 에서만 쓰이는 속성들 */
+export type NotificationResponse = NotificationProps & {
+  templateId: string
+}
+
+export const emptyNotifications: NotificationResponse[] = []
+
+export const notifications: NotificationResponse[] = [
+  {
+    title: "‘단짝이랑’ 앨범에 새로운 사진이 추가됐어요!",
+    body: "지금 바로 새로운 추억을 확인해보세요. 지금 바로 새로운 추억을 확인해보세요. 지금 바로 새로운 추억을 확인해보세요",
+    createdAt: "방금",
+    updatedAt: "방금",
+    notificationType: "REGULAR",
+    url: "",
+    thumbnailImageUrl: "HEART",
+    isRead: false,
+    notificationId: "",
+    templateId: "",
+    receiverMemberId: "",
+    // params: {
+    //   route: "AlbumCreate",
+    //   key: null,
+    //   hasButton: false,
+    // },
+  },
+  {
+    title: "‘단짝이랑’ 앨범에 새로운 사진이 추가됐어요!",
+    body: "지금 바로 새로운 추억을 확인해보세요.",
+    createdAt: "방금",
+    updatedAt: "방금",
+    notificationType: "REGULAR",
+    url: "",
+    thumbnailImageUrl: "HEART",
+    isRead: true,
+    notificationId: "",
+    templateId: "",
+    receiverMemberId: "",
+    // params: {
+    //   route: "AlbumCreate",
+    //   key: null,
+    //   hasButton: false,
+    // },
+  },
+  {
+    title: "‘친구들이랑’ 앨범을 공유받았어요",
+    body: "앨범 공유를 수락하시겠어요?",
+    createdAt: "방금",
+    updatedAt: "방금",
+    notificationType: "NEW_SHARED_MEMBER",
+    url: "",
+    thumbnailImageUrl: "HEART",
+    isRead: true,
+    notificationId: "",
+    templateId: "",
+    receiverMemberId: "",
+    // params: {
+    //   route: "AlbumCreate",
+    //   key: null,
+    //   hasButton: true,
+    // },
+  },
+  {
+    title: "‘농구팟’ 앨범의 리캡이 완성됐어요!",
+    body: "소중한 추억을 영상으로 확인해보세요.",
+    createdAt: "방금",
+    updatedAt: "방금",
+    notificationType: "REGULAR",
+    url: "",
+    thumbnailImageUrl: "HEART",
+    isRead: true,
+    notificationId: "",
+    templateId: "",
+    receiverMemberId: "",
+    // params: {
+    //   route: "AlbumCreate",
+    //   key: null,
+    //   hasButton: false,
+    // },
   },
 ]
