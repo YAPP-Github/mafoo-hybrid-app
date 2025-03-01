@@ -11,6 +11,7 @@ interface NotificationMenuProps {
   visible: boolean
   closeMenu: () => void
   showDeleteModal: () => void
+  readAllNotification: () => void
 }
 
 const NotificationMenuAction = {
@@ -23,6 +24,7 @@ const NotificationMenu = ({
   visible,
   closeMenu,
   showDeleteModal,
+  readAllNotification,
 }: NotificationMenuProps) => {
   const [offset, setOffset] = useState(0)
 
@@ -40,7 +42,8 @@ const NotificationMenu = ({
         closeMenu()
         break
       case NotificationMenuAction.READ:
-        readMutate()
+        readMutate(notificationIds) // 모두 읽음
+        readAllNotification() // 알림 state 변경
         closeMenu()
         break
     }
