@@ -4,6 +4,8 @@ import { PermissionLevel } from "@/api/photo"
 import Icon from "@/common/Icon"
 import { styled } from "nativewind"
 import MFText from "@/common/MFText"
+import { createExport } from "@/api/album/export"
+import { useNavigation } from "@react-navigation/native"
 
 export enum AlbumMenuAction {
   QUIT = "QUIT",
@@ -12,6 +14,7 @@ export enum AlbumMenuAction {
 }
 
 interface AlbumMenuDialogProps {
+  albumId: string
   isVisible: boolean
   myPermission: PermissionLevel
   onTapBackdrop: () => void
@@ -21,12 +24,27 @@ interface AlbumMenuDialogProps {
 const StyledPressable = styled(Pressable)
 
 const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
+  albumId,
   isVisible,
   myPermission,
   onTapBackdrop,
   onTapAction,
 }) => {
   const [offset, setOffset] = useState({ x: 0, y: 0 })
+  const navigation = useNavigation()
+
+  const handleExportAlbum = async () => {
+    console.log("앨범 게시하기", albumId)
+    await createExport(albumId)
+      .then((res) => {
+        console.log("앨범 게시하기 결과", res)
+        navigation.navigate("ExportAlbum", { exportId: res.exportId })
+      })
+      .catch((err) => {
+        console.log("앨범 게시하기 실패", err)
+        // TODO: if){"code": "AE0005", "message": "같은 앨범에 대한 앨범 내보내기가 이미 존재합니다"}인경우 exportId 찾아서 추가 라우팅
+      })
+  }
 
   return (
     <Modal transparent visible={isVisible} animationType="fade">
@@ -63,7 +81,7 @@ const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
                   className="flex flex-row items-center justify-center gap-2 py-4"
                   onPress={() => onTapAction(AlbumMenuAction.DELETE)}>
                   <Icon name="trash" size={28} color="red-500" />
-                  <MFText weight="SemiBold" className="text-body1 text-red-500">
+                  <MFText weight="SemiBold" className="text-red-500 text-body1">
                     앨범 삭제하기
                   </MFText>
                 </StyledPressable>
@@ -80,7 +98,7 @@ const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
                   <Icon name="galleryIcon" size={28} color="gray-500" />
                   <MFText
                     weight="SemiBold"
-                    className="text-body1 text-gray-600">
+                    className="text-gray-600 text-body1">
                     앨범에서 나가기
                   </MFText>
                 </StyledPressable>
@@ -92,8 +110,18 @@ const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
               className="flex flex-row items-center justify-center gap-2 py-4"
               onPress={() => {}}>
               <Icon name="albumEditPencil" size={28} color="#606A78" />
-              <MFText weight="SemiBold" className="text-body1 text-gray-600">
+              <MFText weight="SemiBold" className="text-gray-600 text-body1">
                 앨범 수정하기
+              </MFText>
+            </StyledPressable>
+            {/* FIXME: 앨범 게시하기 */}
+            <View className="h-[1px] bg-gray-200" />
+            <StyledPressable
+              className="flex flex-row items-center justify-center gap-2 py-4"
+              onPress={handleExportAlbum}>
+              <Icon name="albumEditPencil" size={28} color="#606A78" />
+              <MFText weight="SemiBold" className="text-gray-600 text-body1">
+                앨범 게시하기
               </MFText>
             </StyledPressable>
           </View>

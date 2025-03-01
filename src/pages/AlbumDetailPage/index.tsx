@@ -160,6 +160,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
       {isQuitModalShown && <Dialog {...quitDialogProps} />}
       {myPermission && (
         <AlbumMenuDialog
+          albumId={id}
           isVisible={isMenuVisible}
           myPermission={myPermission}
           onTapBackdrop={() => {

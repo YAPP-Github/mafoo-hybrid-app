@@ -21,9 +21,8 @@ export type RootStackParamList = {
 const BottomBar = ({ variant }: BottomBarProps) => {
   return (
     <View className={bottomBarVariants({ variant })}>
-      {variant === "album" && <Album />}
+      {(variant === "album" || variant === "profile") && <Album />}
       {/* {variant === "scanner" && <Scanner />}*/}
-      {variant === "profile" && <Profile />}
     </View>
   )
 }
@@ -46,7 +45,7 @@ const Album = () => {
     navigation.navigate("Profile")
   }
 
-  const isActive = (name: string) => route.name == name
+  const isActive = (name: string) => route.name === name
 
   return (
     <View className="bg-white absolute flex-row left-0 bottom-0 px-[54px] pt-[20px] z-10 w-full h-[106px]">
@@ -112,29 +111,5 @@ const Album = () => {
 //     </>
 //   )
 // }
-
-const Profile = () => {
-  const navigation = useNavigation()
-  return (
-    <>
-      <Button
-        onPress={() => navigation.navigate("Album")}
-        className="rounded-lg">
-        <View className={TAB_ITEM_CLASSNAME}>
-          <Icon name="albumBold" size={28} color={colors.gray[400]} />
-          <Text>내 앨범</Text>
-        </View>
-      </Button>
-
-      <Button
-        onPress={() => navigation.navigate("Profile")}
-        className={TAB_ITEM_CLASSNAME}
-        disabled>
-        <Icon name="userCircleBold" size={28} color={colors.gray[800]} />
-        <Text className="text-gray-800">마이</Text>
-      </Button>
-    </>
-  )
-}
 
 export default BottomBar

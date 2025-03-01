@@ -1,3 +1,4 @@
+import axios, { AxiosError } from "axios"
 import { AlbumInfo, AlbumType, PhotoInfo } from "../album/types"
 import { createFetcher, createUnauthorizedFetcher } from "./myfetch"
 
@@ -109,10 +110,19 @@ export const getAlbum = async (
 }
 
 export const getAlbums = async (): Promise<GetBulkAlbumResponse[]> => {
-  const data = await authorizedFetcher.get(`/albums`)
+  try {
+    const data = await authorizedFetcher.get(`/albums`)
 
-  console.log("getAlbums 데이터", data)
-  return data
+    console.log("getAlbums 데이터", data)
+    return data
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      console.log("error in getAlubms", err)
+      throw err.response?.data.message
+    }
+    console.log("error in getAlubms 123", err)
+    throw err
+  }
 }
 
 export const getSharedAlbum = async (

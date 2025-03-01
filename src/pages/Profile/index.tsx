@@ -8,10 +8,12 @@ import BottomBar from "@/common/BottomBar"
 
 const ProfilePage = ({ navigation }: any) => {
   return (
-    <PageContainer isCustomHeader={false} statusBarColor="#FFF7E2">
-      <Header />
-      <ListItem />
-      <BottomBar variant="profile" />
+    <PageContainer statusBarColor="#FFF7E2">
+      <View className="flex-1 bg-butter-100">
+        <Header />
+        <ListItem />
+        <BottomBar variant="profile" />
+      </View>
     </PageContainer>
   )
 }

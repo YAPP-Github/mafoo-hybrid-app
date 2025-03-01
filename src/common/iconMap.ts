@@ -42,6 +42,15 @@ const iconMap: Record<IconTypes, any> = {
   clapperBoardPlay: require("../assets/clapperBoardPlay.svg"),
   albumEditPencil: require("../assets/albumEditPencil.svg"),
   mafooCharacter1: require("../assets/mafooCharacter1.svg"),
+  checkCircleBold: require("../assets/checkCircleBold.svg"),
+  securityEye: require("../assets/securityEye.svg"),
+  heartBoldMonoColor: require("../assets/heartBoldMonoColor.svg"),
+  shareIcon: require("../assets/shareIcon.svg"),
+  galleryImageIcon: require("../assets/galleryImageIcon.svg"),
+  filledPen: require("../assets/filledPen.svg"),
+  clipboardHeart: require("../assets/clipboardHeart.svg"),
+  clipboardRemove: require("../assets/clipboardRemove.svg"),
+  closeIcon: require("../assets/closeIcon.svg"),
 }
 
 export default iconMap

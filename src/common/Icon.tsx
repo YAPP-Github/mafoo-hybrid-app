@@ -47,6 +47,14 @@ export type IconTypes =
   | "albumEditPencil"
   | "mafooLogo2025"
   | "mafooCharacter1"
+  | "securityEye"
+  | "heartBoldMonoColor"
+  | "shareIcon"
+  | "galleryImageIcon"
+  | "filledPen"
+  | "clipboardHeart"
+  | "clipboardRemove"
+  | "closeIcon"
 
 export interface IconProps {
   name: IconTypes
@@ -75,7 +83,8 @@ const Icon = ({
       height={height || size}
       color={color}
       className={cn(className, color ? `text-${color}` : "text-gray-600")}
-      style={style}></SvgIcon>
+      style={style}
+    />
   )
 }
 
