@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { View, TouchableOpacity, StyleSheet } from "react-native"
 import MasonryList from "@react-native-seoul/masonry-list"
 import { Photo } from "@/album/_component/Photo"
 import { usePhotoInfoStore } from "@/store/photo"
 import { PhotoInfo } from "@/album/types"
 import { getExportAlbumPhotos } from "@/api/album/export"
+import ImageDetail from "./ImageDetail"
 
 interface AlbumPhotosProps {
   exportId: string
@@ -12,7 +13,8 @@ interface AlbumPhotosProps {
 
 export const AlbumPhotos = ({ exportId }: AlbumPhotosProps) => {
   const [photos, setPhotos] = useState<PhotoInfo[]>([])
-
+  const [imageDetailShown, setImageDetailShown] = useState(false)
+  const carouselStartIdx = useRef(0)
   /** file, info */
   const { setPhotos: setIPhotosStore } = usePhotoInfoStore()
 
@@ -28,6 +30,15 @@ export const AlbumPhotos = ({ exportId }: AlbumPhotosProps) => {
     fetchAlbums()
   }, [exportId])
 
+  const onPhotoClick = (startIdx: number) => {
+    carouselStartIdx.current = startIdx
+    setImageDetailShown(true)
+  }
+
+  const closeImageDetail = () => {
+    setImageDetailShown(false)
+  }
+
   return (
     <View style={styles.container} className="flex-1 w-full">
       <MasonryList
@@ -38,12 +49,22 @@ export const AlbumPhotos = ({ exportId }: AlbumPhotosProps) => {
         renderItem={({ item, i }) => {
           const photo = item as PhotoInfo
           return (
-            <TouchableOpacity style={styles.photoContainer}>
+            <TouchableOpacity
+              onPress={() => onPhotoClick(i)}
+              style={styles.photoContainer}>
               <Photo photo={photo} />
             </TouchableOpacity>
           )
         }}
       />
+      {imageDetailShown && (
+        <ImageDetail
+          visible={imageDetailShown}
+          photos={photos}
+          startIdx={carouselStartIdx.current}
+          onClose={closeImageDetail}
+        />
+      )}
     </View>
   )
 }

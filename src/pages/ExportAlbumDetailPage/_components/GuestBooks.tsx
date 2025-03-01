@@ -13,7 +13,6 @@ const GuestBooks = ({ exportId }: GuestBooksProps) => {
   const [guestNotes, setGuestNotes] = useState<ExportNoteType[]>([])
 
   const fetchGuestNotes = async () => {
-    //TODO: fetch guest notes
     await getExportNote(exportId)
       .then((res) => {
         console.log(res)
@@ -38,6 +37,7 @@ const GuestBooks = ({ exportId }: GuestBooksProps) => {
               className="flex flex-col justify-between w-1/3 p-2 mb-8 rounded-xl"
               style={{
                 aspectRatio: "6/7",
+
                 backgroundColor: GUEST_WRITE_BG_COLOR[note.type],
                 transform: [{ rotate: index % 2 === 0 ? "-10deg" : "10deg" }],
               }}>
