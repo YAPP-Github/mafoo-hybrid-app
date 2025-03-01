@@ -7,6 +7,9 @@ import AlbumCreatePage from "@/pages/AlbumCreatePage"
 import ProfilePage from "@/pages/Profile"
 import ScannerPage from "@/pages/ScannerPage"
 import RecapPage from "@/pages/RecapPage"
+import ExportAlbumPage from "@/pages/ExportAlbumPage"
+import ExportAlbumDetailPage from "@/pages/ExportAlbumDetailPage"
+import ExportAlbumGuestbookWritePage from "@/pages/ExportAlbumGuestbookWritePage"
 
 export const UnprotectedRoutes = [
   {
@@ -48,6 +51,21 @@ export const ProtectedRoutes = [
     name: "Profile",
     options: {},
     component: ProfilePage,
+  },
+  {
+    name: "ExportAlbum",
+    options: {},
+    component: ExportAlbumPage,
+  },
+  {
+    name: "ExportAlbumDetailPage",
+    options: {},
+    component: ExportAlbumDetailPage,
+  },
+  {
+    name: "ExportAlbumGuestbookWritePage",
+    options: {},
+    component: ExportAlbumGuestbookWritePage,
   },
   // {
   //   name: "Introduction",
