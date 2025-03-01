@@ -11,6 +11,7 @@ import { ProtectedRoutes, UnprotectedRoutes } from "./constants"
 import Toast from "react-native-toast-message"
 import { toastConfig } from "@/styles/toastConfig"
 import { getAccessToken } from "../auth/util"
+import { useLinking } from "@/hooks/useLinking"
 
 const navigationRef = createRef<NavigationContainerRef<any>>()
 
@@ -42,6 +43,8 @@ const MafooRouter = () => {
     }
   }, [isSignedIn])
 
+  const Linking = useLinking()
+
   // 대신 early return하지 않고 로딩 UI를 보여줍니다.
   if (status === "idle") {
     return (
@@ -53,7 +56,7 @@ const MafooRouter = () => {
 
   return (
     <>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer ref={navigationRef} linking={Linking}>
         <ForegroundEvent />
         <Stack.Navigator initialRouteName={isSignedIn ? "Album" : "Home"}>
           {(isSignedIn ? ProtectedRoutes : UnprotectedRoutes).map((route) => (
