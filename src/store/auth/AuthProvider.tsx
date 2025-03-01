@@ -9,6 +9,7 @@ import React, {
 } from "react"
 
 import { getAccessToken, removeAccessToken, setAccessToken } from "./util"
+import { useNavigation } from "@react-navigation/native"
 
 export interface AuthState {
   accessToken: string | undefined | null

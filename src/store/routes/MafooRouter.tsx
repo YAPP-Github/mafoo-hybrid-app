@@ -1,52 +1,68 @@
-import { NavigationContainer } from "@react-navigation/native"
-
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import { AuthProvider } from "../auth"
 import { useAuth } from "../auth/AuthProvider"
-import { useEffect } from "react"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { ProtectedRoutes } from "./constants"
+import ForegroundEvent from "@/providers/ForegroundEvent"
+import { createRef, useEffect } from "react"
+import { View, ActivityIndicator } from "react-native"
+import { ProtectedRoutes, UnprotectedRoutes } from "./constants"
 import Toast from "react-native-toast-message"
 import { toastConfig } from "@/styles/toastConfig"
-import ForegroundEvent from "@/providers/ForegroundEvent"
+import { getAccessToken } from "../auth/util"
+
+const navigationRef = createRef<NavigationContainerRef<any>>()
 
 const MafooRouter = () => {
   const Stack = createStackNavigator()
   const { status, signIn, signOut } = useAuth()
-
   const isSignedIn = status === "signIn"
 
   useEffect(() => {
     const restoreSession = async () => {
-      let token
-
       try {
-        token = await AsyncStorage.getItem("token")
+        const token = await getAccessToken()
         if (!token) {
           throw new Error("No token")
         }
         signIn(token)
       } catch (e) {
-        // failed to restore token
+        console.log("failed to restore token, will signout", e)
         signOut()
       }
     }
-
     restoreSession()
   }, [signIn, signOut])
 
+  useEffect(() => {
+    console.log("isSignedIn", isSignedIn)
+    if (!isSignedIn && navigationRef.current) {
+      navigationRef.current.navigate("Home")
+    }
+  }, [isSignedIn])
+
+  // 대신 early return하지 않고 로딩 UI를 보여줍니다.
+  if (status === "idle") {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
+
   return (
-    <AuthProvider>
-      <NavigationContainer>
+    <>
+      <NavigationContainer ref={navigationRef}>
         <ForegroundEvent />
         <Stack.Navigator initialRouteName={isSignedIn ? "Album" : "Home"}>
-          {(isSignedIn ? ProtectedRoutes : ProtectedRoutes).map((route) => (
+          {(isSignedIn ? ProtectedRoutes : UnprotectedRoutes).map((route) => (
             <Stack.Screen
               key={route.name}
               name={route.name}
               component={route.component}
               options={{
-                ...route?.options,
+                ...route.options,
                 title: route.name,
                 headerShown: false,
               }}
@@ -55,7 +71,7 @@ const MafooRouter = () => {
         </Stack.Navigator>
       </NavigationContainer>
       <Toast config={toastConfig} />
-    </AuthProvider>
+    </>
   )
 }
 
