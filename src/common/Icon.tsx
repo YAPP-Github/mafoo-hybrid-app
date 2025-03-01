@@ -49,6 +49,12 @@ export type IconTypes =
   | "mafooCharacter1"
   | "securityEye"
   | "heartBoldMonoColor"
+  | "shareIcon"
+  | "galleryImageIcon"
+  | "filledPen"
+  | "clipboardHeart"
+  | "clipboardRemove"
+  | "closeIcon"
 
 export interface IconProps {
   name: IconTypes
