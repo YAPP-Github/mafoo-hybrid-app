@@ -7,4 +7,21 @@ export type RootStackParamList = {
   Frame?: { albumInfo: AlbumInfo }
   Album: undefined
   Notification: undefined
+  Home: undefined
+  AlbumCreate: undefined
+  Profile: undefined | {}
+  AlbumDetail: { albumId: string } | undefined
 }
+
+export const NAVIGATION_PAGE = [
+  "AddFriend",
+  "SharedFriend",
+  "Recap",
+  "Frame",
+  "Album",
+  "Notification",
+  "Home",
+  "AlbumCreate",
+  "Profile",
+  "AlbumDetail",
+]

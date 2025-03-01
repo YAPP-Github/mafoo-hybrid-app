@@ -1,73 +1,92 @@
-import Notification, {
-  NotificationProps,
-} from "@/album/_component/notification"
+import { useRef, useState } from "react"
+import { ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { Dialog } from "@/album/_component/Dialog"
+import Notification from "@/album/_component/notification"
 import NotificationHeader from "@/album/_component/notification/NotificationHeader"
+import NotificationMenu from "@/album/_component/notification/NotificationMenu"
+import Icon from "@/common/Icon"
+import MFText from "@/common/MFText"
 import PageContainer from "@/common/PageContainer"
-import { View } from "react-native"
-import { FlatList } from "react-native-gesture-handler"
-
-type NotificationResponse = NotificationProps & {
-  createdAt: string
-}
-
-const notifications: NotificationResponse[] = [
-  {
-    title: "‘단짝이랑’ 앨범에 새로운 사진이 추가됐어요!",
-    body: "지금 바로 새로운 추억을 확인해보세요. 지금 바로 새로운 추억을 확인해보세요. 지금 바로 새로운 추억을 확인해보세요",
-    createdAt: "방금", // TODO: 읽은 시간 계산하는 로직 추가
-    notificationType: "PHOTO_ADDED",
-    params: {},
-    albumType: "FIRE",
-    read: false,
-    highlight: false,
-  },
-  {
-    title: "‘단짝이랑’ 앨범에 새로운 사진이 추가됐어요!",
-    body: "지금 바로 새로운 추억을 확인해보세요.",
-    createdAt: "방금",
-    notificationType: "PHOTO_ADDED",
-    params: {},
-    albumType: "HEART", // TODO: 아이콘 세팅
-    read: true,
-    highlight: false,
-  },
-  {
-    title: "‘친구들이랑’ 앨범을 공유받았어요",
-    body: "앨범 공유를 수락하시겠어요?",
-    createdAt: "방금",
-    notificationType: "ALBUM_ACCEPT",
-    params: {},
-    albumType: "FIRE",
-    read: true,
-    highlight: false,
-  },
-  {
-    title: "‘농구팟’ 앨범의 리캡이 완성됐어요!",
-    body: "소중한 추억을 영상으로 확인해보세요.",
-    createdAt: "방금",
-    notificationType: "PHOTO_ADDED",
-    params: {},
-    albumType: "BASKETBALL",
-    read: true,
-    highlight: false,
-  },
-]
+import { useGetNotification } from "@/hooks/useNotification"
+import { useGetProfile } from "@/profile/hooks/useProfile"
+import { useDeleteNotification } from "@/hooks/useDeleteNotification"
 
 const NotificationPage = () => {
-  const onTapMenu = () => {}
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
+
+  const onTapMenu = () => setMenuOpen(true)
+
+  const { profile } = useGetProfile()
+
+  const { notifications } = useGetNotification(profile?.memberId)
+
+  const notificationIds = notifications.map(
+    (notification) => notification.notificationId
+  )
+
+  const { mutate: deleteMutate } = useDeleteNotification(
+    profile?.memberId ?? "",
+    notificationIds,
+    () => setIsDeleteModalShown(false)
+  )
+
+  const deleteDialogProps = {
+    title: `정말 알림을 모두 삭제할까요?`,
+    confirmBtnContext: "네",
+    onClose: () => {
+      setIsDeleteModalShown(false)
+    },
+    onConfirm: deleteMutate,
+    visible: isDeleteModalShown,
+  }
+
+  const readAllNotification = () => {
+    readNotificationFnRef.current?.readAllNotification()
+  }
+
+  const readNotificationFnRef = useRef<{ readAllNotification: () => void }>(
+    null
+  )
+
+  console.log("notifications", notifications)
 
   return (
     <PageContainer headerProps={{ title: "Notification" }}>
       <View className="flex-1">
         <NotificationHeader onTapMenu={onTapMenu} />
-        <View className="flex-1 flex-col px-[16px] py-[12px]">
-          <FlatList
-            data={notifications}
-            keyExtractor={(item, index) => item.createdAt + index}
-            renderItem={({ item }) => <Notification {...item} />}
-          />
-        </View>
+        {notifications.length ? (
+          <ScrollView className="flex-1 flex-col px-[16px] py-[12px]">
+            {notifications.map(({ key, ...item }, index) => (
+              <Notification
+                key={`${item.notificationId}-${index}`}
+                {...item}
+                paramKey={key}
+                ref={readNotificationFnRef}
+              />
+            ))}
+          </ScrollView>
+        ) : (
+          <View className="flex-1 bg-gray-50 flex-col items-center">
+            <View className="mt-[180px] flex-col items-center">
+              <Icon name="emptyAlarmBell" size={64} />
+              <MFText
+                weight="SemiBold"
+                className="text-title2 text-gray-400 mt-[28px]">
+                아직 알림이 오지 않았어요.
+              </MFText>
+            </View>
+          </View>
+        )}
       </View>
+      <NotificationMenu
+        notificationIds={notificationIds}
+        visible={menuOpen}
+        closeMenu={() => setMenuOpen(false)}
+        readAllNotification={readAllNotification}
+        showDeleteModal={() => setIsDeleteModalShown(true)}
+      />
+      {isDeleteModalShown && <Dialog {...deleteDialogProps} />}
     </PageContainer>
   )
 }
