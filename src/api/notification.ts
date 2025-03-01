@@ -2,6 +2,7 @@
 
 import { NotificationsType } from "@/types/notifications"
 import { createFetcher } from "./myfetch"
+import { NotificationProps, params } from "@/album/_component/notification"
 
 export interface NotificationUrl {
   thumbnailImageUrl: string
@@ -40,7 +41,7 @@ const authorizedFetcher = createFetcher("user/v1")
 /** 알림 목록 조회 */
 export const getNotificationList = async (
   memberId: string | undefined
-): Promise<LocalNotification[]> => {
+): Promise<(NotificationProps & params)[]> => {
   const data = await authorizedFetcher.get(
     `/notifications?memberId=${memberId}`
   )
