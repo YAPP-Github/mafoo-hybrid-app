@@ -59,21 +59,6 @@ export const LIST_ITEM_INFO: ListItemProps[] = [
       {
         label: "알림 수신",
         icon: "switch",
-        action: () => {
-          Alert.alert("알림 수신", "알림 수신2", [
-            {
-              text: "닫기",
-              style: "cancel",
-            },
-            {
-              text: "로그아웃",
-              onPress: () => {
-                // signOut()
-                console.log("sign out")
-              },
-            },
-          ])
-        },
       },
       {
         label: "로그아웃",
