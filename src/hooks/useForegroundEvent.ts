@@ -1,11 +1,11 @@
 import notifee, { EventType } from "@notifee/react-native"
 import { NavigationProp, useNavigation } from "@react-navigation/native"
 import { useEffect } from "react"
-import { RootStackParamList } from "./usePostAlbum"
 import { useGetProfile } from "@/profile/hooks/useProfile"
 import { useReadNotification } from "./useReadNotification"
 import { fcmNotificationParams } from "@/types/notifications"
 import { fcmNotification } from "./useForegroundMessage"
+import { RootStackParamList } from "@/types/routeParams"
 
 /**
  * foreground 푸시 알림 이벤트 수신 핸들러
