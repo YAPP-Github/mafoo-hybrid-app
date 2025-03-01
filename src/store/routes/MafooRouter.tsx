@@ -12,6 +12,7 @@ import Toast from "react-native-toast-message"
 import { toastConfig } from "@/styles/toastConfig"
 import { getAccessToken } from "../auth/util"
 import { useLinking } from "@/hooks/useLinking"
+import BackgroundAndQuitEvent from "@/providers/BackgroundAndQuitEvent"
 
 const navigationRef = createRef<NavigationContainerRef<any>>()
 
@@ -19,6 +20,8 @@ const MafooRouter = () => {
   const Stack = createStackNavigator()
   const { status, signIn, signOut } = useAuth()
   const isSignedIn = status === "signIn"
+
+  console.log("mafoo router status", status)
 
   useEffect(() => {
     const restoreSession = async () => {
@@ -58,6 +61,7 @@ const MafooRouter = () => {
     <>
       <NavigationContainer ref={navigationRef} linking={Linking}>
         <ForegroundEvent />
+        <BackgroundAndQuitEvent />
         <Stack.Navigator initialRouteName={isSignedIn ? "Album" : "Home"}>
           {(isSignedIn ? ProtectedRoutes : UnprotectedRoutes).map((route) => (
             <Stack.Screen
