@@ -13,6 +13,7 @@ export interface MemberSearchResult {
 }
 
 const memberInstance = createFetcher("user/v1")
+const removeInstance = createFetcher("photo/v1")
 
 export const searchMembers = async (
   query: string,
@@ -25,6 +26,18 @@ export const searchMembers = async (
   } catch (err) {
     throw err
   }
+}
+
+export const withDrawMember = async () => {
+  return await removeInstance
+    .delete("/member-data")
+    .then((res) => {
+      console.log(res)
+      return res
+    })
+    .catch((err) => {
+      throw err
+    })
 }
 
 // export const searchMembers = async (
