@@ -24,6 +24,7 @@ const ItemType = "ALBUM"
 
 export type RootStackParamList = {
   AlbumDetail: { albumId: string } | undefined
+  Recap: { recapUrl: string }
 }
 
 const DraggableAlbum = ({ album, showNewRing }: AlbumItemProps) => {

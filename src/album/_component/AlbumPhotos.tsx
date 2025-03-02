@@ -11,7 +11,7 @@ import { AlbumInfo, PhotoInfo } from "../types"
 import ImageDetail from "./ImageDetail"
 import { Photo } from "./Photo"
 import { PhotoAddButton } from "./PhotoAddButton"
-import { usePhotoAssetStore, usePhotoInfoStore } from "@/store/photo"
+import { usePhotoInfoStore } from "@/store/photo"
 import { useQueryClient } from "@tanstack/react-query"
 
 interface AlbumPhotosProps {
