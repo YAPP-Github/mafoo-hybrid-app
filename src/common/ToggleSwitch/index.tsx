@@ -54,9 +54,6 @@ const ToggleSwitch = forwardRef<boolean, ToggleSwitchProps>(
               memberId: profile?.memberId!,
               fcmToken: fcmToken,
             })
-            await queryClient.invalidateQueries({
-              queryKey: [...NOTIFICATIONS.GET_FCM_TOKEN],
-            })
           }
         } else {
           console.log("memberId", profile?.memberId)

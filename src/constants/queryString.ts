@@ -7,3 +7,7 @@ export const NOTIFICATIONS = {
   DELETE_FCM_TOKEN: ["deleteFcmToken"],
   GET_FCM_TOKEN: ["getFcmToken"],
 }
+
+export const PROFILE = {
+  GET_PROFILE: ["getProfile"],
+}

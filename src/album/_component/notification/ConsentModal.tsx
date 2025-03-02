@@ -13,6 +13,8 @@ import LinearGradient from "react-native-linear-gradient"
 import Icon from "@/common/Icon"
 import { RedDot } from "@/album/_component/notification"
 import { usePostFcmToken } from "@/hooks/usePostFcmToken"
+import { useQueryClient } from "@tanstack/react-query"
+import { PROFILE } from "@/constants/queryString"
 
 export interface ConsentModalProps {
   visible: boolean
@@ -30,6 +32,8 @@ const ConsentModal = ({ visible, closeConsentModal }: ConsentModalProps) => {
     navigation.navigate("Notification")
   }
 
+  const queryClient = useQueryClient()
+
   const { mutate } = usePostFcmToken(onSuccess)
 
   const onPress = async () => {
@@ -40,10 +44,12 @@ const ConsentModal = ({ visible, closeConsentModal }: ConsentModalProps) => {
       if (granted) {
         const fcmToken = await firebase.messaging().getToken()
         if (fcmToken) {
-          console.log("fcmToken")
           mutate({
             memberId: profile?.memberId!,
             fcmToken: fcmToken,
+          })
+          await queryClient.invalidateQueries({
+            queryKey: [...PROFILE.GET_PROFILE],
           })
         }
       }

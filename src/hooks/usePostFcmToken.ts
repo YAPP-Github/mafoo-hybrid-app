@@ -1,7 +1,10 @@
 import { createFcmToken } from "@/api/fcm"
-import { useMutation } from "@tanstack/react-query"
+import { PROFILE } from "@/constants/queryString"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const usePostFcmToken = (onSuccessHandler?: () => void) => {
+  const queryClient = useQueryClient()
+
   const { mutate } = useMutation({
     mutationKey: ["postFcmToken"],
     mutationFn: ({
@@ -11,7 +14,10 @@ export const usePostFcmToken = (onSuccessHandler?: () => void) => {
       memberId: string
       fcmToken: string
     }) => createFcmToken(memberId, fcmToken),
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [...PROFILE.GET_PROFILE],
+      })
       onSuccessHandler && onSuccessHandler()
     },
     onError: () => {},
