@@ -16,6 +16,7 @@
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.4.0",
     "@react-native-async-storage/async-storage": "^2.1.0",
+    "@react-native-camera-roll/camera-roll": "^7.9.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-seoul/kakao-login": "^5.4.1",
     "@react-native-seoul/masonry-list": "^1.4.2",
@@ -32,6 +33,7 @@
     "react-native-camera-kit": "^14.1.0",
     "react-native-device-info": "^11.1.0",
     "react-native-dotenv": "^3.4.11",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.21.2",
     "react-native-image-picker": "^7.2.3",
     "react-native-linear-gradient": "^2.8.3",
