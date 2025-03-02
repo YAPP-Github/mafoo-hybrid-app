@@ -12,7 +12,7 @@ import { PhotoInfo } from "../types"
 import SquareButton from "@/common/SquareButton"
 import MFText from "@/common/MFText"
 import { useQueryClient } from "@tanstack/react-query"
-import { photo } from "@/dummy"
+import { onSaveGallery } from "@/utils/onSaveToGallery"
 
 interface ImageDetailProps {
   photos: PhotoInfo[]
@@ -91,7 +91,11 @@ const ImageDetail = ({
 
           {/* Footer */}
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.downloadButton}>
+            <TouchableOpacity
+              style={styles.downloadButton}
+              onPress={() =>
+                onSaveGallery(photos[idx]?.photoUrl, photos[idx]?.photoId)
+              }>
               <Text style={styles.downloadText}>다운로드 받기</Text>
             </TouchableOpacity>
           </View>
