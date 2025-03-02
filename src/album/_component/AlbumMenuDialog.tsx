@@ -35,6 +35,7 @@ const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
 
   const handleExportAlbum = async () => {
     console.log("앨범 게시하기", albumId)
+    onTapBackdrop()
     await createExport(albumId)
       .then((res) => {
         console.log("앨범 게시하기 결과", res)
@@ -85,7 +86,6 @@ const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
                     앨범 삭제하기
                   </MFText>
                 </StyledPressable>
-                <View className="h-[1px] bg-gray-200" />
               </>
             )}
             {/* 친구 목록에서 권한 넘겨야 앨범에서 나가기 보임 */}
