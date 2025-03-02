@@ -39,11 +39,14 @@ export type AlbumDetailPageProps = {
 
 const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const { albumId: id } = route.params
-  const profile = useGetProfile()
+
+  console.log("albumId", id)
+
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
   const [isRecapOpen, setIsRecapOpen] = useState(false)
+  const [isCapture, setIsCapture] = useState(false)
 
   // 앨범 삭제 여부
   const [isDelete, setIsDelete] = useState(false)
@@ -51,10 +54,10 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const queryClient = useQueryClient()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
-  const [isCapture, setIsCapture] = useState(false)
-
   // 호출하기 전에 먼저 삭제되었는지 여부 확인
   const { albums: albumInfo } = useGetAlbum(id, isDelete)
+
+  const { profile } = useGetProfile()
 
   console.log("albumInfo", albumInfo)
 
@@ -73,9 +76,10 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     name: albumInfo.ownerName ?? "",
     serialNumber: "0000",
   }
-  const isOwner = albumInfo.ownerMemberId === profile.profile?.memberId
+
+  const isOwner = albumInfo.ownerMemberId === profile?.memberId
   const me = sharedMembers.find(
-    (member) => member.memberId === profile.profile?.memberId
+    (member) => member.memberId === profile?.memberId
   )
   const myPermission = isOwner ? PermissionLevel.OWNER : me?.permissionLevel
   const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
@@ -220,9 +224,11 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
       {/*myPermission*/}
       {isCapture && (
         <Frame
+          userName={profile?.name || "user"}
           type={albumInfo?.type || "HEART"}
           setUpload={setIsRecapOpen}
           albumId={id}
+          albumName={albumInfo?.name}
         />
       )}
       <VideoLoading

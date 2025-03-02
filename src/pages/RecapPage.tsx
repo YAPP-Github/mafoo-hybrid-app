@@ -5,35 +5,50 @@ import { recapColorLinearGradient } from "@/styles/variants"
 import { SafeAreaView, TouchableOpacity, View } from "react-native"
 import Video, { VideoRef } from "react-native-video"
 import LinearGradient from "react-native-linear-gradient"
+import RecapVideoSample from "../assets/recapSampleVideo.mp4"
+
+interface RecapPageProps {
+  route: {
+    params: {
+      recapUrl: string
+    }
+  }
+}
 
 // VideoPlayer Page
-const RecapPage = () => {
+const RecapPage = ({ route }: RecapPageProps) => {
   const videoRef = useRef<VideoRef>(null)
 
-  const onBuffer = () => console.log("onBuffer")
+  const recapUrl = route?.params?.recapUrl ?? null
 
-  const onError = () => console.log("onError")
+  const onBuffer = () => {
+    console.log("onBuffer")
+  }
+
+  const onError = (e: any) => console.log("onError ee", console.error(e))
 
   return (
     <SafeAreaView className="flex-1 bg-black">
       <View className="flex-1 bg-black text-sumone-white mt-[10px]">
         {/* Video Container */}
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "white",
-            borderRadius: 24,
-          }}>
-          <View className="z-10 flex-col">
+        <View className="flex-1 bg-white rounded-[24px] z-10">
+          <View className="flex-col flex-1 z-5 rounded-[24px]">
             <Video
-              source={{
-                uri: "", // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-              }}
-              // ref={videoRef}
+              source={
+                recapUrl && recapUrl?.length > 0
+                  ? {
+                      uri: route?.params?.recapUrl,
+                      headers: { Pragma: "no-cache" },
+                    }
+                  : require("../assets/recapSampleVideo.mp4")
+              }
+              ref={videoRef}
               onBuffer={onBuffer} // callback when remote video is buffering
+              onLoad={(e) => console.log("onLoad", e)}
               onError={onError} // callback when video cannot be loaded
               resizeMode="cover"
-              style={{ flex: 1 }}
+              repeat
+              style={{ flex: 1, borderRadius: 24 }}
             />
           </View>
         </View>
