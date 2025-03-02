@@ -21,17 +21,11 @@ import { authorizedFetcher, getPresignedUrls } from "@/api/presignedUrl"
 
 export interface FrameType {
   type: AlbumType
-  userData: ObjectedParams
   setUpload: (data: boolean) => void
   albumId: string
 }
 
-const Frame = ({
-  type,
-  userData,
-  setUpload,
-  albumId: albumIdProps,
-}: FrameType) => {
+const Frame = ({ type, setUpload, albumId: albumIdProps }: FrameType) => {
   const viewRef = useRef<any>()
   const imageRef = useRef<any>()
   const { photos: photoInfo } = usePhotoInfoStore()
@@ -136,20 +130,19 @@ const Frame = ({
       // })
       setCurrentPhoto(photoInfo[index].photoUrl)
 
-      await new Promise((resolve) => setTimeout(resolve, 500)) // 이게 같은 값이 나옴.
+      await new Promise((resolve) => setTimeout(resolve, 500))
 
       const uri = await captureRef(viewRef, {
-        format: "png",
+        format: "jpg",
         quality: 0.8,
         result: "base64", // base64 인코딩
       })
       dataUrls.push(`data:image/jpeg;base64,${uri}`)
 
-      console.log("dataUrls")
-      //  console.log(`data:image/jpeg;base64,${uri}`)
+      //console.log(`data:image/jpeg;base64,${uri}`)
     }
 
-    console.log("handleRecapFramedPhoto")
+    // console.log("handleRecapFramedPhoto")
     handleRecapFramedPhoto(dataUrls)
   }
 
@@ -195,6 +188,7 @@ const Frame = ({
             <Icon name="mafooLogo" color="white" size={64} />
           </View>
         </View>
+        {/* 사진 */}
         <Image
           ref={imageRef}
           resizeMode="center"
