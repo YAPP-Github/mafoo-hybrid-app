@@ -29,11 +29,9 @@ const AlbumsPage = ({ navigation }: any) => {
 
   const { profile } = useGetProfile()
 
-  const { tokenList } = useGetFcmToken(profile?.memberId)
-
   const onPress = () => {
     /** 이미 등록된 토큰이 있는 경우, 알림함 진입 */
-    if (tokenList.length) navigation.navigate("Notification")
+    if (profile?.fcmToken) navigation.navigate("Notification")
     else setOpenConsent(true)
   }
 
