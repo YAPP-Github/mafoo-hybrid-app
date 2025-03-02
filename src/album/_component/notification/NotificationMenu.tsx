@@ -8,6 +8,7 @@ import { Modal, TouchableOpacity, View } from "react-native"
 
 interface NotificationMenuProps {
   notificationIds: string[]
+  unReadNotificationIds: string[]
   visible: boolean
   closeMenu: () => void
   showDeleteModal: () => void
@@ -21,6 +22,7 @@ const NotificationMenuAction = {
 
 const NotificationMenu = ({
   notificationIds,
+  unReadNotificationIds,
   visible,
   closeMenu,
   showDeleteModal,
@@ -32,7 +34,7 @@ const NotificationMenu = ({
 
   const { mutate: readMutate } = useReadNotification(
     profile?.memberId ?? "",
-    notificationIds
+    unReadNotificationIds
   )
 
   const onTapAction = (action: keyof typeof NotificationMenuAction) => {
@@ -42,7 +44,7 @@ const NotificationMenu = ({
         closeMenu()
         break
       case NotificationMenuAction.READ:
-        readMutate(notificationIds) // 모두 읽음
+        if (unReadNotificationIds?.length > 0) readMutate(notificationIds) // 모두 읽음
         readAllNotification() // 알림 state 변경
         closeMenu()
         break
