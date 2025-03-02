@@ -28,8 +28,6 @@ const ListItem = () => {
 
   const { profile } = useGetProfile()
 
-  const { tokenList } = useGetFcmToken(profile?.memberId)
-
   const handleClick = async (item: ItemButtonType) => {
     if (item.action) {
       await item.action()
@@ -66,7 +64,7 @@ const ListItem = () => {
                   <Icon name="arrowRight" size={24} color="gray-500" />
                 )}
                 {item.icon === "switch" && (
-                  <ToggleSwitch defaultChecked={!!tokenList?.length} />
+                  <ToggleSwitch defaultChecked={!!profile?.fcmToken} />
                 )}
               </View>
             </TouchableOpacity>
