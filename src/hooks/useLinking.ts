@@ -61,10 +61,10 @@ export const useLinking = (): LinkingOptions<RootStackParamList> => {
 
       console.log("useLinking foreground", message)
 
-      const params = message?.data?.params as DeepLinkUrl
+      const data = message?.data as DeepLinkUrl
 
       // fcm 을 통해서 들어온게 아닌 경우 (앱 아이콘으로 들어온 경우)
-      if (!message || (!message?.data && !params)) {
+      if (!message || (!message?.data && !data)) {
         console.log(
           "앱 아이콘 클릭",
           isSignedIn ? "mafoo://Album" : "mafoo://Home"
@@ -74,9 +74,9 @@ export const useLinking = (): LinkingOptions<RootStackParamList> => {
 
       // quit: 푸시 알림으로 열렸을 때
       // 여기서 직접 이동하지 말고 null 리턴, storage에 저장.
-      if (params) {
-        console.log("params", params, "store 저장")
-        setDeepLink(params)
+      if (data) {
+        console.log("data", data, "store 저장")
+        setDeepLink(data)
       }
     },
     subscribe(listener: (url: string) => void) {
@@ -90,11 +90,13 @@ export const useLinking = (): LinkingOptions<RootStackParamList> => {
         (remoteMessage) => {
           console.log("background", remoteMessage)
 
-          const params = remoteMessage?.data?.params as DeepLinkUrl
+          const data = remoteMessage?.data as DeepLinkUrl
 
-          if (params) {
-            console.log("params", params, "store 저장")
-            setDeepLink(params)
+          console.log("params", data)
+
+          if (data) {
+            console.log("data", data, "store 저장")
+            setDeepLink(data)
           }
         }
       )
