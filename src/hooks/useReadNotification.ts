@@ -14,8 +14,6 @@ export const useReadNotification = (
 ) => {
   const queryClient = useQueryClient()
 
-  console.log("useread notificationIds", notificationIds)
-
   const { mutate } = useMutation({
     mutationKey: [...NOTIFICATIONS.READ_NOTIFICATIONS],
     mutationFn: (notificationIds: string[]) =>
