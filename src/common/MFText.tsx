@@ -1,4 +1,4 @@
-import React from "react"
+import { useMemo } from "react"
 import { Text as RNText, TextProps } from "react-native"
 
 interface CustomTextProps extends TextProps {
@@ -17,10 +17,12 @@ interface CustomTextProps extends TextProps {
 }
 
 const MFText = ({ style, weight = "Regular", ...rest }: CustomTextProps) => {
-  const customStyle = {
-    fontFamily: `Pretendard-${weight}`,
-    color: "#000000",
-  }
+  const customStyle = useMemo(() => {
+    return {
+      fontFamily: `Pretendard-${weight}`,
+      color: "#000000",
+    }
+  }, [weight])
 
   return <RNText style={[customStyle, style]} {...rest} />
 }

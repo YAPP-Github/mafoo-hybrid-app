@@ -62,7 +62,12 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
         // Edit 모드
         <>
           <TextInput
-            className="text-header1 w-full rounded-lg bg-gray-100 py-2 px-3 caret-gray-600"
+            style={{
+              fontFamily: "Pretendard-Semibold",
+              fontWeight: 700,
+              lineHeight: 36.4,
+            }}
+            className="text-header1 w-full rounded-lg bg-gray-100 py-2 px-3 text-gray-400"
             value={name}
             onChangeText={handleName}
             placeholder="새 앨범"
