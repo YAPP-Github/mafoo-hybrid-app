@@ -1,5 +1,5 @@
 import { useRef, useState } from "react"
-import { ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { ScrollView, View } from "react-native"
 import { Dialog } from "@/album/_component/Dialog"
 import Notification from "@/album/_component/notification"
 import NotificationHeader from "@/album/_component/notification/NotificationHeader"
@@ -24,6 +24,10 @@ const NotificationPage = () => {
   const notificationIds = notifications.map(
     (notification) => notification.notificationId
   )
+
+  const unReadNotificationIds = notifications
+    ?.filter((notification) => !notification?.isRead)
+    ?.map((notification) => notification.notificationId)
 
   const { mutate: deleteMutate } = useDeleteNotification(
     profile?.memberId ?? "",
@@ -57,11 +61,11 @@ const NotificationPage = () => {
         <NotificationHeader onTapMenu={onTapMenu} />
         {notifications.length ? (
           <ScrollView className="flex-1 flex-col px-[16px] py-[12px]">
-            {notifications.map(({ key, ...item }, index) => (
+            {notifications.map(({ paramKey, ...item }, index) => (
               <Notification
-                key={`${item.notificationId}-${index}`}
                 {...item}
-                paramKey={key}
+                key={`${item.notificationId}-${index}`}
+                paramKey={paramKey}
                 ref={readNotificationFnRef}
               />
             ))}
@@ -81,6 +85,7 @@ const NotificationPage = () => {
       </View>
       <NotificationMenu
         notificationIds={notificationIds}
+        unReadNotificationIds={unReadNotificationIds}
         visible={menuOpen}
         closeMenu={() => setMenuOpen(false)}
         readAllNotification={readAllNotification}
