@@ -5,6 +5,7 @@ import { useGetProfile } from "@/profile/hooks/useProfile"
 import { styled } from "nativewind"
 import { useState } from "react"
 import { Modal, TouchableOpacity, View } from "react-native"
+import { NotificationProps } from "."
 
 interface NotificationMenuProps {
   notificationIds: string[]
@@ -21,8 +22,8 @@ const NotificationMenuAction = {
 } as const
 
 const NotificationMenu = ({
-  notificationIds,
   unReadNotificationIds,
+  notificationIds,
   visible,
   closeMenu,
   showDeleteModal,
@@ -44,7 +45,7 @@ const NotificationMenu = ({
         closeMenu()
         break
       case NotificationMenuAction.READ:
-        if (unReadNotificationIds?.length > 0) readMutate(notificationIds) // 모두 읽음
+        if (unReadNotificationIds?.length > 0) readMutate(unReadNotificationIds) // 모두 읽음
         readAllNotification() // 알림 state 변경
         closeMenu()
         break

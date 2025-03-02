@@ -17,7 +17,7 @@ import { AlbumType } from "@/album/types"
 import { getRouteParams } from "@/hooks/useForegroundEvent"
 
 // 알림함 목록 조회 notification response 와 동일
-export interface NotificationProps extends paramsKey {
+export interface NotificationProps extends params {
   title: string
   body: string
   isRead: boolean
@@ -32,16 +32,11 @@ export interface NotificationProps extends paramsKey {
 
 const albumType = "HEART"
 
-export type paramsKey = {
-  buttonType: boolean | null
+export type params = {
+  /* buttonType, paramKey: 알림함에서는 없으면 null, 시스템 노티는 key가 없음 */
+  buttonType: "INVITATION_ACCEPT" | null
   route: keyof RootStackParamList
   paramKey: string | null
-}
-
-export type params = {
-  buttonType: boolean | null
-  route: keyof RootStackParamList
-  key: string | null
 }
 
 const Notification = React.forwardRef(
@@ -88,10 +83,7 @@ const Notification = React.forwardRef(
         setRead(true)
         mutate([notificationId])
       }
-      navigation.navigate(
-        route as any,
-        getRouteParams({ route, key: paramKey })
-      )
+      navigation.navigate(route as any, getRouteParams({ route, paramKey }))
     }
 
     return (
@@ -136,7 +128,7 @@ const Notification = React.forwardRef(
                 </MFText>
               </SquareButton>
             )}
-            {!read && <RedDot className="" />}
+            {!isRead && <RedDot className="" />}
           </View>
         </View>
       </TouchableOpacity>

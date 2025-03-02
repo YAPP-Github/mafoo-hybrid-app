@@ -67,6 +67,7 @@ const NotificationPage = () => {
                 key={`${item.notificationId}-${index}`}
                 paramKey={paramKey}
                 ref={readNotificationFnRef}
+                {...item}
               />
             ))}
           </ScrollView>
