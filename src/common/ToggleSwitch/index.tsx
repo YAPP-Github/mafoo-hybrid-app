@@ -46,7 +46,7 @@ const ToggleSwitch = forwardRef<boolean, ToggleSwitchProps>(
         const granted = await requestUserPermission()
         console.log("granted", granted)
 
-        if (granted) {
+        if (granted && profile?.memberId) {
           const fcmToken = await firebase.messaging().getToken()
           if (fcmToken) {
             console.log("fcmToken")
@@ -58,6 +58,8 @@ const ToggleSwitch = forwardRef<boolean, ToggleSwitchProps>(
               queryKey: [...NOTIFICATIONS.GET_FCM_TOKEN],
             })
           }
+        } else {
+          console.log("memberId", profile?.memberId)
         }
       } catch (e) {
         console.error(e)

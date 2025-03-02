@@ -49,7 +49,7 @@ export const useBackgroundAndQuitEvent = () => {
           console.error(e)
         }
       } else {
-        console.error("Cannot open url:", deepLink)
+        console.log("Cannot open url:", deepLink)
       }
     }
     openDeepLinkUrl()
