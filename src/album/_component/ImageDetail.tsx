@@ -12,6 +12,7 @@ import { PhotoInfo } from "../types"
 import SquareButton from "@/common/SquareButton"
 import MFText from "@/common/MFText"
 import { useQueryClient } from "@tanstack/react-query"
+import { photo } from "@/dummy"
 
 interface ImageDetailProps {
   photos: PhotoInfo[]
@@ -54,6 +55,8 @@ const ImageDetail = ({
   const handleImageClick = () => {
     setIsZoomed(true)
   }
+
+  if (!photos[startIdx]?.photoUrl) return
 
   return (
     <>
