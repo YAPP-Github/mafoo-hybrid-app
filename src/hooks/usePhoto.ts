@@ -33,11 +33,11 @@ export const usePostQrCode = () => {
 }
 
 /** AlbumDetailPage: AlbumInfo 조회 */
-export const useGetAlbum = (id: string) => {
+export const useGetAlbum = (id: string, isDelete: boolean) => {
   const { data } = useQuery({
     queryKey: ["getAlbum", id], // id가 변경되면 새로운 데이터 요청
     queryFn: () => getAlbum(id),
-    enabled: !!id, // id가 없으면 요청 X
+    enabled: !isDelete, // isDelete가 true면 요청 x
   })
 
   return {
@@ -52,7 +52,7 @@ export const useGetAlbums = () => {
   })
 
   return {
-    albums: data,
+    albums: data ?? [],
     albumLength: data?.length,
   }
 }

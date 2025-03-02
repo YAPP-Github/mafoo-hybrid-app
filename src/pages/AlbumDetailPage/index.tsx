@@ -45,12 +45,16 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
   const [isRecapOpen, setIsRecapOpen] = useState(false)
 
+  // 앨범 삭제 여부
+  const [isDelete, setIsDelete] = useState(false)
+
   const queryClient = useQueryClient()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
   const [isCapture, setIsCapture] = useState(false)
 
-  const { albums: albumInfo } = useGetAlbum(id)
+  // 호출하기 전에 먼저 삭제되었는지 여부 확인
+  const { albums: albumInfo } = useGetAlbum(id, isDelete)
 
   console.log("albumInfo", albumInfo)
 
@@ -73,13 +77,19 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const me = sharedMembers.find(
     (member) => member.memberId === profile.profile?.memberId
   )
-
   const myPermission = isOwner ? PermissionLevel.OWNER : me?.permissionLevel
-
   const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
 
   const handleDeleteAlbum = async () => {
     await deleteAlbum(albumInfo.albumId)
+
+    setIsDelete(true)
+
+    // 앨범 목록 갱신 및 앨범 캐시 삭제
+    queryClient.removeQueries({
+      queryKey: ["getAlbum", albumInfo.albumId],
+    })
+
     await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
     navigation.navigate("Album")
     setIsDeleteModalShown(false)
@@ -192,8 +202,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
               <MFText weight="SemiBold" className="text-header1 text-gray-800">
                 {albumInfo?.photoCount}장
               </MFText>
-              {/* TODO: 리캡 만들기 버튼 보여지는 조건 문의 */}
-              {albumInfo?.photoCount?.length >= 2 && (
+              {Number(albumInfo?.photoCount) >= 2 && (
                 <CreateRecapButton
                   type={albumInfo?.type || "HEART"}
                   onPress={() => {
@@ -210,7 +219,6 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
       {/*myPermission*/}
       {isCapture && (
         <Frame
-          userData={sampleUserData} // TODO: 데이터 변경
           type={albumInfo?.type || "HEART"}
           setUpload={setIsRecapOpen}
           albumId={id}
