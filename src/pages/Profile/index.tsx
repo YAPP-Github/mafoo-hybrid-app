@@ -12,8 +12,8 @@ const ProfilePage = ({ navigation }: any) => {
       <View className="flex-1 bg-butter-100">
         <Header />
         <ListItem />
-        <BottomBar variant="profile" />
       </View>
+      <BottomBar variant="profile" />
     </PageContainer>
   )
 }
