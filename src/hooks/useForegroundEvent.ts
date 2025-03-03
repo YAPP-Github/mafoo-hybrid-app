@@ -1,14 +1,14 @@
 import { useEffect } from "react"
 import notifee, { EventType } from "@notifee/react-native"
 import { NavigationProp, useNavigation } from "@react-navigation/native"
-import { useGetProfile } from "@/profile/hooks/useProfile"
-import { useReadNotification } from "./useReadNotification"
 import { fcmNotificationParams } from "@/types/notifications"
 import { fcmNotification } from "./useForegroundMessage"
 import { useAuth } from "@/store/auth/AuthProvider"
 import { RootStackParamList } from "@/types/routeParams"
 import { getMyProfile } from "@/api/signIn"
 import { markNotificationsAsRead } from "@/api/notification"
+import { useQueryClient } from "@tanstack/react-query"
+import { NOTIFICATIONS } from "@/constants/queryString"
 
 /**
  * foreground 푸시 알림 이벤트 수신 핸들러
@@ -60,6 +60,8 @@ export function useForegroundEvent() {
 
   const { status } = useAuth()
 
+  const queryClient = useQueryClient()
+
   const isSignedIn = status === "signIn"
 
   const readAndMove = async (data: any) => {
@@ -67,7 +69,13 @@ export function useForegroundEvent() {
       const profile = await getMyProfile()
 
       if (isSignedIn && profile?.memberId && data?.notificationId) {
+        /** 읽음 처리 */
         await markNotificationsAsRead(profile.memberId, [data.notificationId])
+
+        /** 알림 목록 갱신 */
+        await queryClient.invalidateQueries({
+          queryKey: [...NOTIFICATIONS.GET_NOTIFICATIONS],
+        })
 
         navigation.navigate(
           (data?.route as any) ?? "AlbumCreate",
@@ -98,7 +106,7 @@ export function useForegroundEvent() {
       ) {
         const data = detail?.notification?.data
         if (data) {
-          readAndMove(data)
+          await readAndMove(data)
         } else {
           console.error("data 없음")
         }

@@ -1,9 +1,10 @@
+import { RootStackParamList } from "@/types/routeParams"
 import { create } from "zustand"
 
 const initialDeepLinkUrl: DeepLinkUrl | {} = {}
 
 export interface DeepLinkUrl {
-  route?: string
+  route?: keyof RootStackParamList
   key?: null | string
   buttonType?: null | string
   notificationId?: string
