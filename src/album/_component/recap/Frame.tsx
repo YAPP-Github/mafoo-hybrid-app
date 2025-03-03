@@ -19,10 +19,10 @@ import { authorizedFetcher } from "@/api/photo"
 import { getAccessToken } from "@/store/auth/util"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { RootStackParamList } from "../DraggableAlbum"
 import Svg, { Path, SvgXml } from "react-native-svg"
 import { ICON_COLOR_STYLE_HEX, ICON_NAME } from "@/constants"
 import { colors } from "@/constants/colors"
+import { RootStackParamList } from "@/types/routeParams"
 
 export interface FrameType {
   userName: string
@@ -73,6 +73,16 @@ const Frame = ({
           throw new Error("토큰이 없습니다")
         }
 
+        console.log(
+          "albumId",
+          albumId,
+          "urls",
+          urls,
+          "presignedUrl",
+          presignedUrl
+        )
+
+        // PUT 요청
         return fetch(presignedUrl, {
           method: "PUT",
           body: file,
@@ -115,12 +125,10 @@ const Frame = ({
         })
       console.log("recapUrl", recapUrl)
 
-      // navigation.replace("Recap", { recapUrl: recapUrl })
+      navigation.replace("Recap", { recapUrl: recapUrl })
     } catch (err) {
       console.error("Error during recap processing:", err)
       setUpload(false)
-
-      navigation.replace("Recap", { recapUrl: "" }) // TODO: 삭제
     }
   }
 
@@ -131,10 +139,9 @@ const Frame = ({
       // imageRef.current?.setNativeProps({
       //   source: [photos[index].photoUrl],
       // })
-
       setCurrentPhoto(photoInfo[index].photoUrl)
 
-      await new Promise((resolve) => setTimeout(resolve, 700))
+      await new Promise((resolve) => setTimeout(resolve, 2000))
 
       const uri = await captureRef(viewRef, {
         format: "jpg",
@@ -144,7 +151,7 @@ const Frame = ({
       dataUrls.push(`data:image/jpeg;base64,${uri}`)
       // console.log(`data:image/jpeg;base64,${uri}`)
     }
-    handleRecapFramedPhoto(dataUrls)
+    //  handleRecapFramedPhoto(dataUrls)
   }
 
   useEffect(() => {
@@ -161,7 +168,7 @@ const Frame = ({
         position: "absolute",
         width: 393,
         height: 680,
-        zIndex: -50, // -50
+        zIndex: 50, // -50
         top: 0,
         left: 0,
       }}>
@@ -199,10 +206,12 @@ const Frame = ({
             <Text
               style={{
                 fontFamily: "SBAggroOTF-Medium",
-                fontWeight: "400",
+                fontWeight: 400,
                 color: "white",
                 fontSize: 28,
                 lineHeight: 36.4,
+                marginTop: 15,
+                letterSpacing: 0.56,
               }}>
               HIGHLIGHT
             </Text>
@@ -214,16 +223,21 @@ const Frame = ({
             color={ICON_COLOR_STYLE_HEX[type]}
             size={28}
           />
-          <Text
-            style={{
-              fontFamily: "SBAggroOTF-Medium",
-              fontWeight: "400",
-              color: colors.gray[800],
-              fontSize: 18,
-              lineHeight: 25.2,
-            }}>
+          <MFText
+            font="SBAggroOTF"
+            weight="Medium"
+            //  style={{ fontFamily: "SBAggroOTF-Medium" }}
+            className="text-gray-800 ml-[4px]"
+            // style={{
+            //   fontFamily: "SBAggroOTF-Medium",
+            //   fontWeight: "400",
+
+            //   fontSize: 18,
+            //   lineHeight: 25.2,
+            //   marginLeft: 4,
+          >
             {albumName}
-          </Text>
+          </MFText>
         </View>
       </LinearGradient>
     </ViewShot>

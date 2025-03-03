@@ -26,6 +26,7 @@
 		8EBF51A7CF264EF29E22511C /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A103F0A201884D3EAC5B1984 /* Pretendard-Thin.otf */; };
 		A64BD762F28D413598177690 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = E9B17CCC263944F8BC5DC9AB /* Pretendard-Medium.otf */; };
 		AF6600252D677AD8009DF1CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF6600242D677AD8009DF1CB /* GoogleService-Info.plist */; };
+		AFBDBC852D7594EA009A7767 /* SBAggroOTF-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = AFBDBC842D7594EA009A7767 /* SBAggroOTF-Medium.otf */; };
 		E87D07848CF74C9392AA62FA /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = EC15350091C241C1960CAE43 /* Pretendard-ExtraLight.otf */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MafooApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A103F0A201884D3EAC5B1984 /* Pretendard-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Thin.otf"; path = "../src/assets/font/Pretendard-Thin.otf"; sourceTree = "<group>"; };
 		AF6600242D677AD8009DF1CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		AFBDBC842D7594EA009A7767 /* SBAggroOTF-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SBAggroOTF-Medium.otf"; path = "../src/assets/font/SBAggroOTF-Medium.otf"; sourceTree = SOURCE_ROOT; };
 		B3C048239871CC4C2225B0EE /* Pods-MafooApp-MafooAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MafooApp-MafooAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MafooApp-MafooAppTests/Pods-MafooApp-MafooAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B416365C238102B4C5B20F0C /* Pods_MafooApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MafooApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB98D9369F1ED992D47F44A6 /* Pods-MafooApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MafooApp.debug.xcconfig"; path = "Target Support Files/Pods-MafooApp/Pods-MafooApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 		2B047106579547B49702E8FD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AFBDBC842D7594EA009A7767 /* SBAggroOTF-Medium.otf */,
 				0073E6338D1F4FA3B6386DC7 /* Pretendard-Black.otf */,
 				3986608E137F40678B443218 /* Pretendard-Bold.otf */,
 				16C2F45ECAAD4E8F9D3DCC7B /* Pretendard-ExtraBold.otf */,
@@ -302,6 +305,7 @@
 				E87D07848CF74C9392AA62FA /* Pretendard-ExtraLight.otf in Resources */,
 				05B5AFC6028D49628A6E52CE /* Pretendard-Light.otf in Resources */,
 				A64BD762F28D413598177690 /* Pretendard-Medium.otf in Resources */,
+				AFBDBC852D7594EA009A7767 /* SBAggroOTF-Medium.otf in Resources */,
 				89D494B930564250B51CA12B /* Pretendard-Regular.otf in Resources */,
 				AF6600252D677AD8009DF1CB /* GoogleService-Info.plist in Resources */,
 				3DF3A2E5C3A84AA9959C5662 /* Pretendard-SemiBold.otf in Resources */,
