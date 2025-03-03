@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* MafooAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MafooAppTests.m */; };
+		021006ABB8694CFEBB3FEBD0 /* OTSBAggroM.otf in Resources */ = {isa = PBXBuildFile; fileRef = 24137571185A4E92B6081EAD /* OTSBAggroM.otf */; };
 		047CEA66546BE121F94E70C8 /* Pods_MafooApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B416365C238102B4C5B20F0C /* Pods_MafooApp.framework */; };
 		05B5AFC6028D49628A6E52CE /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 611D8EADC9184EBEA99A5F88 /* Pretendard-Light.otf */; };
 		13A9B9BD2D38594100B662EB /* SwiftBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A9B9BC2D38594100B662EB /* SwiftBridge.swift */; };
@@ -27,7 +28,6 @@
 		A64BD762F28D413598177690 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = E9B17CCC263944F8BC5DC9AB /* Pretendard-Medium.otf */; };
 		AF6600252D677AD8009DF1CB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AF6600242D677AD8009DF1CB /* GoogleService-Info.plist */; };
 		E87D07848CF74C9392AA62FA /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = EC15350091C241C1960CAE43 /* Pretendard-ExtraLight.otf */; };
-		021006ABB8694CFEBB3FEBD0 /* OTSBAggroM.otf in Resources */ = {isa = PBXBuildFile; fileRef = 24137571185A4E92B6081EAD /* OTSBAggroM.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +57,7 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = MafooApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		16C2F45ECAAD4E8F9D3DCC7B /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-ExtraBold.otf"; path = "../src/assets/font/Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
 		1B9A1074E6CD48CD88658C34 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-SemiBold.otf"; path = "../src/assets/font/Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		24137571185A4E92B6081EAD /* OTSBAggroM.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = OTSBAggroM.otf; path = ../src/assets/font/OTSBAggroM.otf; sourceTree = "<group>"; };
 		28759E7C638CBDDB9E89CF66 /* Pods-MafooApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MafooApp.release.xcconfig"; path = "Target Support Files/Pods-MafooApp/Pods-MafooApp.release.xcconfig"; sourceTree = "<group>"; };
 		2D0B243118E960FF8263BEA4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = MafooApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3986608E137F40678B443218 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Bold.otf"; path = "../src/assets/font/Pretendard-Bold.otf"; sourceTree = "<group>"; };
@@ -73,7 +74,6 @@
 		E9B17CCC263944F8BC5DC9AB /* Pretendard-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Medium.otf"; path = "../src/assets/font/Pretendard-Medium.otf"; sourceTree = "<group>"; };
 		EC15350091C241C1960CAE43 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-ExtraLight.otf"; path = "../src/assets/font/Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		24137571185A4E92B6081EAD /* OTSBAggroM.otf */ = {isa = PBXFileReference; name = "OTSBAggroM.otf"; path = "../src/assets/font/OTSBAggroM.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
