@@ -27,14 +27,7 @@ import VideoLoading from "@/album/_component/VideoLoading"
 import { sampleUserData } from "@/types/user"
 import { useGetProfile } from "@/profile/hooks/useProfile"
 import { useGetAlbum } from "@/hooks/usePhoto"
-
-export type RootStackParamList = {
-  AddFriend: { albumId: string } | undefined
-  SharedFriend: { albumId: string } | undefined
-  // Recap?: { albumId: string } | undefined
-  Frame?: { albumInfo: any } // TODO: albumInfo 타입 추가
-  Album: undefined
-}
+import { RootStackParamList } from "@/types/routeParams"
 
 export type AlbumDetailPageProps = {
   route: {
@@ -46,18 +39,27 @@ export type AlbumDetailPageProps = {
 
 const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const { albumId: id } = route.params
-  const profile = useGetProfile()
+
+  console.log("albumId", id)
+
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
   const [isRecapOpen, setIsRecapOpen] = useState(false)
+  const [isCapture, setIsCapture] = useState(false)
+
+  // 앨범 삭제 여부
+  const [isDelete, setIsDelete] = useState(false)
 
   const queryClient = useQueryClient()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
-  const [isCapture, setIsCapture] = useState(false)
+  // 호출하기 전에 먼저 삭제되었는지 여부 확인
+  const { albums: albumInfo } = useGetAlbum(id, isDelete)
 
-  const { albums: albumInfo } = useGetAlbum(id)
+  const { profile } = useGetProfile()
+
+  console.log("albumInfo", albumInfo)
 
   if (!albumInfo) {
     return
@@ -74,17 +76,24 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     name: albumInfo.ownerName ?? "",
     serialNumber: "0000",
   }
-  const isOwner = albumInfo.ownerMemberId === profile.profile?.memberId
+
+  const isOwner = albumInfo.ownerMemberId === profile?.memberId
   const me = sharedMembers.find(
-    (member) => member.memberId === profile.profile?.memberId
+    (member) => member.memberId === profile?.memberId
   )
-
   const myPermission = isOwner ? PermissionLevel.OWNER : me?.permissionLevel
-
   const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
 
   const handleDeleteAlbum = async () => {
     await deleteAlbum(albumInfo.albumId)
+
+    setIsDelete(true)
+
+    // 앨범 목록 갱신 및 앨범 캐시 삭제
+    queryClient.removeQueries({
+      queryKey: ["getAlbum", albumInfo.albumId],
+    })
+
     await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
     navigation.navigate("Album")
     setIsDeleteModalShown(false)
@@ -196,18 +205,18 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
             </MFText>
             <View className="flex-row justify-between items-center">
               <MFText weight="SemiBold" className="text-header1 text-gray-800">
-                {albumInfo.photoCount}장
+                {albumInfo?.photoCount}장
               </MFText>
-              {/* TODO: 리캡 만들기 버튼 보여지는 조건 문의 */}
-              {/* {photos.length >= 232323 && ( */}
-              <CreateRecapButton
-                type={albumInfo?.type || "HEART"}
-                onPress={() => {
-                  setIsCapture(true)
-                  setIsRecapOpen(true)
-                }}>
-                리캡 만들기
-              </CreateRecapButton>
+              {Number(albumInfo?.photoCount) >= 2 && (
+                <CreateRecapButton
+                  type={albumInfo?.type || "HEART"}
+                  onPress={() => {
+                    setIsCapture(true)
+                    setIsRecapOpen(true)
+                  }}>
+                  리캡 만들기
+                </CreateRecapButton>
+              )}
             </View>
           </View>
         </View>
@@ -215,10 +224,11 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
       {/*myPermission*/}
       {isCapture && (
         <Frame
-          userData={sampleUserData} // TODO: 데이터 변경
+          userName={profile?.name || "user"}
           type={albumInfo?.type || "HEART"}
           setUpload={setIsRecapOpen}
           albumId={id}
+          albumName={albumInfo?.name}
         />
       )}
       <VideoLoading
@@ -297,10 +307,10 @@ const ShareBar: React.FC<ShareBarProps> = ({
         {canAddFriend && (
           <TouchableOpacity
             onPress={onTapFindFriend}
-            className="px-3 py-2 bg-purple-200 rounded-md active:bg-purple-300">
-            <Text className="text-purple-700 tp-caption1-semibold">
+            className="px-3 py-2 bg-gray-100 rounded-md active:bg-gray-300">
+            <MFText className="text-gray-600 text-caption1" weight="SemiBold">
               친구 찾기
-            </Text>
+            </MFText>
           </TouchableOpacity>
         )}
       </View>

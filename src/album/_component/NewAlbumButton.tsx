@@ -4,10 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import MFText from "@/common/MFText"
 import NewAlbum from "@/assets/newAlbum.svg"
 import { colors } from "@/constants/colors"
-
-export type RootStackParamList = {
-  AlbumCreate: undefined
-}
+import { RootStackParamList } from "@/types/routeParams"
 
 const NewAlbumButton = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()

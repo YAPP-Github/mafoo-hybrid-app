@@ -12,6 +12,7 @@ import { PhotoInfo } from "../types"
 import SquareButton from "@/common/SquareButton"
 import MFText from "@/common/MFText"
 import { useQueryClient } from "@tanstack/react-query"
+import { onSaveGallery } from "@/utils/onSaveToGallery"
 
 interface ImageDetailProps {
   photos: PhotoInfo[]
@@ -55,6 +56,8 @@ const ImageDetail = ({
     setIsZoomed(true)
   }
 
+  if (!photos[startIdx]?.photoUrl) return
+
   return (
     <>
       {visible && (
@@ -75,17 +78,24 @@ const ImageDetail = ({
           {/* Image Viewer */}
           <View style={styles.imageContainer}>
             <TouchableOpacity onPress={handleImageClick}>
-              <Image
-                source={{ uri: photos[idx].photoUrl }}
-                style={styles.image}
-                resizeMode="contain"
-              />
+              {/* 여기 삭제하고 photoUrl 없어서 에러 */}
+              {photos?.length > 0 && photos[idx]?.photoUrl && (
+                <Image
+                  source={{ uri: photos[idx]?.photoUrl }}
+                  style={styles.image}
+                  resizeMode="contain"
+                />
+              )}
             </TouchableOpacity>
           </View>
 
           {/* Footer */}
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.downloadButton}>
+            <TouchableOpacity
+              style={styles.downloadButton}
+              onPress={() =>
+                onSaveGallery(photos[idx]?.photoUrl, photos[idx]?.photoId)
+              }>
               <Text style={styles.downloadText}>다운로드 받기</Text>
             </TouchableOpacity>
           </View>
@@ -99,7 +109,7 @@ const ImageDetail = ({
                   onPress={handleZoomOut}
                 />
                 <Image
-                  source={{ uri: photos[idx].photoUrl }}
+                  source={{ uri: photos[idx]?.photoUrl }}
                   style={styles.zoomImage}
                   resizeMode="contain"
                 />

@@ -1,7 +1,8 @@
-import React from "react"
+import { useMemo } from "react"
 import { Text as RNText, TextProps } from "react-native"
 
 interface CustomTextProps extends TextProps {
+  font?: "Pretendard" | "SBAggroOTF"
   style?: any
   weight?:
     | "Bold"
@@ -16,11 +17,18 @@ interface CustomTextProps extends TextProps {
   className?: string
 }
 
-const MFText = ({ style, weight = "Regular", ...rest }: CustomTextProps) => {
-  const customStyle = {
-    fontFamily: `Pretendard-${weight}`,
-    color: "#000000",
-  }
+const MFText = ({
+  font = "Pretendard",
+  style,
+  weight = "Regular",
+  ...rest
+}: CustomTextProps) => {
+  const customStyle = useMemo(() => {
+    return {
+      fontFamily: `${font}-${weight}`,
+      color: "#000000",
+    }
+  }, [weight])
 
   return <RNText style={[customStyle, style]} {...rest} />
 }
