@@ -307,10 +307,10 @@ const ShareBar: React.FC<ShareBarProps> = ({
         {canAddFriend && (
           <TouchableOpacity
             onPress={onTapFindFriend}
-            className="px-3 py-2 bg-purple-200 rounded-md active:bg-purple-300">
-            <Text className="text-purple-700 tp-caption1-semibold">
+            className="px-3 py-2 bg-gray-100 rounded-md active:bg-gray-300">
+            <MFText className="text-gray-600 text-caption1" weight="SemiBold">
               친구 찾기
-            </Text>
+            </MFText>
           </TouchableOpacity>
         )}
       </View>
