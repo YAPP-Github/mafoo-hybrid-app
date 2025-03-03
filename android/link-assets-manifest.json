@@ -2,6 +2,10 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/font/OTSBAggroM.otf",
+      "sha1": "0a67782cfd34062191d9e41f86006fe506e4ad8f"
+    },
+    {
       "path": "src/assets/font/Pretendard-Black.otf",
       "sha1": "b9162985d25a21b393185c6139d283fba46fd739"
     },
@@ -36,10 +40,6 @@
     {
       "path": "src/assets/font/Pretendard-Thin.otf",
       "sha1": "72cf55b4d2ea4adc75123f33ca839c10cabfaab4"
-    },
-    {
-      "path": "src/assets/font/SBAggroOTF-Medium.otf",
-      "sha1": "0a67782cfd34062191d9e41f86006fe506e4ad8f"
     }
   ]
 }
