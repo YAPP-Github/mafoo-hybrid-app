@@ -205,8 +205,9 @@ const Frame = ({
             </MFText>
             <Text
               style={{
-                fontFamily: "SBAggroOTF-Medium",
-                fontWeight: 400,
+                // fontFamily: "Pretendard-SemiBold",
+                fontFamily: "OTSBAggroM",
+                // fontWeight: 400,
                 color: "white",
                 fontSize: 28,
                 lineHeight: 36.4,
