@@ -186,12 +186,11 @@ const Frame = ({
               className="text-sumone-white mr-[4px]">
               @{userName}님의
             </MFText>
-            {/* TODO: 폰트 적용 확인 */}
+
             <Text
               style={{
-                // fontFamily: "Pretendard-SemiBold",
                 fontFamily: "OTSBAggroM",
-                // fontWeight: 400,
+                fontWeight: 400,
                 color: "white",
                 fontSize: 28,
                 lineHeight: 36.4,
@@ -210,7 +209,7 @@ const Frame = ({
           />
           <Text
             style={{
-              fontFamily: "SBAggroOTF-Medium",
+              fontFamily: "OTSBAggroM",
               fontWeight: "400",
               fontSize: 18,
               lineHeight: 25.2,
