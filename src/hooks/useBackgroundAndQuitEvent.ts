@@ -8,13 +8,14 @@ import { useGetProfile } from "@/profile/hooks/useProfile"
 import { markNotificationsAsRead } from "@/api/notification"
 import { useQueryClient } from "@tanstack/react-query"
 import { NOTIFICATIONS } from "@/constants/queryString"
+import { getMyProfile } from "@/api/signIn"
 
 export const useBackgroundAndQuitEvent = () => {
   const { deepLinkUrl, removeDeepLink } = useDeepLinkStore()
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
 
   const { status } = useAuth()
-  const { profile } = useGetProfile()
+
   const queryClient = useQueryClient()
 
   const isSignedIn = status === "signIn"
@@ -24,9 +25,10 @@ export const useBackgroundAndQuitEvent = () => {
       const deepLink = deepLinkUrl as DeepLinkUrl
 
       const isValidUrl = deepLink?.route && deepLink?.notificationId
-
-      if (isSignedIn && isValidUrl && profile?.memberId) {
+      if (isSignedIn && isValidUrl) {
         try {
+          const profile = await getMyProfile()
+
           await markNotificationsAsRead(profile.memberId, [
             deepLink.notificationId!,
           ])
