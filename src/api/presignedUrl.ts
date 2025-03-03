@@ -87,12 +87,6 @@ export const getPresignedUrls = async (
 ) => {
   if (!albumId.length) return
 
-  const formatedFileNames = photos.map((photo) => {
-    return photo.photoUrl
-  })
-
-  console.log("formatedFileNames", albumId, formatedFileNames)
-
   const { urls } = await authorizedFetcher
     .post(
       `/recap`,
@@ -107,7 +101,6 @@ export const getPresignedUrls = async (
       }
     )
     .then((res) => {
-      console.log("getPresinedUrl res", res)
       return res
     })
     .catch((err) => {

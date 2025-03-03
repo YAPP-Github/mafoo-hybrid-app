@@ -69,7 +69,6 @@ const Notification = React.forwardRef(
       ref,
       () => ({
         readAllNotification: () => {
-          console.log("readAllNotification 호출")
           setRead(true)
         },
       }),
@@ -79,7 +78,6 @@ const Notification = React.forwardRef(
     // 개별 알림 읽음
     const readAndMove = () => {
       if (!isRead) {
-        console.log("개별 알림 읽음")
         setRead(true)
         mutate([notificationId])
       }
