@@ -86,12 +86,12 @@ const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
                     앨범 삭제하기
                   </MFText>
                 </StyledPressable>
+                <View className="h-[1px] bg-gray-200" />
               </>
             )}
             {/* 친구 목록에서 권한 넘겨야 앨범에서 나가기 보임 */}
             {myPermission !== PermissionLevel.OWNER && (
               <>
-                <View className="h-[1px] bg-gray-200" />
                 <StyledPressable
                   className="flex flex-row items-center justify-center gap-2 py-4"
                   onPress={() => onTapAction(AlbumMenuAction.QUIT)}>
@@ -102,10 +102,11 @@ const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
                     앨범에서 나가기
                   </MFText>
                 </StyledPressable>
+                <View className="h-[1px] bg-gray-200" />
               </>
             )}
             {/* 앨범 수정하기 */}
-            <View className="h-[1px] bg-gray-200" />
+            {/* <View className="h-[1px] bg-gray-200" />
             <StyledPressable
               className="flex flex-row items-center justify-center gap-2 py-4"
               onPress={() => {}}>
@@ -113,9 +114,8 @@ const AlbumMenuDialog: React.FC<AlbumMenuDialogProps> = ({
               <MFText weight="SemiBold" className="text-gray-600 text-body1">
                 앨범 수정하기
               </MFText>
-            </StyledPressable>
+            </StyledPressable> */}
             {/* FIXME: 앨범 게시하기 */}
-            <View className="h-[1px] bg-gray-200" />
             <StyledPressable
               className="flex flex-row items-center justify-center gap-2 py-4"
               onPress={handleExportAlbum}>
