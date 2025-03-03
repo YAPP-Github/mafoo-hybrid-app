@@ -12,7 +12,6 @@ export const onSaveGallery = async (uri: string, fileName: string) => {
         {
           text: "설정으로 이동",
           onPress: () => {
-            // 설정 페이지로 이동
             Linking.openSettings()
           },
         },
@@ -25,20 +24,24 @@ export const onSaveGallery = async (uri: string, fileName: string) => {
     return
   }
 
-  // 확장자 추가
-  const path = `${RNFS.CachesDirectoryPath}/${fileName}.jpg`
+  const isVideo = fileName === "recap"
 
-  // uri to local string
+  const path = isVideo
+    ? `${RNFS.CachesDirectoryPath}/${fileName}.mp4`
+    : `${RNFS.CachesDirectoryPath}/${fileName}.jpg`
+
   const result = await RNFS.downloadFile({ fromUrl: uri, toFile: path }).promise
 
   if (result.statusCode === 200) {
-    await CameraRoll.save(`file://${path}`, { type: "photo" })
+    await CameraRoll.save(`file://${path}`, {
+      type: isVideo ? "video" : "photo",
+    })
       .then((onfulfilled) => {
         console.log("onfulfilled", onfulfilled)
         Alert.alert("Success", "갤러리에 저장되었습니다.")
       })
       .catch((error) => {
-        Alert.alert(`${error.message}`, "사진 저장 실패했습니다.")
+        Alert.alert(`${error.message}`, "저장 실패했습니다.")
         console.log(error.message)
       })
   }
