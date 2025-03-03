@@ -50,7 +50,6 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
 
   const fetchAlbums = async () => {
     const data = await getPhotos(albumInfo.albumId)
-    console.log("이미지 업로드 끝나고 다시 fetch 요청", data)
     if (data.length) {
       setPhotos(data)
       setIPhotosStore(data)
@@ -79,7 +78,6 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   }
 
   useEffect(() => {
-    // console.log("albumInfo.albumId", albumInfo.albumId)
     fetchAlbums()
   }, [albumInfo.albumId])
 

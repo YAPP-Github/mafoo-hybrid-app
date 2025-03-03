@@ -59,8 +59,6 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
 
   const { profile } = useGetProfile()
 
-  console.log("albumInfo", albumInfo)
-
   if (!albumInfo) {
     return
   }
