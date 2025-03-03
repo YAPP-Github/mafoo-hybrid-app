@@ -72,14 +72,14 @@ const AlbumsPage = ({ navigation }: any) => {
               )}
             </TouchableOpacity>
           </View>
-          <View className="flex-row">
+          {/* <View className="flex-row">
             <SquareButton variant="solid" size="large" onPress={onTest}>
               <MFText>알림 발송</MFText>
             </SquareButton>
             <SquareButton variant="solid" size="large" onPress={deleteToken}>
               <MFText>토큰 삭제</MFText>
             </SquareButton>
-          </View>
+          </View> */}
           <Albums />
           <NewAlbumButton />
 
