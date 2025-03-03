@@ -36,7 +36,9 @@ export const Dialog = ({
               size="large"
               theme="gray"
               onPress={onClose}>
-              <MFText>닫기</MFText>
+              <MFText weight="SemiBold" className="text-gray-600">
+                닫기
+              </MFText>
             </SquareButton>
             <SquareButton
               className="flex-1"
@@ -44,7 +46,9 @@ export const Dialog = ({
               size="large"
               theme="red"
               onPress={onConfirm}>
-              <MFText>{confirmBtnContext}</MFText>
+              <MFText weight="SemiBold" className="text-red-600">
+                {confirmBtnContext}
+              </MFText>
             </SquareButton>
           </View>
         </View>

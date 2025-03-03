@@ -11,7 +11,7 @@ import SMILE_FACE from "@/assets/frame/SMILE_FACE.svg"
 import BASKETBALL from "@/assets/frame/BASKETBALL.svg"
 import STARFALL from "@/assets/frame/STARFALL.svg"
 import MFText from "@/common/MFText"
-import Icon from "@/common/Icon"
+import Icon, { IconTypes } from "@/common/Icon"
 import { AlbumType } from "@/album/types"
 import { usePhotoInfoStore } from "@/store/photo"
 import { getPresignedUrls } from "@/api/presignedUrl"
@@ -19,9 +19,8 @@ import { authorizedFetcher } from "@/api/photo"
 import { getAccessToken } from "@/store/auth/util"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
-import Svg, { Path, SvgXml } from "react-native-svg"
 import { ICON_COLOR_STYLE_HEX, ICON_NAME } from "@/constants"
-import { colors } from "@/constants/colors"
+
 import { RootStackParamList } from "@/types/routeParams"
 
 export interface FrameType {
@@ -73,16 +72,6 @@ const Frame = ({
           throw new Error("토큰이 없습니다")
         }
 
-        console.log(
-          "albumId",
-          albumId,
-          "urls",
-          urls,
-          "presignedUrl",
-          presignedUrl
-        )
-
-        // PUT 요청
         return fetch(presignedUrl, {
           method: "PUT",
           body: file,
@@ -101,10 +90,6 @@ const Frame = ({
         return url.split("?")[0]
       })
 
-      console.log("albumId", albumId) // 01JN93QRHN09EDE284WVWBZP87
-      console.log("newUrls", newUrls)
-
-      // recap 생성 API 호출
       const { recapUrl } = await authorizedFetcher
         .post(
           `/recaps`,
@@ -123,8 +108,6 @@ const Frame = ({
           console.error("Error calling recap API:", err)
           throw err
         })
-      console.log("recapUrl", recapUrl)
-
       navigation.replace("Recap", { recapUrl: recapUrl })
     } catch (err) {
       console.error("Error during recap processing:", err)
@@ -149,9 +132,9 @@ const Frame = ({
         result: "base64",
       })
       dataUrls.push(`data:image/jpeg;base64,${uri}`)
-      // console.log(`data:image/jpeg;base64,${uri}`)
+      //  console.log(`data:image/jpeg;base64,${uri}`)
     }
-    //  handleRecapFramedPhoto(dataUrls)
+    handleRecapFramedPhoto(dataUrls)
   }
 
   useEffect(() => {
@@ -168,7 +151,7 @@ const Frame = ({
         position: "absolute",
         width: 393,
         height: 680,
-        zIndex: 50, // -50
+        zIndex: -50,
         top: 0,
         left: 0,
       }}>
@@ -203,6 +186,7 @@ const Frame = ({
               className="text-sumone-white mr-[4px]">
               @{userName}님의
             </MFText>
+            {/* TODO: 폰트 적용 확인 */}
             <Text
               style={{
                 fontFamily: "SBAggroOTF-Medium",
@@ -219,25 +203,20 @@ const Frame = ({
         </View>
         <View className="flex-row items-center px-[16px] py-[8px] absolute top-[604px] left-[46px] rounded-full border border-white bg-white/80">
           <Icon
-            name={ICON_NAME[type]}
+            name={ICON_NAME[type] as IconTypes}
             color={ICON_COLOR_STYLE_HEX[type]}
             size={28}
           />
-          <MFText
-            font="SBAggroOTF"
-            weight="Medium"
-            //  style={{ fontFamily: "SBAggroOTF-Medium" }}
-            className="text-gray-800 ml-[4px]"
-            // style={{
-            //   fontFamily: "SBAggroOTF-Medium",
-            //   fontWeight: "400",
-
-            //   fontSize: 18,
-            //   lineHeight: 25.2,
-            //   marginLeft: 4,
-          >
+          <Text
+            style={{
+              fontFamily: "SBAggroOTF-Medium",
+              fontWeight: "400",
+              fontSize: 18,
+              lineHeight: 25.2,
+              marginLeft: 4,
+            }}>
             {albumName}
-          </MFText>
+          </Text>
         </View>
       </LinearGradient>
     </ViewShot>

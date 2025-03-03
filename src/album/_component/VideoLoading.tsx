@@ -72,8 +72,7 @@ const VideoLoading = ({
                 <Icon
                   name="closeCircleBold"
                   size={36}
-                  color="text-gray-300"
-                  // className="mix-blend-multiply"
+                  className="text-gray-300"
                 />
               </TouchableOpacity>
             </View>
