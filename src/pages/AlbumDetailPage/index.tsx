@@ -207,16 +207,18 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
               <MFText weight="SemiBold" className="text-header1 text-gray-800">
                 {albumInfo?.photoCount}장
               </MFText>
-              {Number(albumInfo?.photoCount) >= 2 && (
-                <CreateRecapButton
-                  type={albumInfo?.type || "HEART"}
-                  onPress={() => {
-                    setIsCapture(true)
-                    setIsRecapOpen(true)
-                  }}>
-                  리캡 만들기
-                </CreateRecapButton>
-              )}
+              {/* `보기만` 권한은 리캡 생성 불가 */}
+              {myPermission !== PermissionLevel.VIEW_ACCESS &&
+                Number(albumInfo?.photoCount) >= 1 && (
+                  <CreateRecapButton
+                    type={albumInfo?.type || "HEART"}
+                    onPress={() => {
+                      setIsCapture(true)
+                      setIsRecapOpen(true)
+                    }}>
+                    리캡 만들기
+                  </CreateRecapButton>
+                )}
             </View>
           </View>
         </View>
