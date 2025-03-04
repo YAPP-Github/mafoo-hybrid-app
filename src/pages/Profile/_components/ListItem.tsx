@@ -1,4 +1,3 @@
-import React from "react"
 import { View, Text, TouchableOpacity } from "react-native"
 import Icon from "@/common/Icon"
 import { LIST_ITEM_INFO } from "@/constants"
@@ -6,11 +5,17 @@ import { isExternalLink, isInternalLink } from "@/libs"
 import { useAlertStore } from "@/store/alert"
 import { useNavigation } from "@react-navigation/native"
 import { Linking } from "react-native"
+import { ToggleSwitch } from "@/common/ToggleSwitch"
+import { useGetFcmToken } from "@/hooks/useFcmToken"
+import { useGetProfile } from "@/profile/hooks/useProfile"
+
+export type ItemIconType = "arrow" | "switch"
 
 interface ItemButtonType {
   label: string
   action?: () => Promise<void> | void
   link?: string
+  icon?: ItemIconType
 }
 
 export interface ListItemProps {
@@ -20,6 +25,8 @@ export interface ListItemProps {
 const ListItem = () => {
   const navigation = useNavigation()
   const { showAlert } = useAlertStore()
+
+  const { profile } = useGetProfile()
 
   const handleClick = async (item: ItemButtonType) => {
     if (item.action) {
@@ -53,7 +60,12 @@ const ListItem = () => {
                 <Text className="text-gray-600 tp-body1-regular">
                   {item.label}
                 </Text>
-                <Icon name="arrowRight" size={24} color="gray-500" />
+                {item.icon === "arrow" && (
+                  <Icon name="arrowRight" size={24} color="gray-500" />
+                )}
+                {item.icon === "switch" && (
+                  <ToggleSwitch defaultChecked={!!profile?.fcmToken} />
+                )}
               </View>
             </TouchableOpacity>
           ))}

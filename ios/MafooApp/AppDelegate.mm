@@ -1,5 +1,7 @@
+#import "RNFBMessagingModule.h"
 #import "AppDelegate.h"
 
+#import <Firebase.h> // iOS Firebase SDK credential
 #import <React/RCTBundleURLProvider.h>
 #import "RNSplashScreen.h"
 #import <RNKakaoLogins.h>  // 카카오 로그인 추가
@@ -8,10 +10,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  // add the following to the top of the method
+  [FIRApp configure];
+
   self.moduleName = @"MafooApp";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
-  self.initialProps = @{};
+
+  // Headless costom props: iOS background 실행 시 React Component mount 방지
+  self.initialProps = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
+
   
   [super application:application didFinishLaunchingWithOptions:launchOptions];
   [RNSplashScreen show];

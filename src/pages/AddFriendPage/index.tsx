@@ -23,6 +23,7 @@ import { colors } from "@/constants/colors"
 import PageContainer from "@/common/PageContainer"
 import Icon from "@/common/Icon"
 import SharePermissionDialog from "@/common/SharePermissionDialog"
+import { cn } from "@/utils"
 
 const AddFriendPage = ({
   route,
@@ -149,7 +150,7 @@ const AddFriendPage = ({
         onTapSave={onSavePermissionLevel}
         radioColor={borderColorClass}
       />
-      <View className="flex-1 px-6 py-4">
+      <View className={cn("flex-1 px-6 py-4")}>
         <MFText weight="SemiBold" className="text-xl text-header2">
           <MFText weight="SemiBold" className={textColorClass}>
             {albumName || "24 Recap"}
@@ -164,6 +165,7 @@ const AddFriendPage = ({
           value={searchParam}
           onChangeText={handleSearchParam}
           placeholder="이름으로 검색해주세요"
+          autoFocus
         />
         <ScrollView className="flex-1 mt-4">
           {searchResults.length === 0 ? (

@@ -20,6 +20,10 @@ target 'MafooApp' do
 
   config = use_native_modules!
 
+  use_frameworks! :linkage => :static # this line should be located right before the line "use_react_native"
+
+  $RNFirebaseAsStaticFramework = true # To use Static Frameworks on iOS
+
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.

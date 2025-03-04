@@ -57,7 +57,7 @@ export const COLOR_MAP: ColorMapType = {
     bg: "#DEEEFF",
     album: {
       bg: "bg-sky-blue-200",
-      text: "text-skyblue-700",
+      text: "text-sky-blue-700",
     },
     bottomButton: {
       color: ["#92AAFF", "#9FE7FC"],

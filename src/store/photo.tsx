@@ -8,12 +8,6 @@ export interface PhotoStore<T extends Asset | PhotoInfo> {
   getSinglePhoto: () => T | null
 }
 
-export const usePhotoAssetStore = create<PhotoStore<Asset>>((set, get) => ({
-  photos: [] as Asset[],
-  setPhotos: (photos: Asset[]) => set({ photos }),
-  getSinglePhoto: () => get().photos[0],
-}))
-
 export const usePhotoInfoStore = create<PhotoStore<PhotoInfo>>((set, get) => ({
   photos: [] as PhotoInfo[],
   setPhotos: (photos: PhotoInfo[]) => set({ photos }),

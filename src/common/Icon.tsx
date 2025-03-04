@@ -55,6 +55,9 @@ export type IconTypes =
   | "clipboardHeart"
   | "clipboardRemove"
   | "closeIcon"
+  | "mafooSantaCharacter"
+  | "mafooSantaCharacter"
+  | "emptyAlarmBell"
 
 export interface IconProps {
   name: IconTypes

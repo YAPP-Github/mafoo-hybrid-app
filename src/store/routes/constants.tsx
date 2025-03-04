@@ -10,6 +10,7 @@ import RecapPage from "@/pages/RecapPage"
 import ExportAlbumPage from "@/pages/ExportAlbumPage"
 import ExportAlbumDetailPage from "@/pages/ExportAlbumDetailPage"
 import ExportAlbumGuestbookWritePage from "@/pages/ExportAlbumGuestbookWritePage"
+import NotificationPage from "@/pages/NotificationPage"
 
 export const UnprotectedRoutes = [
   {
@@ -96,5 +97,10 @@ export const ProtectedRoutes = [
     name: "Recap",
     options: {},
     component: RecapPage,
+  },
+  {
+    name: "Notification",
+    options: {},
+    component: NotificationPage,
   },
 ]

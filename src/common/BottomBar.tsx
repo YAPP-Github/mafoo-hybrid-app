@@ -8,14 +8,10 @@ import {
   useRoute,
 } from "@react-navigation/native"
 import { colors } from "@/constants/colors"
+import { RootStackParamList } from "@/types/routeParams"
 
 interface BottomBarProps {
   variant: "album" | "scanner" | "profile"
-}
-
-export type RootStackParamList = {
-  Album: {} | undefined
-  Profile: {} | undefined
 }
 
 const BottomBar = ({ variant }: BottomBarProps) => {
@@ -111,5 +107,29 @@ const Album = () => {
 //     </>
 //   )
 // }
+
+const Profile = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+  return (
+    <>
+      <Button
+        onPress={() => navigation.navigate("Album")}
+        className="rounded-lg">
+        <View className={TAB_ITEM_CLASSNAME}>
+          <Icon name="albumBold" size={28} color={colors.gray[400]} />
+          <Text>내 앨범</Text>
+        </View>
+      </Button>
+
+      <Button
+        onPress={() => navigation.navigate("Profile")}
+        className={TAB_ITEM_CLASSNAME}
+        disabled>
+        <Icon name="userCircleBold" size={28} color={colors.gray[800]} />
+        <Text className="text-gray-800">마이</Text>
+      </Button>
+    </>
+  )
+}
 
 export default BottomBar

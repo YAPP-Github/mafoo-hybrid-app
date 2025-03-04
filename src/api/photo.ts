@@ -38,7 +38,7 @@ export interface SharedMember {
   serialNumber: string
 }
 
-const authorizedFetcher = createFetcher("photo/v1")
+export const authorizedFetcher = createFetcher("photo/v1")
 const unAuthorizedFetcher = createUnauthorizedFetcher("photo/v1")
 const albumInstance = createFetcher("photo/v1/albums")
 const sharedMemberInstance = createFetcher("photo/v1/shared-members")

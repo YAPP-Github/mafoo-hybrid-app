@@ -11,6 +11,7 @@ export interface GetMyProfileResponse {
   profileImageUrl: string
   serialNumber: string
   isDefaultName: boolean
+  fcmToken: string | null
 }
 
 const unAuthorizedFetcher = createUnauthorizedFetcher("user/v1")

@@ -4,7 +4,7 @@ import MFText from "@/common/MFText"
 
 interface DeleteDialogProps {
   title: string
-  desc: string
+  desc?: string
   confirmBtnContext: string
   visible: boolean
   onClose: () => void
@@ -28,7 +28,7 @@ export const Dialog = ({
       <View style={styles.overlay}>
         <View style={styles.dialog}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.description}>{desc}</Text>
+          {desc && <Text style={styles.description}>{desc}</Text>}
           <View style={styles.buttonContainer}>
             <SquareButton
               className="flex-1"
@@ -36,15 +36,19 @@ export const Dialog = ({
               size="large"
               theme="gray"
               onPress={onClose}>
-              <MFText>닫기</MFText>
+              <MFText weight="SemiBold" className="text-gray-600">
+                닫기
+              </MFText>
             </SquareButton>
             <SquareButton
               className="flex-1"
-              variant="solid"
+              variant="weak"
               size="large"
               theme="red"
               onPress={onConfirm}>
-              <MFText>{confirmBtnContext}</MFText>
+              <MFText weight="SemiBold" className="text-red-600">
+                {confirmBtnContext}
+              </MFText>
             </SquareButton>
           </View>
         </View>

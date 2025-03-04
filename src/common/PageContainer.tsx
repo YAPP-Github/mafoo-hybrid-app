@@ -1,7 +1,7 @@
 import { calculateContentStyle } from "@/utils/calculateContentStyle"
 
 import { PropsWithChildren } from "react"
-import { SafeAreaView, StatusBar } from "react-native"
+import { Platform, SafeAreaView, StatusBar } from "react-native"
 
 interface PageBasicProps extends PropsWithChildren {
   statusBarColor?: string

@@ -13,6 +13,7 @@ import AlbumItem from "./AlbumItem"
 import WaitingAlbumItem from "./WaitingAlbumItem"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { ShareStatus } from "@/api/photo"
+import { RootStackParamList } from "@/types/routeParams"
 
 interface AlbumItemProps {
   album: GetBulkAlbumResponse
@@ -21,10 +22,6 @@ interface AlbumItemProps {
   showNewRing: boolean
 }
 const ItemType = "ALBUM"
-
-export type RootStackParamList = {
-  AlbumDetail: { albumId: string } | undefined
-}
 
 const DraggableAlbum = ({ album, showNewRing }: AlbumItemProps) => {
   const queryClient = useQueryClient()

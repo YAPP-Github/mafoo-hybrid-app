@@ -4,7 +4,8 @@ function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 60 * 1000,
+        staleTime: 60 * 60 * 1000,
+        gcTime: 60 * 60 * 1000,
         retry: 0, // 실패 시 재시도 비활성화
         throwOnError: true, // 오류 발생 시 throw
       },

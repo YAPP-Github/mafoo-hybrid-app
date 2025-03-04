@@ -9,7 +9,7 @@ export const albumDetailHeaderVariants = cva(
         HEART: "bg-red-200",
         FIRE: "bg-butter-200",
         BASKETBALL: "bg-green-200",
-        BUILDING: "bg-blue-200",
+        BUILDING: "bg-sky-blue-200",
         STARFALL: "bg-purple-200",
         SMILE_FACE: "bg-pink-200",
         false: "bg-transparent",
@@ -27,7 +27,7 @@ export const albumDetailStickyHeaderVariants = cva("w-full", {
       HEART: "bg-red-200",
       FIRE: "bg-butter-200",
       BASKETBALL: "bg-green-200",
-      BUILDING: "bg-blue-200",
+      BUILDING: "bg-sky-blue-200",
       STARFALL: "bg-purple-200",
       SMILE_FACE: "bg-pink-200",
       false: "bg-transparent",
@@ -111,7 +111,7 @@ export const photoCountVariants = cva("text-caption1", {
 })
 
 export const buttonVariants = cva(
-  "flex items-center justify-center gap-[6px] whitespace-nowrap rounded-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "flex items-center justify-center whitespace-nowrap rounded-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -224,7 +224,7 @@ export type LinearGradientSpec = WithAngle & {
   locations?: number[]
 }
 
-export type LinearGradientTypeKey = AlbumType | "INSTA"
+export type LinearGradientTypeKey = AlbumType | "INSTA" | "ALARM"
 
 export const recapColorLinearGradient: Record<
   LinearGradientTypeKey,
@@ -281,6 +281,13 @@ export const recapColorLinearGradient: Record<
     colors: ["#FFD735", "#FF6C5A", "#E848C8", "#4A8CF0"],
     start: { x: 1, y: 0 },
     end: { x: 0, y: 0 },
+    useAngle: false,
+    angle: 0,
+  },
+  ALARM: {
+    colors: ["#FFF", "#E9F6FE"],
+    start: { x: 0.5, y: 0 },
+    end: { x: 0.5, y: 1 },
     useAngle: false,
     angle: 0,
   },
