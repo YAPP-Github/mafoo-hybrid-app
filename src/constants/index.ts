@@ -1,10 +1,11 @@
 import { AlbumType } from "@/album/types"
+import { IconTypes } from "@/common/Icon"
 import { ListItemProps } from "@/pages/Profile/_components/ListItem"
 import { AuthRef } from "@/store/auth/AuthProvider"
 import { removeAccessToken, removeRefreshToken } from "@/store/auth/util"
 import { Alert } from "react-native"
 
-export const ICON_NAME: Record<AlbumType, string> = {
+export const ICON_NAME: Record<AlbumType, IconTypes> = {
   HEART: "heartAngleBold",
   FIRE: "fireBold",
   BASKETBALL: "basketballBold",
