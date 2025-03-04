@@ -39,7 +39,6 @@ export function AlbumEditSection({
 
   const handleSubmit = async () => {
     const { name, type } = value
-    console.log(name, type)
     postAlbum({ name, type, photoId: null })
   }
 
