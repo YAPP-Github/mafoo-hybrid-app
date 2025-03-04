@@ -26,7 +26,9 @@ const AlbumDetailHeader = ({
   }
 
   return (
-    <View style={styles.header} className={className}>
+    <View
+      style={styles.header}
+      className={cn(headerVariants({ type: albumInfo.type }), className)}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={styles.iconButton}>

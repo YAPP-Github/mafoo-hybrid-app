@@ -9,7 +9,7 @@ export const albumDetailHeaderVariants = cva(
         HEART: "bg-red-200",
         FIRE: "bg-butter-200",
         BASKETBALL: "bg-green-200",
-        BUILDING: "bg-blue-200",
+        BUILDING: "bg-sky-blue-200",
         STARFALL: "bg-purple-200",
         SMILE_FACE: "bg-pink-200",
         false: "bg-transparent",
