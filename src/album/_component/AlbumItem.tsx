@@ -1,13 +1,13 @@
 import React, { useState } from "react"
-import { Text, TextInput, View, TouchableOpacity } from "react-native"
+import { Text, TextInput, View } from "react-native"
 import { VariantProps } from "class-variance-authority"
 import { twMerge } from "tailwind-merge"
 
 import { AlbumValue } from "../types"
 import { albumItemVariants, photoCountVariants } from "../../styles/variants"
-// import Badge from "./Badge"
 import ColorIcon from "../../common/ColorIcon"
 import MFText from "../../common/MFText"
+import Badge from "./Badge"
 
 export interface AlbumItemProps extends VariantProps<typeof albumItemVariants> {
   value: AlbumValue
@@ -90,7 +90,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
           <MFText className={photoCountVariants({ type })}>
             사진 {photoCount}장
           </MFText>
-          {/* {isNew && <Badge className="absolute -left-2 -top-2">New!</Badge>} */}
+          {/* {isNew && <Badge className="absolute -left-3 -top-2">New!</Badge>} */}
         </>
       )}
       <ColorIcon
