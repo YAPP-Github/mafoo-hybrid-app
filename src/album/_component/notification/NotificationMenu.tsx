@@ -5,10 +5,8 @@ import { useGetProfile } from "@/profile/hooks/useProfile"
 import { styled } from "nativewind"
 import { useState } from "react"
 import { Modal, TouchableOpacity, View } from "react-native"
-import { NotificationProps } from "."
 
 interface NotificationMenuProps {
-  notificationIds: string[]
   unReadNotificationIds: string[]
   visible: boolean
   closeMenu: () => void
@@ -23,7 +21,6 @@ const NotificationMenuAction = {
 
 const NotificationMenu = ({
   unReadNotificationIds,
-  notificationIds,
   visible,
   closeMenu,
   showDeleteModal,
@@ -55,7 +52,7 @@ const NotificationMenu = ({
   const StyledPressable = styled(TouchableOpacity)
 
   return (
-    <Modal visible={visible} transparent>
+    <Modal transparent visible={visible} animationType="fade">
       <TouchableOpacity
         activeOpacity={0.45}
         style={{ opacity: 0.45 }}

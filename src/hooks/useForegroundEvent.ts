@@ -98,7 +98,7 @@ export function useForegroundEvent() {
   useEffect(() => {
     // iOS, android
     const unsubscribe = notifee.onForegroundEvent(async ({ type, detail }) => {
-      console.log("foreground event!!")
+      console.log("foreground event")
       if (
         type === EventType.PRESS &&
         (detail.pressAction?.id === "open_detail" || // android

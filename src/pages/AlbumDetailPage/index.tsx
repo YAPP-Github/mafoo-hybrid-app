@@ -139,7 +139,6 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     ? COLOR_MAP[albumInfo.type].bg
     : "bg-gray-200"
 
-  console.log(headerVariants({ type: albumInfo.type }))
   return (
     <PageContainer
       statusBarColor={COLOR_MAP[albumInfo.type].bg}

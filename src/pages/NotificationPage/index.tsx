@@ -56,7 +56,7 @@ const NotificationPage = () => {
   console.log("notifications", notifications)
 
   return (
-    <PageContainer headerProps={{ title: "Notification" }}>
+    <PageContainer>
       <View className="flex-1">
         <NotificationHeader onTapMenu={onTapMenu} />
         {notifications.length ? (
@@ -85,7 +85,6 @@ const NotificationPage = () => {
         )}
       </View>
       <NotificationMenu
-        notificationIds={notificationIds}
         unReadNotificationIds={unReadNotificationIds}
         visible={menuOpen}
         closeMenu={() => setMenuOpen(false)}

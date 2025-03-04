@@ -9,25 +9,19 @@ import { colors } from "@/constants/colors"
 import { useState } from "react"
 import { useGetProfile } from "@/profile/hooks/useProfile"
 import ConsentModal from "@/album/_component/notification/ConsentModal"
-import SquareButton from "@/common/SquareButton"
-import {
-  SenarioNotification,
-  sendSenarioNotification,
-} from "@/api/notification"
-import MFText from "@/common/MFText"
 import { RedDot } from "@/album/_component/notification"
 import { useGetNotification } from "@/hooks/useNotification"
-import { useQueryClient } from "@tanstack/react-query"
-import { useDeleteFcmToken } from "@/hooks/useDeleteFcmToken"
-import { NOTIFICATIONS } from "@/constants/queryString"
+// import { useQueryClient } from "@tanstack/react-query"
+// import { useDeleteFcmToken } from "@/hooks/useDeleteFcmToken"
+// import { NOTIFICATIONS } from "@/constants/queryString"
 
 const AlbumsPage = ({ navigation }: any) => {
   const [openConsent, setOpenConsent] = useState(false)
 
-  const queryClient = useQueryClient()
+  // const queryClient = useQueryClient()
   const { profile } = useGetProfile()
 
-  const { mutate: deleteMutate } = useDeleteFcmToken(profile?.memberId)
+  //  const { mutate: deleteMutate } = useDeleteFcmToken(profile?.memberId)
   const { notifications } = useGetNotification(profile?.memberId)
 
   const onPress = () => {
@@ -36,31 +30,31 @@ const AlbumsPage = ({ navigation }: any) => {
     else setOpenConsent(true)
   }
 
-  const onTest = async () => {
-    const body: SenarioNotification = {
-      notificationType: "NEW_MEMBER",
-      receiverMemberIds: [profile?.memberId ?? "01JM79B1YRDQJE96TC7ZQBSR8C"],
-      variables: {
-        name: "다른 유저 이름 님이 공유앨범 이름에 n장의 사진을 올렸어요",
-      },
-    }
-    try {
-      const data = await sendSenarioNotification(body)
-      console.log("senario", data)
-      await queryClient.invalidateQueries({
-        queryKey: [...NOTIFICATIONS.GET_NOTIFICATIONS],
-      })
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  // const onTest = async () => {
+  //   const body: SenarioNotification = {
+  //     notificationType: "NEW_MEMBER",
+  //     receiverMemberIds: [profile?.memberId ?? "01JM79B1YRDQJE96TC7ZQBSR8C"],
+  //     variables: {
+  //       name: "다른 유저 이름 님이 공유앨범 이름에 n장의 사진을 올렸어요",
+  //     },
+  //   }
+  //   try {
+  //     const data = await sendSenarioNotification(body)
+  //     console.log("senario", data)
+  //     await queryClient.invalidateQueries({
+  //       queryKey: [...NOTIFICATIONS.GET_NOTIFICATIONS],
+  //     })
+  //   } catch (e) {
+  //     console.error(e)
+  //   }
+  // }
 
-  const deleteToken = async () => {
-    deleteMutate()
-  }
+  // const deleteToken = async () => {
+  //   deleteMutate()
+  // }
   return (
     <>
-      <PageContainer statusBarColor="#ffffff">
+      <PageContainer statusBarColor="#ffffff" homeIndicatorColor="#ffffff">
         <View className="flex-1 bg-white">
           {/* header */}
           <View className="flex-row w-full h-[56px] pt-[14px] py-[14px] px-[16px] justify-between">

@@ -65,7 +65,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       return
     }
 
-    console.log("assets", result.assets)
+    // console.log("assets", result.assets)
     const files = result.assets || []
     setProgress(0)
     setCurrentUploaded(0)
@@ -85,8 +85,6 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       setProgress(10)
       const totalItems = files.length
       let currentItems = 0
-
-      console.log("preSignedUrls", preSignedUrls)
 
       await Promise.all(
         files.map(async (file, index) => {
