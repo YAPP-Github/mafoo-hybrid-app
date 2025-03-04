@@ -8,6 +8,7 @@ import SquareButton from "@/common/SquareButton"
 import { buildCancelableTask } from "@/utils"
 import MFText from "@/common/MFText"
 import { PhotoInfo } from "@/album/types"
+import { uriToBlob } from "@/utils/uriToBlob"
 
 interface AddImageDialogProps {
   currentAlbumId: string
@@ -48,13 +49,6 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       type: "errorToast",
       text1: "업로드 진행이 취소됐어요",
     })
-  }
-
-  // 파일 URI를 Blob으로 변환
-  const uriToBlob = async (uri: string): Promise<Blob> => {
-    const response = await fetch(uri)
-    const blob = await response.blob()
-    return blob
   }
 
   const handleImageSelection = useCallback(async () => {

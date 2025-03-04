@@ -20,8 +20,8 @@ import { getAccessToken } from "@/store/auth/util"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { ICON_COLOR_STYLE_HEX, ICON_NAME } from "@/constants"
-
 import { RootStackParamList } from "@/types/routeParams"
+import { uriToBlob } from "@/utils/uriToBlob"
 
 export interface FrameType {
   userName: string
@@ -38,43 +38,43 @@ const Frame = ({
   albumId: albumIdProps,
   albumName,
 }: FrameType) => {
-  const viewRef = useRef<any>()
-  const imageRef = useRef<any>()
+  const viewRef = useRef<ViewShot>(null)
+  const imageRef = useRef<Image>(null)
+
   const { photos: photoInfo } = usePhotoInfoStore()
 
   const [currentPhoto, setCurrentPhoto] = useState(photoInfo[0]?.photoUrl)
-
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
-  const handleRecapFramedPhoto = async (dataUrls: string[]) => {
+  const handleRecapFramedPhoto = async (filePaths: string[]) => {
     const presignedResult = await getPresignedUrls(photoInfo, albumIdProps)
     if (!presignedResult) {
       console.error("Failed to get presigned URLs")
-      // navigation.push(`/pickphoto?${searchParams.toString()}`)
+      navigation.navigate("AlbumDetail", { albumId: albumIdProps })
       return
     }
 
     const [albumId, urls] = presignedResult
 
     try {
-      const uploadPromises = dataUrls.map(async (dataUrl, index) => {
-        /** base64 to blob */
-        const blob = await fetch(dataUrl).then((res) => res.blob())
-        const file = new File([blob], `frame_${index + 1}.jpeg`, {
+      const uploadPromises = filePaths.map(async (filePath, index) => {
+        /** uri to blob */
+        const blob = await uriToBlob(filePath)
+        const file = new File([blob!], `frame_${index + 1}.jpeg`, {
           type: "image/jpeg",
           lastModified: Date.now(),
         })
-
         const presignedUrl = urls[index]
         const accessToken = await getAccessToken()
 
-        if (!accessToken) {
-          throw new Error("토큰이 없습니다")
-        }
+        if (!accessToken) throw new Error("토큰이 없습니다")
 
         return fetch(presignedUrl, {
           method: "PUT",
           body: file,
+          headers: {
+            "Content-Type": file.type || "application/octet-stream",
+          },
         }).then((res) => {
           if (!res.ok) {
             throw new Error(`Failed to upload frame ${index + 1}`)
@@ -86,10 +86,7 @@ const Frame = ({
       await Promise.all(uploadPromises)
 
       // presigned URL에서 query string 제거 후 새 URL 생성
-      const newUrls = urls.map((url: string) => {
-        return url.split("?")[0]
-      })
-
+      const newUrls = urls.map((url: string) => url.split("?")[0])
       const { recapUrl } = await authorizedFetcher
         .post(
           `/recaps`,
@@ -116,7 +113,7 @@ const Frame = ({
   }
 
   const onCaptureBackground = async () => {
-    const dataUrls: string[] = []
+    const filePaths: string[] = []
 
     for (let index = 0; index < photoInfo.length; index++) {
       // imageRef.current?.setNativeProps({
@@ -126,15 +123,15 @@ const Frame = ({
 
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
-      const uri = await captureRef(viewRef, {
+      const filePath = await captureRef(viewRef, {
         format: "jpg",
         quality: 0.8,
-        result: "base64",
+        result: "tmpfile",
       })
-      dataUrls.push(`data:image/jpeg;base64,${uri}`)
-      //  console.log(`data:image/jpeg;base64,${uri}`)
+
+      filePaths.push(`file://${filePath}`)
     }
-    handleRecapFramedPhoto(dataUrls)
+    handleRecapFramedPhoto(filePaths)
   }
 
   useEffect(() => {
