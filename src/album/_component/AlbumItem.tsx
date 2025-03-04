@@ -64,7 +64,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
           <TextInput
             style={{
               fontFamily: "Pretendard-Semibold",
-              fontWeight: 700,
+              fontWeight: "700",
               lineHeight: 36.4,
             }}
             className="text-header1 w-full rounded-lg bg-gray-100 py-2 px-3 text-gray-400"
