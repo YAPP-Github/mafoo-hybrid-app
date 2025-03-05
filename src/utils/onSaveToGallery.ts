@@ -1,18 +1,18 @@
-import { Alert, Linking, Platform } from "react-native"
-import { hasAndroidPermission } from "./getCheckPermission"
+import { Alert, Platform } from "react-native"
+import { requestAndroidPermissions } from "./getCheckPermission"
 import { CameraRoll } from "@react-native-camera-roll/camera-roll"
 import RNFS from "react-native-fs"
 
 export const onSaveGallery = async (uri: string, fileName: string) => {
-  if (Platform.OS === "android" && !(await hasAndroidPermission())) {
+  if (Platform.OS === "android" && !requestAndroidPermissions()) {
     Alert.alert(
       "권한이 필요합니다",
       "설정에서 이미지와 비디오 파일 접근 권한을 허용해주세요.",
       [
         {
-          text: "설정으로 이동",
+          text: "허용",
           onPress: () => {
-            Linking.openSettings()
+            requestAndroidPermissions()
           },
         },
         {
