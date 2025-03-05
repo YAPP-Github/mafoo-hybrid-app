@@ -15,6 +15,7 @@ import { useReadNotification } from "@/hooks/useReadNotification"
 import { formatTime } from "@/utils/formatTime"
 import { AlbumType } from "@/album/types"
 import { getRouteParams } from "@/hooks/useForegroundEvent"
+import { ShareStatus, updateSharedMemberStatus } from "@/api/photo"
 
 // 알림함 목록 조회 notification response 와 동일
 export interface NotificationProps extends params {
@@ -64,7 +65,6 @@ const Notification = React.forwardRef(
     // 초기값을 isRead로 설정
     const [read, setRead] = useState(isRead)
 
-    // ref가 호출되면 readAllNotification 실행
     React.useImperativeHandle(
       ref,
       () => ({
@@ -75,13 +75,30 @@ const Notification = React.forwardRef(
       [setRead]
     )
 
-    // 개별 알림 읽음
+    const hasButton = notificationType === NOTIFICATIONS.NEW_SHARED_MEMBER
+
+    // 읽었거나, 공유 사용자 생성 알림 제외
     const readAndMove = () => {
+      if (hasButton) return
+
       if (!isRead) {
         setRead(true)
         mutate([notificationId])
       }
       navigation.navigate(route as any, getRouteParams({ route, paramKey }))
+    }
+
+    const onTapAccept = () => {
+      if (receiverMemberId) {
+        updateSharedMemberStatus(receiverMemberId, ShareStatus.ACCEPTED).then(
+          () => {
+            // 수락을 누르면 알림 읽음 처리
+            setRead(true)
+            mutate([notificationId])
+            navigation.navigate("Album")
+          }
+        )
+      }
     }
 
     return (
@@ -119,8 +136,12 @@ const Notification = React.forwardRef(
           </View>
           <View className="relative">
             {/* 공유 앨범 초대 알림의 경우, 수락하기 버튼이 보임*/}
-            {notificationType === NOTIFICATIONS.NEW_SHARED_MEMBER && (
-              <SquareButton size="small" theme="gray" variant="weak">
+            {hasButton && (
+              <SquareButton
+                size="small"
+                theme="gray"
+                variant="weak"
+                onPress={onTapAccept}>
                 <MFText weight="SemiBold" className="text-gray-600 text-body2">
                   수락하기
                 </MFText>

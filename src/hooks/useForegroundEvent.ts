@@ -77,10 +77,15 @@ export function useForegroundEvent() {
           queryKey: [...NOTIFICATIONS.GET_NOTIFICATIONS],
         })
 
-        navigation.navigate(
-          (data?.route as any) ?? "AlbumCreate",
-          getRouteParams(data as any)
-        )
+        // 알림함으로 이동
+        if (data?.buttonType) {
+          navigation.navigate("Notification")
+        } else {
+          navigation.navigate(
+            (data?.route as any) ?? "AlbumCreate",
+            getRouteParams(data as any)
+          )
+        }
       } else {
         console.log(
           "이동 못함 isSignedIn, memberId, notificationId",
@@ -105,7 +110,10 @@ export function useForegroundEvent() {
           detail.notification?.ios?.categoryId === "open_detail_category") // ios
       ) {
         const data = detail?.notification?.data
-        if (data) {
+
+        if (data?.buttonType) {
+          navigation.navigate("Notification")
+        } else if (data) {
           await readAndMove(data)
         } else {
           console.error("data 없음")
