@@ -166,7 +166,11 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                 </View>
               </TouchableOpacity>
               <View className="w-[1px] h-full bg-gray-200" />
-              <TouchableOpacity onPress={handleImageSelection}>
+              <TouchableOpacity
+                onPress={() => {
+                  onTapBackdrop()
+                  handleImageSelection()
+                }}>
                 <View className="px-[24px] py-[16px] items-center gap-[8px]">
                   <Icon name="galleryIcon" size={28} color="gray" />
                   <MFText
