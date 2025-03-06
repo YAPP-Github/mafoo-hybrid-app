@@ -1,16 +1,12 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postAlbum } from "@/api/photo"
-import { getQueryClient } from "@/common/QueryProviders"
 import { useAlertStore } from "@/store/alert"
 
 import { usePatchPhotoAlbum } from "@/hooks/usePhoto"
 import type { AlbumType } from "@/album/types"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
-
-export type RootStackParamList = {
-  AlbumDetail: { albumId: string } | undefined
-}
+import { RootStackParamList } from "@/types/routeParams"
 
 export const usePostAlbum = () => {
   const { showAlert } = useAlertStore()
@@ -18,6 +14,8 @@ export const usePostAlbum = () => {
   const { patchPhotoAlbum } = usePatchPhotoAlbum()
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
+
+  const queryClient = useQueryClient()
 
   const { data, mutate, isPending } = useMutation({
     mutationFn: ({
@@ -33,10 +31,10 @@ export const usePostAlbum = () => {
     onError: (error) => {
       showAlert("앗! 앨범을 만들지 못했어요", error.message)
     },
-    onSuccess: (data, { photoId }) => {
+    onSuccess: async (data, { photoId }) => {
       const { albumId } = data
-      const queryClient = getQueryClient()
-      queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
+
+      await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
 
       if (photoId) {
         patchPhotoAlbum({ photoId, defaultAlbumId: albumId })

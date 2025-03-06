@@ -1,17 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import { View, TouchableOpacity, StyleSheet } from "react-native"
 import MasonryList from "@react-native-seoul/masonry-list"
-import {
-  deletePhoto,
-  generateRecap,
-  getPhotos,
-  PermissionLevel,
-} from "@/api/photo"
+import { deletePhoto, getPhotos, PermissionLevel } from "@/api/photo"
 import { AlbumInfo, PhotoInfo } from "../types"
 import ImageDetail from "./ImageDetail"
 import { Photo } from "./Photo"
 import { PhotoAddButton } from "./PhotoAddButton"
-import { usePhotoAssetStore, usePhotoInfoStore } from "@/store/photo"
+import { usePhotoInfoStore } from "@/store/photo"
 import { useQueryClient } from "@tanstack/react-query"
 
 interface AlbumPhotosProps {
@@ -31,8 +26,6 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   const [photos, setPhotos] = useState<PhotoInfo[]>([])
   const [imageDetailShown, setImageDetailShown] = useState(false)
   const carouselStartIdx = useRef(0)
-  const [isRecapOpen, setIsRecapOpen] = useState(false)
-  const [videoUrl, setVideoUrl] = useState<string | null>(null)
 
   /** file, info */
   const { setPhotos: setIPhotosStore } = usePhotoInfoStore()
@@ -50,7 +43,6 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
 
   const fetchAlbums = async () => {
     const data = await getPhotos(albumInfo.albumId)
-    console.log("이미지 업로드 끝나고 다시 fetch 요청", data)
     if (data.length) {
       setPhotos(data)
       setIPhotosStore(data)
@@ -79,23 +71,8 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   }
 
   useEffect(() => {
-    // console.log("albumInfo.albumId", albumInfo.albumId)
     fetchAlbums()
   }, [albumInfo.albumId])
-
-  useEffect(() => {
-    if (isRecapOpen) {
-      generateRecap(albumInfo.albumId).then(
-        (data) => {
-          setVideoUrl(data.recapUrl)
-        },
-        (error) => {
-          console.error(error)
-          setIsRecapOpen(false)
-        }
-      )
-    }
-  }, [isRecapOpen])
 
   const showPhotoAdd =
     myPermission === PermissionLevel.OWNER ||

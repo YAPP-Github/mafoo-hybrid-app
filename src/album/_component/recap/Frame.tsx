@@ -1,8 +1,8 @@
+import { useEffect, useRef, useState } from "react"
 import { recapColorLinearGradient } from "@/styles/variants"
-import { Image, Platform, View } from "react-native"
+import { Image, Text, View } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import ViewShot, { captureRef } from "react-native-view-shot"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import HEART from "@/assets/frame/HEART.svg"
 import BUILDING from "@/assets/frame/BUILDING.svg"
@@ -10,125 +10,110 @@ import FIRE from "@/assets/frame/FIRE.svg"
 import SMILE_FACE from "@/assets/frame/SMILE_FACE.svg"
 import BASKETBALL from "@/assets/frame/BASKETBALL.svg"
 import STARFALL from "@/assets/frame/STARFALL.svg"
-import { useEffect, useRef, useState } from "react"
 import MFText from "@/common/MFText"
-// import { photo } from "@/dummy"
-import Icon from "@/common/Icon"
+import Icon, { IconTypes } from "@/common/Icon"
 import { AlbumType } from "@/album/types"
-import { ObjectedParams } from "@/types/user"
-import { usePhotoAssetStore, usePhotoInfoStore } from "@/store/photo"
-import { authorizedFetcher, getPresignedUrls } from "@/api/presignedUrl"
+import { usePhotoInfoStore } from "@/store/photo"
+import { getPresignedUrls } from "@/api/presignedUrl"
+import { authorizedFetcher } from "@/api/photo"
+import { getAccessToken } from "@/store/auth/util"
+import { useNavigation } from "@react-navigation/native"
+import { StackNavigationProp } from "@react-navigation/stack"
+import { ICON_COLOR_STYLE_HEX, ICON_NAME } from "@/constants"
+import { RootStackParamList } from "@/types/routeParams"
+import { uriToBlob } from "@/utils/uriToBlob"
 
 export interface FrameType {
+  userName: string
   type: AlbumType
-  userData: ObjectedParams
   setUpload: (data: boolean) => void
   albumId: string
+  albumName: string
 }
 
 const Frame = ({
+  userName,
   type,
-  userData,
   setUpload,
   albumId: albumIdProps,
+  albumName,
 }: FrameType) => {
-  const viewRef = useRef<any>()
-  const imageRef = useRef<any>()
+  const viewRef = useRef<ViewShot>(null)
+  const imageRef = useRef<Image>(null)
+
   const { photos: photoInfo } = usePhotoInfoStore()
-  const { photos: photoAsset } = usePhotoAssetStore()
 
   const [currentPhoto, setCurrentPhoto] = useState(photoInfo[0]?.photoUrl)
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
-  // console.log("photoInfo", photoInfo)
-
-  const handleRecapFramedPhoto = async (dataUrls: string[]) => {
-    // presigned URLs 가져오기
-
-    // console.time("리캡 이미지 presigned url 발급")
-
-    console.log("time2", albumIdProps)
-
-    console.log("photoAsset", photoAsset)
-
-    const presignedResult = await getPresignedUrls(photoAsset, albumIdProps)
+  const handleRecapFramedPhoto = async (filePaths: string[]) => {
+    const presignedResult = await getPresignedUrls(photoInfo, albumIdProps)
     if (!presignedResult) {
       console.error("Failed to get presigned URLs")
-      // navigation.push(`/pickphoto?${searchParams.toString()}`)
+      navigation.navigate("AlbumDetail", { albumId: albumIdProps })
       return
     }
-    // console.timeEnd("리캡 이미지 presigned url 발급")
-
-    console.log("presignedResult", presignedResult)
 
     const [albumId, urls] = presignedResult
-    console.log("Presigned URLs: ", urls)
 
-    // // dataUrls (프레임된 이미지들) 업로드
-    // try {
-    //   console.time("이미지 PUT")
-    //   const uploadPromises = dataUrls.map(async (dataUrl, index) => {
-    //     const blob = await fetch(dataUrl).then((res) => res.blob())
+    try {
+      const uploadPromises = filePaths.map(async (filePath, index) => {
+        /** uri to blob */
+        const blob = await uriToBlob(filePath)
+        const file = new File([blob!], `frame_${index + 1}.jpeg`, {
+          type: "image/jpeg",
+          lastModified: Date.now(),
+        })
+        const presignedUrl = urls[index]
+        const accessToken = await getAccessToken()
 
-    //     const file = new File([blob], `frame_${index + 1}.jpeg`, {
-    //       type: "image/jpeg",
-    //       lastModified: Date.now(),
-    //     })
+        if (!accessToken) throw new Error("토큰이 없습니다")
 
-    //     const presignedUrl = urls[index]
+        return fetch(presignedUrl, {
+          method: "PUT",
+          body: file,
+          headers: {
+            "Content-Type": file.type || "application/octet-stream",
+          },
+        }).then((res) => {
+          if (!res.ok) {
+            throw new Error(`Failed to upload frame ${index + 1}`)
+          }
+          return res
+        })
+      })
 
-    //     return fetch(presignedUrl, {
-    //       method: "PUT",
-    //       body: file,
-    //     }).then((res) => {
-    //       if (!res.ok) {
-    //         throw new Error(`Failed to upload frame ${index + 1}`)
-    //       }
-    //       return res
-    //     })
-    //   })
+      await Promise.all(uploadPromises)
 
-    //   await Promise.all(uploadPromises)
-
-    //   console.timeEnd("이미지 PUT")
-    //   // presigned URL에서 query string 제거 후 새 URL 생성
-    //   const newUrls = urls.map((url: string) => {
-    //     return url.split("?")[0]
-    //   })
-
-    //   console.time("리캡 생성 요청")
-    //   // recap API 호출
-    //   const { recapUrl } = await authorizedFetcher
-    //     .post(
-    //       `/${albumId}/recap`,
-    //       JSON.stringify({
-    //         userId: userData.coupleId + userData.nickName,
-    //         fileUrls: newUrls,
-    //       }),
-    //       {
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     )
-    //     .then((res) => res.json())
-    //     .catch((err) => {
-    //       console.error("Error calling recap API:", err)
-    //       throw err
-    //     })
-
-    //   console.log("recapUrl", recapUrl)
-    //   console.timeEnd("리캡 생성 요청")
-
-    //   // Recao page에 Url로 전달
-    //   // navigation.push(`result?${searchParams.toString()}&recapUrl=${recapUrl}`)
-    // } catch (err) {
-    //   console.error("Error during recap processing:", err)
-    //   setUpload(false)
-    // }
+      // presigned URL에서 query string 제거 후 새 URL 생성
+      const newUrls = urls.map((url: string) => url.split("?")[0])
+      const { recapUrl } = await authorizedFetcher
+        .post(
+          `/recaps`,
+          {
+            albumId: albumId,
+            fileUrls: newUrls,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => res)
+        .catch((err) => {
+          console.error("Error calling recap API:", err)
+          throw err
+        })
+      navigation.replace("Recap", { recapUrl: recapUrl })
+    } catch (err) {
+      console.error("Error during recap processing:", err)
+      setUpload(false)
+    }
   }
 
   const onCaptureBackground = async () => {
-    const dataUrls: string[] = []
+    const filePaths: string[] = []
 
     for (let index = 0; index < photoInfo.length; index++) {
       // imageRef.current?.setNativeProps({
@@ -136,21 +121,17 @@ const Frame = ({
       // })
       setCurrentPhoto(photoInfo[index].photoUrl)
 
-      await new Promise((resolve) => setTimeout(resolve, 500)) // 이게 같은 값이 나옴.
+      await new Promise((resolve) => setTimeout(resolve, 2000))
 
-      const uri = await captureRef(viewRef, {
-        format: "png",
+      const filePath = await captureRef(viewRef, {
+        format: "jpg",
         quality: 0.8,
-        result: "base64", // base64 인코딩
+        result: "tmpfile",
       })
-      dataUrls.push(`data:image/jpeg;base64,${uri}`)
 
-      console.log("dataUrls")
-      //  console.log(`data:image/jpeg;base64,${uri}`)
+      filePaths.push(`file://${filePath}`)
     }
-
-    console.log("handleRecapFramedPhoto")
-    handleRecapFramedPhoto(dataUrls)
+    handleRecapFramedPhoto(filePaths)
   }
 
   useEffect(() => {
@@ -171,17 +152,27 @@ const Frame = ({
         top: 0,
         left: 0,
       }}>
+      {/* LinearGradient 배경 */}
       <LinearGradient
         className="absolute top-0 left-0 items-center justify-center w-[393px] h-[680px]"
         {...recapColorLinearGradient[type]}>
+        <Image
+          ref={imageRef}
+          resizeMode="contain"
+          key={currentPhoto}
+          width={300}
+          height={500}
+          source={{ uri: currentPhoto }}
+        />
+        {/* Frame */}
         {type === "HEART" && <HEART className={FRAME_LAYOUT} />}
         {type === "BUILDING" && <BUILDING className={FRAME_LAYOUT} />}
         {type === "STARFALL" && <STARFALL className={FRAME_LAYOUT} />}
         {type === "FIRE" && <FIRE className={FRAME_LAYOUT} />}
         {type === "SMILE_FACE" && <SMILE_FACE className={FRAME_LAYOUT} />}
         {type === "BASKETBALL" && <BASKETBALL className={FRAME_LAYOUT} />}
-        <View className="flex-col">
-          <View className="flex-row items-center justify-center">
+        <View className="flex-col absolute top-[46px]">
+          <View className="flex-col items-center justify-center">
             <MFText
               style={{
                 fontSize: 18,
@@ -190,20 +181,40 @@ const Frame = ({
                 letterSpacing: 0.36,
               }}
               className="text-sumone-white mr-[4px]">
-              @수연님의
+              @{userName}님의
             </MFText>
-            <Icon name="mafooLogo" color="white" size={64} />
+
+            <Text
+              style={{
+                fontFamily: "OTSBAggroM",
+                fontWeight: 400,
+                color: "white",
+                fontSize: 28,
+                lineHeight: 36.4,
+                marginTop: 15,
+                letterSpacing: 0.56,
+              }}>
+              HIGHLIGHT
+            </Text>
           </View>
         </View>
-        <Image
-          ref={imageRef}
-          resizeMode="center"
-          key={photoInfo[0].photoId}
-          width={300}
-          height={500}
-          source={{ uri: currentPhoto }}
-          className=""
-        />
+        <View className="flex-row items-center px-[16px] py-[8px] absolute top-[604px] left-[46px] rounded-full border border-white bg-white/80">
+          <Icon
+            name={ICON_NAME[type] as IconTypes}
+            color={ICON_COLOR_STYLE_HEX[type]}
+            size={28}
+          />
+          <Text
+            style={{
+              fontFamily: "OTSBAggroM",
+              fontWeight: "400",
+              fontSize: 18,
+              lineHeight: 25.2,
+              marginLeft: 4,
+            }}>
+            {albumName}
+          </Text>
+        </View>
       </LinearGradient>
     </ViewShot>
   )

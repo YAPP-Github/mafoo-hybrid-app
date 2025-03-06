@@ -1,3 +1,5 @@
+export type NotificationIconType = AlbumType & "CONGRATULATION"
+
 export type AlbumType =
   | "HEART"
   | "FIRE"

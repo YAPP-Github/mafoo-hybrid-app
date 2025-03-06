@@ -1,7 +1,8 @@
 import { Asset } from "react-native-image-picker"
 import { createFetcher } from "./myfetch"
+import { PhotoInfo } from "@/album/types"
 
-export const authorizedFetcher = createFetcher("sumone/albums")
+export const authorizedFetcher = createFetcher("photo/v1/object-storage")
 
 export const postOriginalPhoto = async (
   photos: File[],
@@ -79,20 +80,19 @@ export const postOriginalPhoto = async (
   }
 }
 
-export const getPresignedUrls = async (photos: Asset[], albumId: string) => {
+// Recap Frame 사용
+export const getPresignedUrls = async (
+  photos: PhotoInfo[],
+  albumId: string
+) => {
   if (!albumId.length) return
-
-  const formatedFileNames = photos.map((photo) => {
-    return photo.fileName!.split(".")[0] + ".jpeg"
-  })
-
-  console.log("formatedFileNames", albumId, formatedFileNames)
 
   const { urls } = await authorizedFetcher
     .post(
-      `/sumone/albums/${albumId}/presigned-urls`,
+      `/recap`,
       {
-        fileNames: formatedFileNames,
+        fileCount: photos.length,
+        albumId: albumId,
       },
       {
         headers: {
@@ -101,7 +101,7 @@ export const getPresignedUrls = async (photos: Asset[], albumId: string) => {
       }
     )
     .then((res) => {
-      return res.json()
+      return res
     })
     .catch((err) => {
       console.error(err)

@@ -1,6 +1,5 @@
 import { useState } from "react"
-import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native"
-
+import { Image, Text, TouchableOpacity, View } from "react-native"
 import { useQueryClient } from "@tanstack/react-query"
 import {
   PermissionLevel,
@@ -15,7 +14,6 @@ import { AlbumPhotos } from "@/album/_component/AlbumPhotos"
 import AlbumDetailHeader from "@/album/_component/AlbumDetailHeader"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
-import React from "react"
 import MFText from "@/common/MFText"
 import { Dialog } from "@/album/_component/Dialog"
 import AlbumMenuDialog, {
@@ -24,17 +22,11 @@ import AlbumMenuDialog, {
 import { CreateRecapButton } from "@/album/_component/recap/CreateRecap"
 import Frame from "@/album/_component/recap/Frame"
 import VideoLoading from "@/album/_component/VideoLoading"
-import { sampleUserData } from "@/types/user"
 import { useGetProfile } from "@/profile/hooks/useProfile"
 import { useGetAlbum } from "@/hooks/usePhoto"
-
-export type RootStackParamList = {
-  AddFriend: { albumId: string } | undefined
-  SharedFriend: { albumId: string } | undefined
-  // Recap?: { albumId: string } | undefined
-  Frame?: { albumInfo: any } // TODO: albumInfo 타입 추가
-  Album: undefined
-}
+import { RootStackParamList } from "@/types/routeParams"
+import PageContainer from "@/common/PageContainer"
+import { COLOR_MAP } from "../ExportAlbumPage/constant"
 
 export type AlbumDetailPageProps = {
   route: {
@@ -46,18 +38,21 @@ export type AlbumDetailPageProps = {
 
 const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
   const { albumId: id } = route.params
-  const profile = useGetProfile()
+
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false)
   const [isQuitModalShown, setIsQuitModalShown] = useState(false)
   const [isRecapOpen, setIsRecapOpen] = useState(false)
+  const [isCapture, setIsCapture] = useState(false)
+  // 앨범 삭제 여부
+  const [isDelete, setIsDelete] = useState(false)
 
   const queryClient = useQueryClient()
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
 
-  const [isCapture, setIsCapture] = useState(false)
-
-  const { albums: albumInfo } = useGetAlbum(id)
+  // 호출하기 전에 먼저 삭제되었는지 여부 확인
+  const { albums: albumInfo } = useGetAlbum(id, isDelete)
+  const { profile } = useGetProfile()
 
   if (!albumInfo) {
     return
@@ -74,17 +69,24 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     name: albumInfo.ownerName ?? "",
     serialNumber: "0000",
   }
-  const isOwner = albumInfo.ownerMemberId === profile.profile?.memberId
+
+  const isOwner = albumInfo.ownerMemberId === profile?.memberId
   const me = sharedMembers.find(
-    (member) => member.memberId === profile.profile?.memberId
+    (member) => member.memberId === profile?.memberId
   )
-
   const myPermission = isOwner ? PermissionLevel.OWNER : me?.permissionLevel
-
   const sharedMembersPreview = [ownerShared, ...sharedMembers.slice(0, 5)]
 
   const handleDeleteAlbum = async () => {
     await deleteAlbum(albumInfo.albumId)
+
+    setIsDelete(true)
+
+    // 앨범 목록 갱신 및 앨범 캐시 삭제
+    queryClient.removeQueries({
+      queryKey: ["getAlbum", albumInfo.albumId],
+    })
+
     await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
     navigation.navigate("Album")
     setIsDeleteModalShown(false)
@@ -94,7 +96,7 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     if (me) {
       await deleteSharedMember(me.sharedMemberId)
       await queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
-      //   router.push("/album")
+      navigation.navigate("Album")
     }
   }
 
@@ -133,101 +135,97 @@ const AlbumDetailPage = ({ route }: AlbumDetailPageProps) => {
     }
   }
 
-  const typeToBackgroundColor: Record<string, string> = {
-    HEART: "bg-red-200",
-    FIRE: "bg-butter-200",
-    BASKETBALL: "bg-green-200",
-    BUILDING: "bg-skyblue-200",
-    STARFALL: "bg-purple-200",
-    SMILE_FACE: "bg-pink-200",
-  }
-
   const backgroundColorClass = albumInfo?.type
-    ? typeToBackgroundColor[albumInfo.type]
+    ? COLOR_MAP[albumInfo.type].bg
     : "bg-gray-200"
 
   return (
-    <View className={`flex-1 ${headerVariants({ type: albumInfo.type })} `}>
-      <SafeAreaView
-        className={`${headerVariants({ type: albumInfo.type })} pb-0`}>
+    <PageContainer
+      statusBarColor={COLOR_MAP[albumInfo.type].bg}
+      homeIndicatorColor="#ffffff">
+      <View className={`flex-1 ${headerVariants({ type: albumInfo.type })} `}>
         <AlbumDetailHeader
           albumInfo={albumInfo}
           className={`sticky top-0 z-20 ${backgroundColorClass}`}
           onTapMenu={() => setIsMenuVisible(true)}
         />
-      </SafeAreaView>
-      {isDeleteModalShown && <Dialog {...deleteDialogProps} />}
-      {isQuitModalShown && <Dialog {...quitDialogProps} />}
-      {myPermission && (
-        <AlbumMenuDialog
-          albumId={id}
-          isVisible={isMenuVisible}
-          myPermission={myPermission}
-          onTapBackdrop={() => {
-            setIsMenuVisible(false)
-          }}
-          onTapAction={onTapMenuAction}
-        />
-      )}
-      <View
-        className={cn(
-          headerVariants({ type: albumInfo.type }),
-          "z-10 h-20 w-full px-4"
-        )}>
-        <ShareBar
-          canAddFriend={
-            myPermission === PermissionLevel.OWNER ||
-            myPermission === PermissionLevel.FULL_ACCESS
-          }
-          onTapViewFriend={() =>
-            navigation.navigate("SharedFriend", { albumId: id })
-          }
-          onTapFindFriend={() =>
-            navigation.navigate("AddFriend", { albumId: id })
-          }
-          previewMembers={sharedMembersPreview}
-        />
-      </View>
-      <View className={headerVariants({ type: albumInfo.type })}>
-        <View className="sticky z-10 flex w-full flex-row justify-between bg-sumone-white rounded-tl-3xl rounded-tr-3xl">
-          <View className="flex flex-col px-6 pb-2 pt-6 w-full">
-            <MFText className="text-body2 text-gray-500 pb-[8px]">
-              함께 찍은 추억
-            </MFText>
-            <View className="flex-row justify-between items-center">
-              <MFText weight="SemiBold" className="text-header1 text-gray-800">
-                {albumInfo.photoCount}장
+        {isDeleteModalShown && <Dialog {...deleteDialogProps} />}
+        {isQuitModalShown && <Dialog {...quitDialogProps} />}
+        {myPermission && (
+          <AlbumMenuDialog
+            albumId={id}
+            isVisible={isMenuVisible}
+            myPermission={myPermission}
+            onTapBackdrop={() => {
+              setIsMenuVisible(false)
+            }}
+            onTapAction={onTapMenuAction}
+          />
+        )}
+        <View
+          className={cn(
+            headerVariants({ type: albumInfo.type }),
+            "z-10 h-20 w-full px-4"
+          )}>
+          <ShareBar
+            canAddFriend={
+              myPermission === PermissionLevel.OWNER ||
+              myPermission === PermissionLevel.FULL_ACCESS
+            }
+            onTapViewFriend={() =>
+              navigation.navigate("SharedFriend", { albumId: id })
+            }
+            onTapFindFriend={() =>
+              navigation.navigate("AddFriend", { albumId: id })
+            }
+            previewMembers={sharedMembersPreview}
+          />
+        </View>
+        <View className={headerVariants({ type: albumInfo.type })}>
+          <View className="sticky z-10 flex w-full flex-row justify-between bg-sumone-white rounded-tl-3xl rounded-tr-3xl">
+            <View className="flex flex-col px-6 pb-2 pt-6 w-full">
+              <MFText className="text-body2 text-gray-500 pb-[8px]">
+                함께 찍은 추억
               </MFText>
-              {/* TODO: 리캡 만들기 버튼 보여지는 조건 문의 */}
-              {/* {photos.length >= 232323 && ( */}
-              <CreateRecapButton
-                type={albumInfo?.type || "HEART"}
-                onPress={() => {
-                  setIsCapture(true)
-                  setIsRecapOpen(true)
-                }}>
-                리캡 만들기
-              </CreateRecapButton>
+              <View className="flex-row justify-between items-center">
+                <MFText
+                  weight="SemiBold"
+                  className="text-header1 text-gray-800">
+                  {albumInfo?.photoCount}장
+                </MFText>
+                {/* `보기만` 권한은 리캡 생성 불가 */}
+                {myPermission !== PermissionLevel.VIEW_ACCESS &&
+                  Number(albumInfo?.photoCount) >= 1 && (
+                    <CreateRecapButton
+                      type={albumInfo?.type || "HEART"}
+                      onPress={() => {
+                        setIsCapture(true)
+                        setIsRecapOpen(true)
+                      }}>
+                      리캡 만들기
+                    </CreateRecapButton>
+                  )}
+              </View>
             </View>
           </View>
         </View>
-      </View>
-      {/*myPermission*/}
-      {isCapture && (
-        <Frame
-          userData={sampleUserData} // TODO: 데이터 변경
-          type={albumInfo?.type || "HEART"}
-          setUpload={setIsRecapOpen}
-          albumId={id}
+        {isCapture && (
+          <Frame
+            userName={profile?.name || "user"}
+            type={albumInfo?.type || "HEART"}
+            setUpload={setIsRecapOpen}
+            albumId={id}
+            albumName={albumInfo?.name}
+          />
+        )}
+        <VideoLoading
+          visible={isRecapOpen}
+          type={albumInfo.type}
+          closeRecapModal={() => setIsRecapOpen(false)}
         />
-      )}
-      <VideoLoading
-        visible={isRecapOpen}
-        type={albumInfo.type}
-        closeRecapModal={() => setIsRecapOpen(false)}
-      />
-      <AlbumPhotos albumInfo={albumInfo} myPermission={myPermission} />
-    </View>
+        <AlbumPhotos albumInfo={albumInfo} myPermission={myPermission} />
+      </View>
+    </PageContainer>
   )
 }
 
@@ -297,10 +295,10 @@ const ShareBar: React.FC<ShareBarProps> = ({
         {canAddFriend && (
           <TouchableOpacity
             onPress={onTapFindFriend}
-            className="px-3 py-2 bg-purple-200 rounded-md active:bg-purple-300">
-            <Text className="text-purple-700 tp-caption1-semibold">
+            className="px-3 py-2 bg-gray-100 rounded-md active:bg-gray-300">
+            <MFText className="text-gray-600 text-caption1" weight="SemiBold">
               친구 찾기
-            </Text>
+            </MFText>
           </TouchableOpacity>
         )}
       </View>

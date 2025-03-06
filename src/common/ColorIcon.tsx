@@ -5,6 +5,7 @@ import { ICON_NAME } from "@/constants"
 import { colorIconVariants } from "@/styles/variants"
 import iconMap from "./iconMap"
 import { AlbumType } from "@/album/types"
+import { cn } from "@/utils"
 
 export const iconSize = {
   medium: 24,
@@ -15,6 +16,7 @@ export interface ColorIconProps extends VariantProps<typeof colorIconVariants> {
   size?: keyof typeof iconSize
   iconColor?: AlbumType
   style?: StyleProp<ViewStyle>
+  className?: string
 }
 
 /**
@@ -24,6 +26,7 @@ export interface ColorIconProps extends VariantProps<typeof colorIconVariants> {
 const ColorIcon = ({
   size = "medium",
   iconColor,
+  className,
   ...props
 }: ColorIconProps) => {
   const SvgIcon = iconMap[ICON_NAME[iconColor || "HEART"]].default
@@ -31,7 +34,7 @@ const ColorIcon = ({
   return (
     <View
       style={[styles.container, props.style]}
-      className={`${colorIconVariants({ size, iconColor })}`}>
+      className={cn(className, colorIconVariants({ size, iconColor }))}>
       <SvgIcon
         width={iconSize[size || "medium"]}
         height={iconSize[size || "medium"]}

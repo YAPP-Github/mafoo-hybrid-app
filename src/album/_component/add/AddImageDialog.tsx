@@ -7,8 +7,8 @@ import Icon from "@/common/Icon"
 import SquareButton from "@/common/SquareButton"
 import { buildCancelableTask } from "@/utils"
 import MFText from "@/common/MFText"
-import { usePhotoAssetStore } from "@/store/photo"
 import { PhotoInfo } from "@/album/types"
+import { uriToBlob } from "@/utils/uriToBlob"
 
 interface AddImageDialogProps {
   currentAlbumId: string
@@ -37,7 +37,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
   const [totalFiles, setTotalFiles] = useState(0)
   const [isError, setError] = useState(false)
   const [isOverLimit, setOverLimit] = useState(false)
-  const { setPhotos } = usePhotoAssetStore()
+
   const [tasks, setTasks] = useState<
     { run: () => Promise<unknown>; cancel: () => void }[]
   >([])
@@ -49,13 +49,6 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       type: "errorToast",
       text1: "업로드 진행이 취소됐어요",
     })
-  }
-
-  // 파일 URI를 Blob으로 변환
-  const uriToBlob = async (uri: string): Promise<Blob> => {
-    const response = await fetch(uri)
-    const blob = await response.blob()
-    return blob
   }
 
   const handleImageSelection = useCallback(async () => {
@@ -72,7 +65,7 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       return
     }
 
-    console.log("assets", result.assets)
+    // console.log("assets", result.assets)
     const files = result.assets || []
     setProgress(0)
     setCurrentUploaded(0)
@@ -83,8 +76,6 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
     onCloseAddDialogOnly()
 
     setTasks([])
-    /** 파일 이름 저장 */
-    setPhotos(files)
 
     try {
       const preSignedResponse = await generatePreSignedUrls(
@@ -94,8 +85,6 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
       setProgress(10)
       const totalItems = files.length
       let currentItems = 0
-
-      console.log("preSignedUrls", preSignedUrls)
 
       await Promise.all(
         files.map(async (file, index) => {
@@ -177,7 +166,11 @@ export const AddImageDialog: React.FC<AddImageDialogProps> = ({
                 </View>
               </TouchableOpacity>
               <View className="w-[1px] h-full bg-gray-200" />
-              <TouchableOpacity onPress={handleImageSelection}>
+              <TouchableOpacity
+                onPress={() => {
+                  onTapBackdrop()
+                  handleImageSelection()
+                }}>
                 <View className="px-[24px] py-[16px] items-center gap-[8px]">
                   <Icon name="galleryIcon" size={28} color="gray" />
                   <MFText

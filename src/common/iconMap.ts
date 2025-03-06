@@ -51,6 +51,9 @@ const iconMap: Record<IconTypes, any> = {
   clipboardHeart: require("../assets/clipboardHeart.svg"),
   clipboardRemove: require("../assets/clipboardRemove.svg"),
   closeIcon: require("../assets/closeIcon.svg"),
+  mafooSantaCharacter: require("../assets/mafooSantaCharacter.svg"),
+  emptyAlarmBell: require("../assets/emptyAlarmBell.svg"),
+  congratulation: require("../assets/congratulation.svg"),
 }
 
 export default iconMap

@@ -1,13 +1,13 @@
 import React, { useState } from "react"
-import { Text, TextInput, View, TouchableOpacity } from "react-native"
+import { Text, TextInput, View } from "react-native"
 import { VariantProps } from "class-variance-authority"
 import { twMerge } from "tailwind-merge"
 
 import { AlbumValue } from "../types"
 import { albumItemVariants, photoCountVariants } from "../../styles/variants"
-// import Badge from "./Badge"
 import ColorIcon from "../../common/ColorIcon"
 import MFText from "../../common/MFText"
+import Badge from "./Badge"
 
 export interface AlbumItemProps extends VariantProps<typeof albumItemVariants> {
   value: AlbumValue
@@ -62,10 +62,16 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
         // Edit 모드
         <>
           <TextInput
-            className="text-header1 w-full rounded-lg bg-gray-100 py-2 px-3 caret-gray-600"
+            style={{
+              fontFamily: "Pretendard-Semibold",
+              fontWeight: "700",
+              lineHeight: 36.4,
+            }}
+            className="text-header1 w-full rounded-lg bg-gray-100 py-2 px-3 text-gray-400"
             value={name}
             onChangeText={handleName}
             placeholder="새 앨범"
+            autoFocus
           />
           <Text className="text-body2 mt-1 text-right text-gray-500">
             {name.length}/8자
@@ -85,7 +91,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
           <MFText className={photoCountVariants({ type })}>
             사진 {photoCount}장
           </MFText>
-          {/* {isNew && <Badge className="absolute -left-2 -top-2">New!</Badge>} */}
+          {/* {isNew && <Badge className="absolute -left-3 -top-2">New!</Badge>} */}
         </>
       )}
       <ColorIcon

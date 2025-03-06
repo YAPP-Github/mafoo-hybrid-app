@@ -1,18 +1,18 @@
 import { useState } from "react"
-import { Alert, Text, TouchableOpacity, View } from "react-native"
+import { Alert, TouchableOpacity } from "react-native"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigation } from "@react-navigation/native"
 
 import {
   GetBulkAlbumResponse,
-  deleteSharedMember,
-  updateSharedMemberStatus,
+  acceptSharedMemberStatus,
+  rejectSharedMemberStatus,
 } from "@/api/photo"
 import { usePatchAlbumMove } from "@/hooks/useAlbum"
 import AlbumItem from "./AlbumItem"
 import WaitingAlbumItem from "./WaitingAlbumItem"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { ShareStatus } from "@/api/photo"
+import { RootStackParamList } from "@/types/routeParams"
 
 interface AlbumItemProps {
   album: GetBulkAlbumResponse
@@ -21,10 +21,6 @@ interface AlbumItemProps {
   showNewRing: boolean
 }
 const ItemType = "ALBUM"
-
-export type RootStackParamList = {
-  AlbumDetail: { albumId: string } | undefined
-}
 
 const DraggableAlbum = ({ album, showNewRing }: AlbumItemProps) => {
   const queryClient = useQueryClient()
@@ -37,11 +33,9 @@ const DraggableAlbum = ({ album, showNewRing }: AlbumItemProps) => {
 
   const onTapAccept = () => {
     if (album.sharedMemberId) {
-      updateSharedMemberStatus(album.sharedMemberId, ShareStatus.ACCEPTED).then(
-        () => {
-          queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
-        }
-      )
+      acceptSharedMemberStatus(album.sharedMemberId).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
+      })
     }
   }
 
@@ -58,7 +52,7 @@ const DraggableAlbum = ({ album, showNewRing }: AlbumItemProps) => {
       {
         text: "거절하기",
         onPress: () => {
-          deleteSharedMember(album.sharedMemberId!).then(() => {
+          rejectSharedMemberStatus(album.sharedMemberId!).then(() => {
             queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
           })
         },

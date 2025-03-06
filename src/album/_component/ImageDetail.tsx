@@ -12,6 +12,9 @@ import { PhotoInfo } from "../types"
 import SquareButton from "@/common/SquareButton"
 import MFText from "@/common/MFText"
 import { useQueryClient } from "@tanstack/react-query"
+import { onSaveGallery } from "@/utils/onSaveToGallery"
+import Icon from "@/common/Icon"
+import PageContainer from "@/common/PageContainer"
 
 interface ImageDetailProps {
   photos: PhotoInfo[]
@@ -55,107 +58,114 @@ const ImageDetail = ({
     setIsZoomed(true)
   }
 
+  if (!photos[startIdx]?.photoUrl) return
+
   return (
     <>
-      {visible && (
-        <Modal style={styles.container} animationType="fade">
-          {/* Header */}
-          <View style={styles.header}>
-            <TouchableOpacity onPress={onClose}>
-              <Text style={styles.headerButton}>←</Text>
-            </TouchableOpacity>
-            <Text style={styles.headerText}>
-              {/* {idx + 1} / {photos.length} */}
-            </Text>
-            <TouchableOpacity onPress={() => setDeleteModalShown(true)}>
-              <Text style={[styles.headerButton, { color: "red" }]}>삭제</Text>
-            </TouchableOpacity>
-          </View>
+      <PageContainer>
+        {visible && (
+          <Modal style={styles.container} animationType="fade">
+            {/* Header */}
+            <View style={styles.header}>
+              <TouchableOpacity onPress={onClose}>
+                <Icon name="altArrowLeftOutline" size={28} />
+              </TouchableOpacity>
+              <Text style={styles.headerText}>
+                {/* {idx + 1} / {photos.length} */}
+              </Text>
+              <TouchableOpacity onPress={() => setDeleteModalShown(true)}>
+                <Text style={[styles.headerButton, { color: "red" }]}>
+                  삭제
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-          {/* Image Viewer */}
-          <View style={styles.imageContainer}>
-            <TouchableOpacity onPress={handleImageClick}>
-              <Image
-                source={{ uri: photos[idx].photoUrl }}
-                style={styles.image}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
+            {/* Image Viewer */}
+            <View style={styles.imageContainer}>
+              <TouchableOpacity onPress={handleImageClick}>
+                {/* 여기 삭제하고 photoUrl 없어서 에러 */}
+                {photos?.length > 0 && photos[idx]?.photoUrl && (
+                  <Image
+                    source={{ uri: photos[idx]?.photoUrl }}
+                    style={styles.image}
+                    resizeMode="contain"
+                  />
+                )}
+              </TouchableOpacity>
+            </View>
 
-          {/* Footer */}
-          <View style={styles.footer}>
-            <TouchableOpacity style={styles.downloadButton}>
-              <Text style={styles.downloadText}>다운로드 받기</Text>
-            </TouchableOpacity>
-          </View>
+            {/* Footer */}
+            <View style={styles.footer}>
+              <TouchableOpacity
+                style={styles.downloadButton}
+                onPress={() =>
+                  onSaveGallery(photos[idx]?.photoUrl, photos[idx]?.photoId)
+                }>
+                <Text style={styles.downloadText}>다운로드 받기</Text>
+              </TouchableOpacity>
+            </View>
 
-          {/* Zoom Modal */}
-          {isZoomed && (
-            <Modal visible={isZoomed} transparent={true}>
-              <View style={styles.zoomContainer}>
-                <TouchableOpacity
-                  style={styles.zoomOverlay}
-                  onPress={handleZoomOut}
-                />
-                <Image
-                  source={{ uri: photos[idx].photoUrl }}
-                  style={styles.zoomImage}
-                  resizeMode="contain"
-                />
-              </View>
-            </Modal>
-          )}
+            {/* Zoom Modal */}
+            {isZoomed && (
+              <Modal visible={isZoomed} transparent={true}>
+                <View style={styles.zoomContainer}>
+                  <TouchableOpacity
+                    style={styles.zoomOverlay}
+                    onPress={handleZoomOut}
+                  />
+                  <Image
+                    source={{ uri: photos[idx]?.photoUrl }}
+                    style={styles.zoomImage}
+                    resizeMode="contain"
+                  />
+                </View>
+              </Modal>
+            )}
 
-          {/* Delete Confirmation Modal */}
-          {deleteModalShown && (
-            <Modal visible={deleteModalShown} transparent={true}>
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <MFText weight="SemiBold" className="text-title1">
-                    해당 사진을 삭제할까요?
-                  </MFText>
-                  <MFText className="text-gray-600 text-body1 mt-[12px]">
-                    한 번 삭제하면 복구할 수 없어요.
-                  </MFText>
-                  <View style={styles.modalActions}>
-                    <SquareButton
-                      className="flex-1"
-                      variant="solid"
-                      size="large"
-                      theme="gray">
-                      <TouchableOpacity
-                        className="flex-1 items-center justify-center"
+            {/* Delete Confirmation Modal */}
+            {deleteModalShown && (
+              <Modal visible={deleteModalShown} transparent={true}>
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalContent}>
+                    <MFText weight="SemiBold" className="text-title1">
+                      해당 사진을 삭제할까요?
+                    </MFText>
+                    <MFText className="text-gray-600 text-body1 mt-[12px]">
+                      한 번 삭제하면 복구할 수 없어요.
+                    </MFText>
+                    <View style={styles.modalActions}>
+                      <SquareButton
+                        className="flex-1"
+                        variant="solid"
+                        size="large"
+                        theme="gray"
                         onPress={() => setDeleteModalShown(false)}>
                         <MFText
                           weight="SemiBold"
                           className="text-body1 text-gray-600">
                           닫기
                         </MFText>
-                      </TouchableOpacity>
-                    </SquareButton>
-                    <SquareButton
-                      className="flex-1"
-                      variant="solid"
-                      size="large"
-                      theme="red">
-                      <TouchableOpacity
-                        className="flex-1 items-center justify-center"
+                      </SquareButton>
+                      <SquareButton
+                        className="flex-1"
+                        variant="solid"
+                        size="large"
+                        theme="red"
                         onPress={handleDelete}>
                         <MFText
                           weight="SemiBold"
                           className="text-body1 text-white">
                           사진 삭제
                         </MFText>
-                      </TouchableOpacity>
-                    </SquareButton>
+                      </SquareButton>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Modal>
-          )}
-        </Modal>
-      )}
+              </Modal>
+            )}
+          </Modal>
+        )}
+      </PageContainer>
     </>
   )
 }

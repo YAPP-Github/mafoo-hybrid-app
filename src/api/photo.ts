@@ -38,7 +38,7 @@ export interface SharedMember {
   serialNumber: string
 }
 
-const authorizedFetcher = createFetcher("photo/v1")
+export const authorizedFetcher = createFetcher("photo/v1")
 const unAuthorizedFetcher = createUnauthorizedFetcher("photo/v1")
 const albumInstance = createFetcher("photo/v1/albums")
 const sharedMemberInstance = createFetcher("photo/v1/shared-members")
@@ -112,8 +112,6 @@ export const getAlbum = async (
 export const getAlbums = async (): Promise<GetBulkAlbumResponse[]> => {
   try {
     const data = await authorizedFetcher.get(`/albums`)
-
-    console.log("getAlbums 데이터", data)
     return data
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
@@ -159,7 +157,9 @@ export const patchPhotoAlbum = async (
   photoId: string,
   albumId: string
 ): Promise<PostQrCodeResponse> => {
-  return await authorizedFetcher.patch(`photos/${photoId}/album`, { albumId })
+  return await authorizedFetcher.patch(`photos/${photoId}/album`, {
+    albumId,
+  })
 }
 
 export const patchAlbumMove = async (
@@ -203,9 +203,10 @@ export const updatePhotoAlbumBulk = async (
 }
 
 export const generateRecap = async (
-  albumId: string
+  albumId: string,
+  fileUrls: string[]
 ): Promise<GenerateRecapResponse> => {
-  return await authorizedFetcher.post("/recaps", { albumId })
+  return await authorizedFetcher.post("/recaps", { albumId, fileUrls })
 }
 
 export const createSharedMember = async (
@@ -220,11 +221,20 @@ export const deleteSharedMember = async (sharedMemberId: string) => {
   await sharedMemberInstance.delete(`/${sharedMemberId}`)
 }
 
+/** deprecated */
 export const updateSharedMemberStatus = async (
   sharedMemberId: string,
   shareStatus: ShareStatus
 ) => {
   await sharedMemberInstance.patch(`/${sharedMemberId}/status`, { shareStatus })
+}
+
+export const acceptSharedMemberStatus = async (sharedMemberId: string) => {
+  await sharedMemberInstance.patch(`/${sharedMemberId}/status/accept`)
+}
+
+export const rejectSharedMemberStatus = async (sharedMemberId: string) => {
+  await sharedMemberInstance.patch(`/${sharedMemberId}/status/reject`)
 }
 
 export const updateShareMemberPermissionLevel = async (

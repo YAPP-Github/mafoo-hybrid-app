@@ -1,5 +1,4 @@
 import { httpToHttps } from "@/utils/formatUrl"
-import React from "react"
 import { View, Text, Image, TouchableOpacity } from "react-native"
 
 interface FriendElementProps {
@@ -44,7 +43,7 @@ const SharedFriendElement = ({
           <Text className="text-gray-500 tp-body2-regular">{tag}</Text>
         </View>
       </View>
-      {!isOwner && isManageVisible && <ManageButton onTapShare={onTapShare} />}
+      {isOwner && isManageVisible && <ManageButton onTapShare={onTapShare} />}
     </View>
   )
 }
