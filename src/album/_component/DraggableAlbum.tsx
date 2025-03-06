@@ -1,19 +1,17 @@
 import { useState } from "react"
-import { Alert, Text, TouchableOpacity, View } from "react-native"
+import { Alert, TouchableOpacity } from "react-native"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigation } from "@react-navigation/native"
 
 import {
   GetBulkAlbumResponse,
   acceptSharedMemberStatus,
-  deleteSharedMember,
-  updateSharedMemberStatus,
+  rejectSharedMemberStatus,
 } from "@/api/photo"
 import { usePatchAlbumMove } from "@/hooks/useAlbum"
 import AlbumItem from "./AlbumItem"
 import WaitingAlbumItem from "./WaitingAlbumItem"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { ShareStatus } from "@/api/photo"
 import { RootStackParamList } from "@/types/routeParams"
 
 interface AlbumItemProps {
@@ -54,7 +52,7 @@ const DraggableAlbum = ({ album, showNewRing }: AlbumItemProps) => {
       {
         text: "거절하기",
         onPress: () => {
-          deleteSharedMember(album.sharedMemberId!).then(() => {
+          rejectSharedMemberStatus(album.sharedMemberId!).then(() => {
             queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
           })
         },
