@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { View } from "react-native"
-import Icon, { IconTypes } from "@/common/Icon"
+import Icon from "@/common/Icon"
 import MFText from "@/common/MFText"
 import SquareButton from "@/common/SquareButton"
 import { ICON_COLOR_STYLE_HEX, ICON_NAME } from "@/constants"
@@ -13,9 +13,9 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import { RootStackParamList } from "@/types/routeParams"
 import { useReadNotification } from "@/hooks/useReadNotification"
 import { formatTime } from "@/utils/formatTime"
-import { AlbumType } from "@/album/types"
+import { NotificationIconType } from "@/album/types"
 import { getRouteParams } from "@/hooks/useForegroundEvent"
-import { ShareStatus, updateSharedMemberStatus } from "@/api/photo"
+import { acceptSharedMemberStatus } from "@/api/photo"
 
 // 알림함 목록 조회 notification response 와 동일
 export interface NotificationProps extends params {
@@ -26,7 +26,7 @@ export interface NotificationProps extends params {
   notificationType: NotificationsType
   receiverMemberId: string
   templateId: string
-  thumbnailImageUrl: AlbumType
+  icon: NotificationIconType | null
   createdAt: string
   updatedAt: string
 }
@@ -43,7 +43,7 @@ export type params = {
 const Notification = React.forwardRef(
   (
     {
-      notificationType,
+      icon,
       title,
       body,
       isRead,
@@ -53,8 +53,8 @@ const Notification = React.forwardRef(
       route,
       buttonType,
       paramKey,
-    }: // readAllNotification,
-    NotificationProps,
+      notificationType,
+    }: NotificationProps,
     ref
   ) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
@@ -75,11 +75,12 @@ const Notification = React.forwardRef(
       [setRead]
     )
 
-    const hasButton = notificationType === NOTIFICATIONS.NEW_SHARED_MEMBER
+    const hasButton = buttonType === NOTIFICATIONS.INVITATION_ACCEPT
+    //    const icon = icon ? icon
 
     // 읽었거나, 공유 사용자 생성 알림 제외
     const readAndMove = () => {
-      if (hasButton) return
+      if (hasButton && !isRead) return onTapAccept()
 
       if (!isRead) {
         setRead(true)
@@ -89,17 +90,23 @@ const Notification = React.forwardRef(
     }
 
     const onTapAccept = () => {
-      if (receiverMemberId) {
-        updateSharedMemberStatus(receiverMemberId, ShareStatus.ACCEPTED).then(
-          () => {
-            // 수락을 누르면 알림 읽음 처리
+      /** paramKey: sharedMemberedId */
+      if (paramKey) {
+        acceptSharedMemberStatus(paramKey)
+          .then(() => {
             setRead(true)
             mutate([notificationId])
             navigation.navigate("Album")
-          }
-        )
+          })
+          .catch((e) => console.error(e))
       }
     }
+
+    const NotiIcon = !icon
+      ? notificationType === "NEW_MEMBER"
+        ? "CONGRATULATION"
+        : "HEART"
+      : icon
 
     return (
       <TouchableOpacity
@@ -111,8 +118,8 @@ const Notification = React.forwardRef(
             "flex-1 flex-row px-[12px] py-[8px] rounded-[10px] mt-[8px] h-[90px]"
           )}`}>
           <Icon
-            name={ICON_NAME[albumType] as IconTypes} // TODO: {ICON_NAME[thumbnailImageUrl] as IconTypes}
-            color={ICON_COLOR_STYLE_HEX[albumType]}
+            name={ICON_NAME[NotiIcon]}
+            color={ICON_COLOR_STYLE_HEX[NotiIcon]}
             size={24}
             className="mr-[8px]"
           />
@@ -141,6 +148,7 @@ const Notification = React.forwardRef(
                 size="small"
                 theme="gray"
                 variant="weak"
+                disabled={hasButton && isRead}
                 onPress={onTapAccept}>
                 <MFText weight="SemiBold" className="text-gray-600 text-body2">
                   수락하기

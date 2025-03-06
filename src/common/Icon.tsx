@@ -58,6 +58,7 @@ export type IconTypes =
   | "mafooSantaCharacter"
   | "mafooSantaCharacter"
   | "emptyAlarmBell"
+  | "congratulation"
 
 export interface IconProps {
   name: IconTypes

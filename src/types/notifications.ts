@@ -5,6 +5,8 @@ export enum NOTIFICATIONS {
   NEW_SHARED_MEMBER = "NEW_SHARED_MEMBER", // 공유 사용자 생성 (공유 앨범 초대)
   SHARED_MEMBER_INVITATION_ACCEPTED = "SHARED_MEMBER_INVITATION_ACCEPTED", // 공유 사용자 초대 수락
   REGULAR = "REGULAR", // 공유 사용자 사진 생성, 앨범 주간, 공유 사용자 생성 권유 (앨범 초대 권유), 앨범 생성 권유, 앨범 접속 권유, 공유 사용자 사진 생성 권유
+  INVITATION_ACCEPT = "INVITATION_ACCEPT",
+  SHARED_MEMBER_INVITATION_CREATED = "SHARED_MEMBER_INVITATION_CREATED",
 }
 
 /** 전체 알림 key */

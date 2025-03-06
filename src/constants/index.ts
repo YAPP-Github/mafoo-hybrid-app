@@ -5,13 +5,16 @@ import { AuthRef } from "@/store/auth/AuthProvider"
 import { removeAccessToken, removeRefreshToken } from "@/store/auth/util"
 import { Alert } from "react-native"
 
-export const ICON_NAME: Record<AlbumType, IconTypes> = {
+export const ICON_NAME: Record<AlbumType, IconTypes> & {
+  CONGRATULATION: "congratulation"
+} = {
   HEART: "heartAngleBold",
   FIRE: "fireBold",
   BASKETBALL: "basketballBold",
   BUILDING: "buildingsBold",
   STARFALL: "starFallMinimalisticBold",
   SMILE_FACE: "emojiFunnyCircleBold",
+  CONGRATULATION: "congratulation",
 } as const
 
 export const ICON_COLOR_STYLE = {
@@ -30,6 +33,7 @@ export const ICON_COLOR_STYLE_HEX = {
   BUILDING: "#146EC2",
   STARFALL: "#B862EB",
   SMILE_FACE: "#F966B2",
+  CONGRATULATION: "#B862EB",
 } as const
 
 export const LIST_ITEM_INFO: ListItemProps[] = [

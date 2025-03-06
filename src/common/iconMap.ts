@@ -53,6 +53,7 @@ const iconMap: Record<IconTypes, any> = {
   closeIcon: require("../assets/closeIcon.svg"),
   mafooSantaCharacter: require("../assets/mafooSantaCharacter.svg"),
   emptyAlarmBell: require("../assets/emptyAlarmBell.svg"),
+  congratulation: require("../assets/congratulation.svg"),
 }
 
 export default iconMap

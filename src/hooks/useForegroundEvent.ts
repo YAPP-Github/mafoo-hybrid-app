@@ -78,7 +78,7 @@ export function useForegroundEvent() {
         })
 
         // 알림함으로 이동
-        if (data?.buttonType) {
+        if (data?.buttonType === "INVITATION_ACCEPT") {
           navigation.navigate("Notification")
         } else {
           navigation.navigate(
