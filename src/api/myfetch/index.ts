@@ -49,7 +49,6 @@ export const createFetcher = (path: string) => {
     async function (config: InternalAxiosRequestConfig) {
       const accessToken = await getAccessToken()
 
-      // console.log("accessToken", accessToken)
       if (accessToken) {
         config.headers!.Authorization = "Bearer " + accessToken
       }
