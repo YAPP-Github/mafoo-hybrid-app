@@ -71,6 +71,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({
             value={name}
             onChangeText={handleName}
             placeholder="새 앨범"
+            autoFocus
           />
           <Text className="text-body2 mt-1 text-right text-gray-500">
             {name.length}/8자
