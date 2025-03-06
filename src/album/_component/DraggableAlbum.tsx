@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native"
 
 import {
   GetBulkAlbumResponse,
+  acceptSharedMemberStatus,
   deleteSharedMember,
   updateSharedMemberStatus,
 } from "@/api/photo"
@@ -34,11 +35,9 @@ const DraggableAlbum = ({ album, showNewRing }: AlbumItemProps) => {
 
   const onTapAccept = () => {
     if (album.sharedMemberId) {
-      updateSharedMemberStatus(album.sharedMemberId, ShareStatus.ACCEPTED).then(
-        () => {
-          queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
-        }
-      )
+      acceptSharedMemberStatus(album.sharedMemberId).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["getAlbums"] })
+      })
     }
   }
 
