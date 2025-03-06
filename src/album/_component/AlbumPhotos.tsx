@@ -44,6 +44,7 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   const fetchAlbums = async () => {
     const data = await getPhotos(albumInfo.albumId)
     if (data.length) {
+      console.log("photoData", data)
       setPhotos(data)
       setIPhotosStore(data)
     }
@@ -88,13 +89,18 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
           keyExtractor={(item) => item.photoId.toString()}
           renderItem={({ item, i }) => {
             const photo = item as PhotoInfo
-            return showPhotoAdd && i == 0 ? (
-              <PhotoAddButton
-                albumId={albumInfo.albumId}
-                onImageUploaded={onImageUploaded}
-              />
+            return i === 0 ? (
+              showPhotoAdd ? (
+                <PhotoAddButton
+                  albumId={albumInfo.albumId}
+                  onImageUploaded={onImageUploaded}
+                />
+              ) : (
+                <></>
+              )
             ) : (
               <TouchableOpacity
+                key={i}
                 style={styles.photoContainer}
                 onPress={() => onPhotoClick(i - 1)}>
                 <Photo photo={photo} />
