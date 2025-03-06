@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { View, TouchableOpacity, StyleSheet } from "react-native"
 import MasonryList from "@react-native-seoul/masonry-list"
-import {
-  deletePhoto,
-  generateRecap,
-  getPhotos,
-  PermissionLevel,
-} from "@/api/photo"
+import { deletePhoto, getPhotos, PermissionLevel } from "@/api/photo"
 import { AlbumInfo, PhotoInfo } from "../types"
 import ImageDetail from "./ImageDetail"
 import { Photo } from "./Photo"
@@ -31,8 +26,6 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   const [photos, setPhotos] = useState<PhotoInfo[]>([])
   const [imageDetailShown, setImageDetailShown] = useState(false)
   const carouselStartIdx = useRef(0)
-  const [isRecapOpen, setIsRecapOpen] = useState(false)
-  const [videoUrl, setVideoUrl] = useState<string | null>(null)
 
   /** file, info */
   const { setPhotos: setIPhotosStore } = usePhotoInfoStore()
@@ -80,20 +73,6 @@ export const AlbumPhotos = ({ albumInfo, myPermission }: AlbumPhotosProps) => {
   useEffect(() => {
     fetchAlbums()
   }, [albumInfo.albumId])
-
-  useEffect(() => {
-    if (isRecapOpen) {
-      generateRecap(albumInfo.albumId).then(
-        (data) => {
-          setVideoUrl(data.recapUrl)
-        },
-        (error) => {
-          console.error(error)
-          setIsRecapOpen(false)
-        }
-      )
-    }
-  }, [isRecapOpen])
 
   const showPhotoAdd =
     myPermission === PermissionLevel.OWNER ||
