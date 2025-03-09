@@ -86,13 +86,6 @@ export function useForegroundEvent() {
             getRouteParams(data as any)
           )
         }
-      } else {
-        console.log(
-          "이동 못함 isSignedIn, memberId, notificationId",
-          isSignedIn,
-          profile?.memberId,
-          data?.notificationId
-        )
       }
     } catch (e) {
       console.error("me", e)
@@ -103,7 +96,6 @@ export function useForegroundEvent() {
   useEffect(() => {
     // iOS, android
     const unsubscribe = notifee.onForegroundEvent(async ({ type, detail }) => {
-      console.log("foreground event")
       if (
         type === EventType.PRESS &&
         (detail.pressAction?.id === "open_detail" || // android

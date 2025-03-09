@@ -13,15 +13,25 @@ import { toastConfig } from "@/styles/toastConfig"
 import { getAccessToken } from "../auth/util"
 import { useLinking } from "@/hooks/useLinking"
 import BackgroundAndQuitEvent from "@/providers/BackgroundAndQuitEvent"
+import { useGetFcmToken } from "@/hooks/useGetFcmToken"
 
 const navigationRef = createRef<NavigationContainerRef<any>>()
 
 const MafooRouter = () => {
   const Stack = createStackNavigator()
   const { status, signIn, signOut } = useAuth()
+  const { getToken } = useGetFcmToken()
   const isSignedIn = status === "signIn"
 
   console.log("mafoo router status", status)
+
+  /** 로그인되어 있을 경우, 알림 권한 확인 후 FCM 토큰 발급 */
+  useEffect(() => {
+    if (isSignedIn) {
+      console.log("isSignedIn 이미 로그인되어 있음, fcm 토큰 발급하러감")
+      getToken()
+    }
+  }, [isSignedIn])
 
   useEffect(() => {
     const restoreSession = async () => {

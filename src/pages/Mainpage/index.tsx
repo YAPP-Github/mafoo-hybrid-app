@@ -11,6 +11,7 @@ import appleAuth from "@invertase/react-native-apple-authentication"
 import { mafooAppleLogin, mafooKakaoLogin } from "@/api/signIn"
 import { Platform } from "react-native"
 import { createFetcher } from "@/api/myfetch"
+import { useGetFcmToken } from "@/hooks/useGetFcmToken"
 
 const LoginButton = ({
   type,
@@ -105,9 +106,12 @@ const LoginButton = ({
 }
 
 const HomePage = ({ navigation }: any) => {
+  const { getToken } = useGetFcmToken()
+
+  /** 로그인 성공 시, FCM 토큰 여부 확인 후 재발급 */
   const onSuccessLogin = () => {
+    getToken()
     navigation.navigate("Album")
-    // navigation.navigate("ExportAlbum", { exportId: "test_album_id" })
   }
 
   return (
