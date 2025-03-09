@@ -1,7 +1,3 @@
-/**
- * @format
- */
-
 import { AppRegistry } from "react-native"
 import App from "./App"
 import messaging from "@react-native-firebase/messaging"
@@ -13,6 +9,10 @@ import { name as appName } from "./app.json"
 // remoteMessage contains all the custom data via the data property.
 // if remoteMessage payload conatins a notification property, the device will have displayed a
 // notification to the user.
+
+/** Switching off warning logs for v21 */
+globalThis.RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true
+
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log("Message handled in the background!", remoteMessage)
 })
