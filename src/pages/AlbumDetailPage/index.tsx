@@ -256,6 +256,7 @@ const ShareBar: React.FC<ShareBarProps> = ({
           <View className="flex-row h-11">
             {previewMembers.slice(0, 4)?.map((member, idx) => (
               <View
+                key={`previewMembers-${member.memberId}-${idx}`}
                 className="relative"
                 style={{
                   zIndex: 10 + (5 - idx),
