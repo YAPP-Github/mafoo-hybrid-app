@@ -42,6 +42,7 @@ const ConsentModal = ({ visible, closeConsentModal }: ConsentModalProps) => {
       console.log("granted", granted)
 
       if (granted) {
+        await firebase.messaging().deleteToken()
         const fcmToken = await firebase.messaging().getToken()
         if (fcmToken) {
           mutate({

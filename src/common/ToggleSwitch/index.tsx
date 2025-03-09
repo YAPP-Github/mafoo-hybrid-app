@@ -30,13 +30,17 @@ const ToggleSwitch = forwardRef<boolean, ToggleSwitchProps>(
     const { mutate: deleteMutate } = useDeleteFcmToken(profile?.memberId ?? "")
     const { mutate: postMutate } = usePostFcmToken()
 
-    const handleToggle = (value: boolean) => {
+    const handleToggle = async (value: boolean) => {
       if (ref && typeof ref !== "function") {
         ref.current = null
       }
 
-      if (value) requestPermission()
-      else deleteMutate()
+      if (value) {
+        requestPermission()
+      } else {
+        deleteMutate()
+        await firebase.messaging().deleteToken()
+      }
 
       setIsEnabled(value)
     }
