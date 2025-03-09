@@ -37,10 +37,9 @@ const MafooRouter = () => {
       }
     }
     restoreSession()
-  }, [signIn, signOut])
+  }, [status, signIn, signOut])
 
   useEffect(() => {
-    console.log("isSignedIn", isSignedIn)
     if (!isSignedIn && navigationRef.current) {
       navigationRef.current.navigate("Home")
     }

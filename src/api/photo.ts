@@ -114,6 +114,7 @@ export const getAlbums = async (): Promise<GetBulkAlbumResponse[]> => {
     const data = await authorizedFetcher.get(`/albums`)
     return data
   } catch (err: unknown) {
+    console.log(JSON.stringify(err))
     if (axios.isAxiosError(err)) {
       console.log("error in getAlubms", err)
       throw err.response?.data.message
