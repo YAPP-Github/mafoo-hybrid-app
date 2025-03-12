@@ -21,8 +21,6 @@ const MafooRouter = () => {
   const { status, signIn, signOut } = useAuth()
   const isSignedIn = status === "signIn"
 
-  console.log("mafoo router status", status)
-
   useEffect(() => {
     const restoreSession = async () => {
       try {

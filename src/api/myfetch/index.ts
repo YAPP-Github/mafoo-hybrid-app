@@ -40,9 +40,6 @@ export const createUnauthorizedFetcher = (path: string) => {
 }
 
 export const createFetcher = (path: string) => {
-  if (!API_URL) {
-    throw new Error("API_URL is not defined")
-  }
   const instance = axios.create({
     baseURL: `${API_URL}${path}`,
     timeout: FETCHER_TIME_OUT,
