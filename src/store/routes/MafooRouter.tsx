@@ -18,24 +18,9 @@ const navigationRef = createRef<NavigationContainerRef<any>>()
 
 const MafooRouter = () => {
   const Stack = createStackNavigator()
-  const { status, signIn, signOut } = useAuth()
-  const isSignedIn = status === "signIn"
 
-  useEffect(() => {
-    const restoreSession = async () => {
-      try {
-        const token = await getAccessToken()
-        if (!token) {
-          throw new Error("No token")
-        }
-        signIn(token)
-      } catch (e) {
-        console.log("failed to restore token, will signout", e)
-        signOut()
-      }
-    }
-    restoreSession()
-  }, [status, signIn, signOut])
+  const { status } = useAuth()
+  const isSignedIn = status === "signIn"
 
   useEffect(() => {
     if (!isSignedIn && navigationRef.current) {
@@ -66,7 +51,7 @@ const MafooRouter = () => {
               name={route.name}
               component={route.component}
               options={{
-                ...route.options,
+                ...route?.options,
                 title: route.name,
                 headerShown: false,
               }}
