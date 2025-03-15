@@ -6,23 +6,42 @@ import MafooLogo from "@/assets/mafooNewLogo.svg"
 import HeaderBell from "@/assets/headerBell.svg"
 import PageContainer from "@/common/PageContainer"
 import { colors } from "@/constants/colors"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useGetProfile } from "@/profile/hooks/useProfile"
 import ConsentModal from "@/album/_component/notification/ConsentModal"
-import { RedDot } from "@/album/_component/notification"
-import { useGetNotification } from "@/hooks/useNotification"
-// import { useQueryClient } from "@tanstack/react-query"
-// import { useDeleteFcmToken } from "@/hooks/useDeleteFcmToken"
-// import { NOTIFICATIONS } from "@/constants/queryString"
+import {
+  NotificationProps,
+  RedDot,
+  params,
+} from "@/album/_component/notification"
+import { useDeleteFcmToken } from "@/hooks/useDeleteFcmToken"
+import { getNotificationList } from "@/api/notification"
 
 const AlbumsPage = ({ navigation }: any) => {
   const [openConsent, setOpenConsent] = useState(false)
 
-  // const queryClient = useQueryClient()
   const { profile } = useGetProfile()
 
-  //  const { mutate: deleteMutate } = useDeleteFcmToken(profile?.memberId)
-  const { notifications } = useGetNotification(profile?.memberId)
+  // const { mutate: deleteMutate } = useDeleteFcmToken(profile?.memberId)
+  const [notifications, setNotifications] = useState<
+    (NotificationProps & params)[]
+  >([])
+
+  useEffect(() => {
+    const getNotification = async (memberId: string) => {
+      try {
+        const data = await getNotificationList(memberId)
+        if (data) {
+          setNotifications(data ?? [])
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    if (profile?.memberId && profile?.fcmToken) {
+      getNotification(profile?.memberId)
+    }
+  }, [profile?.memberId, profile?.fcmToken])
 
   const onPress = () => {
     /** 이미 등록된 토큰이 있는 경우, 알림함 진입 */
@@ -76,7 +95,6 @@ const AlbumsPage = ({ navigation }: any) => {
           </View> */}
           <Albums />
           <NewAlbumButton />
-
           <ConsentModal
             visible={openConsent}
             closeConsentModal={() => setOpenConsent(false)}
