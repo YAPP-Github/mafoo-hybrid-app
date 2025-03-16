@@ -1,45 +1,69 @@
-"use client"
-
-import { useRouter } from "next/navigation"
-import { ComponentType } from "react"
-
-import { FallbackProps } from "./ErrorBoundary"
+import { View } from "react-native"
 import Icon from "./Icon"
 import SquareButton from "./SquareButton"
+import MFText from "./MFText"
+import { removeAccessToken, removeRefreshToken } from "@/store/auth/util"
+import { AuthRef } from "@/store/auth/AuthProvider"
 
-const Fallback: ComponentType<FallbackProps> = ({ resetErrorBoundary }) => {
-  const router = useRouter()
+interface FallbackProps {
+  error: Error
+  resetError: () => void
+}
+
+const Fallback = ({ error, resetError }: FallbackProps) => {
+  console.log("fallback", error)
+
+  const onLogout = async () => {
+    Promise.all([removeAccessToken(), removeRefreshToken()])
+      .then(async () => {
+        AuthRef.current?.signOut()
+      })
+      .catch((e) => {
+        console.log("failed to sign out", e)
+      })
+  }
 
   return (
-    <div className="flex h-[100vh] flex-col items-center">
-      <div className="grow"></div>
-      <div className="grow">
-        <p className="text-center text-header-2 font-semibold text-gray-500">
+    <View className="flex-1 flex-col justify-center items-center">
+      <View className="grow" />
+      <View className="grow items-center">
+        <MFText
+          weight="SemiBold"
+          className="text-center text-header2 text-gray-500">
           앗! 마푸를 불러오지 못했어요
-        </p>
-        <p className="text-center text-header-2 font-semibold text-gray-800">
+        </MFText>
+        <MFText
+          weight="SemiBold"
+          className="text-center text-header2 text-gray-800">
           다시 시도해볼까요?
-        </p>
+        </MFText>
         <Icon
           name="errorLogo"
-          className="ml-[34px] mt-8 h-[134px] w-[217px]"
-          size={64}
+          className="w-[210px] h-[133px] mt-[32px]"
+          size={210}
+          height={133}
         />
-      </div>
-      <div className="relative grow">
-        <div className="absolute bottom-0 left-0 flex w-full justify-center gap-3 pb-11">
+        <MFText className="mt-[32px] text-body1 text-red-500">
+          {error?.toString()}
+        </MFText>
+      </View>
+      <View className="grow relative w-full">
+        <View className="absolute left-0 bottom-0 flex-row justify-center px-[23px] pb-[40px]">
           <SquareButton
-            className="bg-green-200 text-green-700"
-            onClick={() => {
-              router.replace("/")
-              resetErrorBoundary()
-            }}>
-            홈으로 돌아가기
+            className="bg-green-200 text-green-700 grow"
+            onPress={onLogout}>
+            <MFText weight="SemiBold" className="text-body1 text-green-700">
+              로그아웃하기
+            </MFText>
           </SquareButton>
-          <SquareButton onClick={resetErrorBoundary}>새로고침하기</SquareButton>
-        </div>
-      </div>
-    </div>
+          <SquareButton onPress={resetError} className="grow ml-[10px]">
+            <MFText weight="SemiBold" className="text-body1 text-white">
+              새로고침하기
+            </MFText>
+          </SquareButton>
+        </View>
+      </View>
+    </View>
   )
 }
 
