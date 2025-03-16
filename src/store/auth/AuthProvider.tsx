@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   createRef,
   useContext,
@@ -9,7 +9,7 @@ import React, {
 } from "react"
 
 import { getAccessToken, removeAccessToken, setAccessToken } from "./util"
-import { useNavigation } from "@react-navigation/native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export interface AuthState {
   accessToken: string | undefined | null
@@ -54,11 +54,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const initialState = async () => {
       try {
-        const token = await getAccessToken()
-        if (token !== null) {
-          dispatch({ type: "SIGN_IN", token })
-        } else {
+        const firstRun = await AsyncStorage.getItem("firstRun")
+
+        if (!firstRun) {
+          await removeAccessToken()
+          await AsyncStorage.setItem("firstRun", "true")
           dispatch({ type: "SIGN_OUT" })
+        } else {
+          const token = await getAccessToken()
+          if (token !== null) {
+            dispatch({ type: "SIGN_IN", token })
+          } else {
+            dispatch({ type: "SIGN_OUT" })
+          }
         }
       } catch (error) {
         // console.error(error)

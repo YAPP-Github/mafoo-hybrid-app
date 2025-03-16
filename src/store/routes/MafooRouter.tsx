@@ -22,6 +22,10 @@ const MafooRouter = () => {
   const { status } = useAuth()
   const isSignedIn = status === "signIn"
 
+  if (__DEV__) {
+    console.log("[MafooRouter] status", status)
+  }
+
   useEffect(() => {
     if (!isSignedIn && navigationRef.current) {
       navigationRef.current.navigate("Home")
