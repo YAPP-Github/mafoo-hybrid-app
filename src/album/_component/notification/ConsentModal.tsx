@@ -39,17 +39,15 @@ const ConsentModal = ({ visible, closeConsentModal }: ConsentModalProps) => {
   const onPress = async () => {
     try {
       const granted = await requestUserPermission()
-      console.log("granted", granted)
+      // console.log("granted", granted)
 
       if (granted) {
         const fcmToken = await firebase.messaging().getToken()
-        if (fcmToken) {
+
+        if (fcmToken && profile?.memberId) {
           mutate({
             memberId: profile?.memberId!,
             fcmToken: fcmToken,
-          })
-          await queryClient.invalidateQueries({
-            queryKey: [...PROFILE.GET_PROFILE],
           })
         }
       }

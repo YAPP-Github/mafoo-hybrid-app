@@ -1,5 +1,5 @@
 import { createFcmToken } from "@/api/fcm"
-import { PROFILE } from "@/constants/queryString"
+import { NOTIFICATIONS, PROFILE } from "@/constants/queryString"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const usePostFcmToken = (onSuccessHandler?: () => void) => {
@@ -18,9 +18,15 @@ export const usePostFcmToken = (onSuccessHandler?: () => void) => {
       await queryClient.invalidateQueries({
         queryKey: [...PROFILE.GET_PROFILE],
       })
+      await queryClient.invalidateQueries({
+        queryKey: [...NOTIFICATIONS.GET_NOTIFICATIONS],
+      })
       onSuccessHandler && onSuccessHandler()
     },
-    onError: () => {},
+    onError: (e) => {
+      console.error(e)
+    },
+    throwOnError: true,
   })
 
   return { mutate }

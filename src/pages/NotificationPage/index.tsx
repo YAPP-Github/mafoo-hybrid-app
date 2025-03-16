@@ -19,7 +19,10 @@ const NotificationPage = () => {
 
   const { profile } = useGetProfile()
 
-  const { notifications } = useGetNotification(profile?.memberId)
+  const { notifications } = useGetNotification(
+    profile?.memberId,
+    profile?.fcmToken
+  )
 
   const notificationIds = notifications.map(
     (notification) => notification.notificationId
@@ -52,8 +55,6 @@ const NotificationPage = () => {
   const readNotificationFnRef = useRef<{ readAllNotification: () => void }>(
     null
   )
-
-  console.log("notifications", notifications)
 
   return (
     <PageContainer>
