@@ -83,3 +83,9 @@ yarn-error.log
 # firebase sdk config
 /ios/MafooApp/GoogleService-Info.plist
 /android/app/google-services.json
+
+# asset
+/ios/assets/**/*
+
+# xcode scheme
+/ios/MafooApp.xcodeproj/xcshareddata/xcschemes/**/*
