@@ -87,6 +87,15 @@ android {
         versionCode 9
         versionName "1.1.2"
     }
+    flavorDimensions "version" /* version을 기준으로 빌드 변형을 만듦 */
+    productFlavors {
+        develop {
+            // 개발 환경 환경 변수 설정
+        }
+        product {
+            // 운영 환경 환경 변수 설정
+        }
+    }
     /*
     signingConfigs {
         debug {
@@ -131,3 +140,12 @@ dependencies {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
+project.ext.envConfigFiles = [
+    developdebug: ".env.development", // 개발/디버그모드 환경변수
+    developrelease: ".env.development", // 개발/릴리즈모드 환경변수
+    productdebug: ".env.production",    // 운영/디버그모드 환경변수
+    productrelease: ".env.production", // 운영/릴리즈모드 환경변수
+    anothercustombuild: ".env", // 사용자 정의 빌드용 환경변수
+ ]
