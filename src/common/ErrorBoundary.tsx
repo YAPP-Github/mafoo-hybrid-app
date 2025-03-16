@@ -1,5 +1,3 @@
-"use client"
-
 import { Component, ComponentType, ErrorInfo, ReactNode } from "react"
 
 interface ErrorBoundaryState {
@@ -57,6 +55,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     const { FallbackComponent, children } = props
 
+    /** 에러 발생 시, Fallback Component에 error 전달 */
     if (hasError && error) {
       return (
         <FallbackComponent
