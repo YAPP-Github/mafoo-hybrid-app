@@ -1,4 +1,3 @@
-import { API_URL } from "@env"
 import axios, { AxiosError } from "axios"
 import { StatusCodes } from "http-status-codes"
 import type { AxiosResponse, InternalAxiosRequestConfig } from "axios"
@@ -10,6 +9,7 @@ import {
   setAccessToken,
   setRefreshToken,
 } from "@/store/auth/util"
+import Config from "react-native-config"
 
 const FETCHER_TIME_OUT = 7500
 
@@ -22,8 +22,13 @@ export const responseBody = (response: AxiosResponse) => {
 }
 
 export const createUnauthorizedFetcher = (path: string) => {
+  if (__DEV__) {
+    console.log("[createUnauthorizedFetcher] API_URL", Config.API_URL)
+    console.log("[NODE_ENV]", Config.NODE_ENV)
+  }
+
   const instance = axios.create({
-    baseURL: `${API_URL}${path}`,
+    baseURL: `${Config.API_URL}${path}`,
     timeout: FETCHER_TIME_OUT,
   })
 
@@ -40,8 +45,12 @@ export const createUnauthorizedFetcher = (path: string) => {
 }
 
 export const createFetcher = (path: string) => {
+  if (__DEV__) {
+    console.log("[createFetcher] API_URL", Config.API_URL)
+  }
+
   const instance = axios.create({
-    baseURL: `${API_URL}${path}`,
+    baseURL: `${Config.API_URL}${path}`,
     timeout: FETCHER_TIME_OUT,
   })
 
@@ -71,11 +80,12 @@ export const createFetcher = (path: string) => {
       const accessToken = await getAccessToken()
       const refreshToken = await getRefreshToken()
 
+      /** 토큰 에러가 아닐 경우 에러 전파 */
       if (!res || res.status !== 401 || !accessToken || !refreshToken) {
         return Promise.reject(_err)
       }
       try {
-        const reissueResponse = await axios.post(`${API_URL}/reissue`, {
+        const reissueResponse = await axios.post(`${Config.API_URL}/reissue`, {
           accessToken,
           refreshToken,
         })
@@ -83,8 +93,10 @@ export const createFetcher = (path: string) => {
         setAccessToken(reissueResponse.data.accessToken)
         setRefreshToken(reissueResponse.data.refreshToken)
 
+        /** 만료 때문에 반려된 api 재요청 */
         return instance.request(_err.config!)
       } catch (reissueErr) {
+        /** reissue에서 에러 발생할 경우, 토큰 제거 */
         if (reissueErr instanceof AxiosError && reissueErr.response) {
           const { status } = reissueErr.response
 

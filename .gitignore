@@ -78,3 +78,8 @@ yarn-error.log
 .env.local
 .env.production
 .env.development
+/ios/tmp.xcconfig
+
+# firebase sdk config
+/ios/MafooApp/GoogleService-Info.plist
+/android/app/google-services.json

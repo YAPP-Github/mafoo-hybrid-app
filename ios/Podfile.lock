@@ -1035,6 +1035,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-config (1.5.5):
+    - react-native-config/App (= 1.5.5)
+  - react-native-config/App (1.5.5):
+    - React-Core
   - react-native-image-picker (7.2.3):
     - DoubleConversion
     - glog
@@ -1591,6 +1595,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
+  - react-native-config (from `../node_modules/react-native-config`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sensitive-info (from `../node_modules/react-native-sensitive-info`)
@@ -1722,6 +1727,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-camera-roll/camera-roll"
+  react-native-config:
+    :path: "../node_modules/react-native-config"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
@@ -1859,6 +1866,7 @@ SPEC CHECKSUMS:
   React-logger: bbd09ad59f304e718962b2867534204710873bd9
   React-Mapbuffer: 22e46ba223764ea080f4506debac13ffed7748bf
   react-native-cameraroll: f9d646347707fc3d428bcb08a89d3d9798e1ad83
+  react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
   react-native-image-picker: f5147edf96d2cdb4c157eda701b19e750ce14b5d
   react-native-safe-area-context: e134b241010ebe2aacdcea013565963d13826faa
   react-native-sensitive-info: ee358bf2b901ac3d04f63ff637b31daee44ea87f

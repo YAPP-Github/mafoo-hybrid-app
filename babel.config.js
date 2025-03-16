@@ -16,12 +16,13 @@ module.exports = {
     [
       "module:react-native-dotenv",
       {
+        envName: "APP_ENV",
         moduleName: "@env",
         path: `.env.${process.env.NODE_ENV}`,
         blocklist: null,
         whitelist: null,
-        safe: false,
-        allowUndefined: true,
+        safe: true,
+        allowUndefined: false,
       },
     ],
   ],

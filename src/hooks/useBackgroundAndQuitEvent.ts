@@ -8,7 +8,7 @@ import { markNotificationsAsRead } from "@/api/notification"
 import { useQueryClient } from "@tanstack/react-query"
 import { NOTIFICATIONS } from "@/constants/queryString"
 import { getMyProfile } from "@/api/signIn"
-import { API_URL } from "@env"
+import Config from "react-native-config"
 
 export const useBackgroundAndQuitEvent = () => {
   const { deepLinkUrl, removeDeepLink } = useDeepLinkStore()
@@ -22,7 +22,7 @@ export const useBackgroundAndQuitEvent = () => {
 
   useEffect(() => {
     const openDeepLinkUrl = async () => {
-      if (!API_URL) return
+      if (!Config.API_URL) return
       const deepLink = deepLinkUrl as DeepLinkUrl
 
       const isValidUrl = deepLink?.route && deepLink?.notificationId
@@ -48,5 +48,5 @@ export const useBackgroundAndQuitEvent = () => {
       }
     }
     openDeepLinkUrl()
-  }, [status, deepLinkUrl, API_URL])
+  }, [status, deepLinkUrl, Config.API_URL])
 }

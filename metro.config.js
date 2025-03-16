@@ -18,7 +18,7 @@ const config = {
   },
   resolver: {
     assetExts: [...assetExts.filter((ext) => ext !== "svg"), "mp4"],
-    sourceExts: [...sourceExts, "svg"],
+    sourceExts: [...sourceExts, "svg", "env"], // 환경 변수 파일도 번들에 추가
   },
 }
 
