@@ -46,7 +46,7 @@ export const useGetAlbum = (id: string, isDelete: boolean) => {
 }
 
 export const useGetAlbums = () => {
-  const { data } = useQuery({
+  const { data, error, isError } = useQuery({
     queryKey: ["getAlbums"],
     queryFn: getAlbums,
   })
@@ -54,6 +54,8 @@ export const useGetAlbums = () => {
   return {
     albums: data ?? [],
     albumLength: data?.length,
+    error,
+    isError,
   }
 }
 
